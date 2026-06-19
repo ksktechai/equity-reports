@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- report-meta: type=stock; slug=microsoft; name=Microsoft; generated=2026-06-19; prompt=e7c98f2 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft Stock Analysis · MSFT</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap');
+
+  :root{
+    --void:#080c16;
+    --deep:#0d131f;
+    --panel:#121a2a;
+    --panel-2:#16203399;
+    --line:#26344f;
+    --ink:#eaf0fa;
+    --mute:#94a2bf;
+    --faint:#62708e;
+    --azure:#3aa0ff;       /* Azure / Fluent blue */
+    --azure-soft:#7cc2ff;
+    --ms-red:#f25022;      /* the four logo squares */
+    --ms-green:#7fba00;
+    --ms-blue:#00a4ef;
+    --ms-yellow:#ffb900;
+    --green:#46d39a;
+    --amber:#f2b441;
+    --red:#ff5470;
+    --grid:rgba(58,160,255,.06);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1100px 560px at 82% -10%, rgba(58,160,255,.12), transparent 60%),
+      radial-gradient(820px 460px at 6% 4%, rgba(0,164,239,.08), transparent 55%),
+      var(--void);
+    color:var(--ink);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* faint datacenter grid backdrop */
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:46px 46px;
+    mask-image:radial-gradient(circle at 50% 0%,#000,transparent 75%);
+    -webkit-mask-image:radial-gradient(circle at 50% 0%,#000,transparent 75%)}
+
+  main{position:relative;z-index:1}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--azure-soft)}
+
+  /* logo squares */
+  .squares{display:inline-grid;grid-template-columns:1fr 1fr;gap:3px;width:26px;height:26px;
+    vertical-align:middle;margin-right:6px}
+  .squares i{display:block;border-radius:2px}
+  .squares i:nth-child(1){background:var(--ms-red)}
+  .squares i:nth-child(2){background:var(--ms-green)}
+  .squares i:nth-child(3){background:var(--ms-blue)}
+  .squares i:nth-child(4){background:var(--ms-yellow)}
+
+  /* HERO */
+  header.hero{position:relative;padding:84px 0 56px;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero-inner{position:relative;z-index:2}
+  .hero-tag{display:flex;gap:14px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .pill{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+    padding:5px 11px;border:1px solid var(--line);border-radius:100px;color:var(--mute);background:var(--panel-2)}
+  .pill.live{color:var(--green);border-color:rgba(70,211,154,.4)}
+  .pill.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--green);margin-right:7px;vertical-align:middle;box-shadow:0 0 8px var(--green);
+    animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .pill.down{color:var(--red);border-color:rgba(255,84,112,.4)}
+
+  h1.title{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(40px,7vw,76px);
+    line-height:1.02;letter-spacing:-.02em;margin:8px 0 6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  h1.title .ticker{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.32em;
+    letter-spacing:.05em;color:var(--azure);vertical-align:middle;border:1px solid rgba(58,160,255,.4);
+    border-radius:8px;padding:6px 12px;margin-left:6px;background:rgba(58,160,255,.07)}
+  .sub{color:var(--mute);max-width:62ch;font-size:17px;margin-top:14px}
+
+  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:44px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+  .strip .cell{background:var(--deep);padding:20px 18px}
+  .strip .v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(20px,2.6vw,27px);letter-spacing:-.01em}
+  .strip .v.azure{color:var(--azure-soft)} .strip .v.down{color:var(--red)} .strip .v.up{color:var(--green)}
+  .strip .k{font-size:11px;color:var(--faint);margin-top:6px;font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.04em;text-transform:uppercase}
+  .asof{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);margin-top:18px}
+  .note{font-size:13px;color:var(--faint);margin-top:14px;font-style:italic}
+
+  /* sections */
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--azure);
+    border:1px solid rgba(58,160,255,.3);border-radius:6px;padding:2px 8px}
+  h2{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em;line-height:1.1}
+  .lede{color:var(--mute);max-width:70ch;margin-top:14px;font-size:16px}
+
+  /* cards */
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:linear-gradient(180deg,var(--panel),var(--deep));border:1px solid var(--line);
+    border-radius:16px;padding:24px;position:relative;overflow:hidden}
+  .card .corner{position:absolute;top:0;right:0;font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:.1em;color:var(--faint);padding:9px 12px;text-transform:uppercase}
+  .card h3{font-size:20px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .seg-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute);margin-bottom:14px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;
+    border-top:1px solid var(--line);font-size:14px}
+  .row:first-of-type{border-top:none}
+  .row .lbl{color:var(--faint)} .row .val{font-family:'IBM Plex Mono',monospace;font-weight:500}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot.blue{background:var(--ms-blue);box-shadow:0 0 10px var(--ms-blue)}
+  .dot.green{background:var(--ms-green);box-shadow:0 0 10px var(--ms-green)}
+  .dot.yellow{background:var(--ms-yellow);box-shadow:0 0 10px var(--ms-yellow)}
+
+  .callout{margin-top:28px;border-left:2px solid var(--azure);
+    background:linear-gradient(90deg,rgba(58,160,255,.08),transparent);padding:18px 22px;border-radius:0 12px 12px 0}
+  .callout .q{font-weight:600;color:var(--azure-soft);font-size:14px;margin-bottom:6px;
+    font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+  .callout p{color:var(--mute);font-size:15px}
+  .callout.amber{border-color:var(--amber);background:linear-gradient(90deg,rgba(242,180,65,.08),transparent)}
+  .callout.amber .q{color:var(--amber)}
+
+  /* charts */
+  .chartbox{margin-top:34px;background:var(--deep);border:1px solid var(--line);border-radius:16px;padding:26px 24px 18px}
+  .chartbox .ct{font-size:13px;color:var(--mute);margin-bottom:2px}
+  .chartbox .cs{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-bottom:22px}
+  .bars{display:flex;align-items:flex-end;gap:clamp(8px,3vw,30px);height:230px;padding-left:8px}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:100%;max-width:62px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--azure),rgba(58,160,255,.22));
+    transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+  .bar.est{background:linear-gradient(180deg,var(--amber),rgba(242,180,65,.2))}
+  .bar .top{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+  .bar-x{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-top:10px}
+  .legend{display:flex;gap:18px;margin-top:18px;font-size:11px;color:var(--faint);
+    font-family:'IBM Plex Mono',monospace;flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .swatch{width:11px;height:11px;border-radius:3px}
+  svg.line{width:100%;height:auto;display:block;margin-top:6px}
+
+  /* tables */
+  .tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--deep);overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
+  th{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--faint);background:var(--panel)}
+  td{color:var(--ink)}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right}
+  tr.self td{background:rgba(58,160,255,.06)}
+  .tag-est{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--amber);
+    border:1px solid rgba(242,180,65,.35);border-radius:4px;padding:1px 5px;margin-left:6px}
+  .conf{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--faint);
+    border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:6px;text-transform:uppercase;letter-spacing:.06em}
+  .pos{color:var(--green)}.neg{color:var(--red)}
+
+  /* risk meter */
+  .risk-row{display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center;
+    padding:14px 0;border-top:1px solid var(--line)}
+  .risk-row:first-child{border-top:none}
+  .risk-name{font-weight:500;font-size:15px}
+  .risk-why{color:var(--faint);font-size:13px;margin-top:3px;grid-column:1/-1}
+  .meter{display:flex;align-items:center;gap:11px}
+  .meter .track{width:130px;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .meter .fill{height:100%;border-radius:4px}
+  .meter .sc{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;width:30px;text-align:right}
+
+  /* bull/bear */
+  .bb{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+  .bb-col{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .bb-head{padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .bb.bull .bb-head{background:rgba(70,211,154,.1);color:var(--green);border-bottom:1px solid rgba(70,211,154,.25)}
+  .bb.bear .bb-head{background:rgba(255,84,112,.1);color:var(--red);border-bottom:1px solid rgba(255,84,112,.25)}
+  .bb-body{padding:8px 22px 18px}
+  .bb-item{padding:15px 0;border-top:1px solid var(--line)}
+  .bb-item:first-child{border-top:none}
+  .bb-fact{font-size:14px;font-weight:500;margin-bottom:4px}
+  .bb-why{font-size:13px;color:var(--faint)}
+
+  /* scenarios */
+  .scn{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .scn-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--deep);position:relative}
+  .scn-card .prob{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:-.02em}
+  .scn-card .name{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+  .scn-card.bear .prob{color:var(--red)} .scn-card.bear .name{color:var(--red)}
+  .scn-card.base .prob{color:var(--azure-soft)} .scn-card.base .name{color:var(--azure-soft)}
+  .scn-card.bull .prob{color:var(--green)} .scn-card.bull .name{color:var(--green)}
+  .scn-card .tgt{font-size:15px;margin:12px 0 4px;font-weight:600}
+  .scn-card .asm{font-size:13px;color:var(--faint)}
+
+  /* verdict + scorecard */
+  .verdict-box{margin-top:30px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(160deg,var(--panel),var(--void));padding:36px;text-align:center;position:relative;overflow:hidden}
+  .verdict-box::before{content:"";position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+    width:420px;height:420px;background:radial-gradient(circle,rgba(58,160,255,.14),transparent 70%)}
+  .verdict-label{position:relative;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;
+    text-transform:uppercase;font-size:12px;color:var(--faint);margin-bottom:14px}
+  .verdict-word{position:relative;font-family:'Newsreader',serif;font-size:clamp(44px,8vw,72px);
+    color:var(--green);font-weight:500;letter-spacing:-.01em}
+  .verdict-score{position:relative;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--mute);margin-top:8px}
+  .verdict-reason{position:relative;max-width:66ch;margin:22px auto 0;color:var(--mute);font-size:15px}
+
+  .score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 28px;margin-top:30px}
+  .score-line{display:flex;align-items:center;gap:14px}
+  .score-line .nm{flex:none;width:140px;font-size:13px;color:var(--mute)}
+  .score-line .track{flex:1;height:6px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .score-line .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--azure),var(--azure-soft));
+    width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .score-line .n{font-family:'IBM Plex Mono',monospace;font-size:13px;width:34px;text-align:right;font-weight:600}
+
+  /* disclaimer */
+  .disc{padding:48px 0 70px;text-align:center}
+  .disc p{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);
+    letter-spacing:.04em;max-width:66ch;margin:0 auto}
+  .disc .big{color:var(--mute);font-size:13px;margin-bottom:10px}
+  .src-note{font-size:12px;color:var(--faint);margin-top:24px;line-height:1.7}
+
+  @media(max-width:860px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    .g3,.g2,.scn,.score-grid{grid-template-columns:1fr}
+    .bb{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<main>
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-tag">
+      <span class="pill live">Trading live · Nasdaq</span>
+      <span class="pill down">−19% YTD</span>
+      <span class="pill">Educational · not advice</span>
+    </div>
+    <div class="eyebrow">Institutional Stock Teardown</div>
+    <h1 class="title"><span class="squares" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Microsoft<span class="ticker">MSFT</span></h1>
+    <p class="sub">The most profitable software company on earth, growing 18% — yet its stock has fallen ~31% from last summer's high as the market recoils at a $190B AI-infrastructure bill. Quality was never the question; the price of the AI bet is.</p>
+
+    <div class="strip">
+      <div class="cell"><div class="v azure">$382.30</div><div class="k">Price · 18 Jun 2026</div></div>
+      <div class="cell"><div class="v">~$2.81T</div><div class="k">Market cap</div></div>
+      <div class="cell"><div class="v">~23×</div><div class="k">P/E (TTM)</div></div>
+      <div class="cell"><div class="v up">+18%</div><div class="k">Latest qtr revenue</div></div>
+      <div class="cell"><div class="v down">$356–555</div><div class="k">52-week range</div></div>
+    </div>
+    <p class="asof">Prices &amp; multiples as of 18 Jun 2026 close. The live price will have moved — look up MSFT for where it trades now.</p>
+    <p class="note">Analysis complexity: <strong style="color:var(--azure-soft)">7 / 10</strong> — a clean, single-class mega-cap, but the AI-capex / return-on-investment question makes the valuation genuinely hard to call.</p>
+  </div>
+</header>
+
+<!-- ===================== 1 · EXEC SUMMARY ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>The one-paragraph version</h2></div>
+  <p class="lede">Microsoft sells software, cloud infrastructure, and productivity tools to nearly every large enterprise on the planet — Azure, Microsoft 365, Windows, LinkedIn, Dynamics, GitHub and Xbox. In its most recent quarter (FQ3 FY2026, ended 31 Mar 2026) revenue rose 18% to $82.9B and Azure grew ~40%, yet the shares are down sharply over the past year because management committed to ~$190B of FY2026 capital spending to build AI capacity, pressuring free cash flow and raising the question of when — and whether — that spend earns its cost of capital.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Bull thesis · one line</div>
+      <h3 style="color:var(--green)">The bull pull</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">A fortress franchise with ~70% gross margins and $70B+ of free cash flow is monetising AI across Azure and Copilot while the multiple has compressed to ~23× — below its own five-year norm and a discount to mega-cap peers. <span class="conf">Confidence: Med</span></p>
+    </div>
+    <div class="card">
+      <div class="corner">Bear thesis · one line</div>
+      <h3 style="color:var(--red)">The bear weight</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">A ~$190B annual capex ramp converts a famously cash-generative business into a capital-intensive one, with rising depreciation, uncertain AI ROI, and a still-rich absolute valuation for a company that can't compound at 30%+ forever. <span class="conf">Confidence: Med</span></p>
+    </div>
+  </div>
+  <div class="callout amber">
+    <div class="q">WHAT CHANGED MOST RECENTLY</div>
+    <p>FQ3 beat on revenue ($82.9B vs ~$81.5B expected) and EPS ($4.27, +23%), and Microsoft Cloud crossed $50B in a quarter for the first time ($54.5B, +29%). But the FY capex guide of ~$190B — driven partly by soaring memory costs — overshadowed the beat and weighed on the stock.</p>
+  </div>
+</div></section>
+
+<!-- ===================== 2 · BUSINESS MODEL ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2>What Microsoft actually sells</h2></div>
+  <p class="lede">Three reported segments. Microsoft reclassified some products into these segments in FY2025, so exact splits vary by source — the figures below are approximate full-year FY2025 revenue and are marked as estimates. <span class="tag-est">EST</span></p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">~42% of revenue</div>
+      <h3><span class="dot blue"></span>Intelligent Cloud</h3>
+      <div class="seg-tag">Azure · Server products · Enterprise services</div>
+      <div class="row"><span class="lbl">FY25 revenue</span><span class="val">~$105B <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">Azure growth (FQ3'26)</span><span class="val pos">~40%</span></div>
+      <div class="row"><span class="lbl">Role</span><span class="val">Primary growth engine</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">~42% of revenue</div>
+      <h3><span class="dot green"></span>Productivity &amp; Business</h3>
+      <div class="seg-tag">Microsoft 365 · LinkedIn · Dynamics</div>
+      <div class="row"><span class="lbl">FY25 revenue</span><span class="val">~$117B <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">Driver</span><span class="val">M365 Copilot, seats</span></div>
+      <div class="row"><span class="lbl">Margin</span><span class="val">Very high</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">~21% of revenue</div>
+      <h3><span class="dot yellow"></span>More Personal Computing</h3>
+      <div class="seg-tag">Windows · Gaming · Search · Devices</div>
+      <div class="row"><span class="lbl">FY25 revenue</span><span class="val">~$60B <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">Driver</span><span class="val">Activision, Windows OEM</span></div>
+      <div class="row"><span class="lbl">Role</span><span class="val">Mature / cyclical</span></div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">DO ECONOMICS IMPROVE WITH SCALE?</div>
+    <p>Historically, emphatically yes — software and cloud carry high incremental margins, and group operating margin reached 46.3% last quarter. The open question is whether the AI build-out inverts that: heavy capex and the depreciation that follows are a new, capital-intensive cost layer the old software model never carried. <span class="conf">Confidence: Med</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 3 · FINANCIAL TRAJECTORY ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>The financial trajectory</h2></div>
+  <p class="lede">Five fiscal years (Microsoft's year ends 30 June) of near-uninterrupted compounding: revenue up from $168B to $282B, a ~14% CAGR, with a brief 2023 slowdown before AI re-accelerated cloud.</p>
+
+  <div class="chartbox">
+    <div class="ct">Total revenue, fiscal year ($B)</div>
+    <div class="cs">FY2021–FY2025 actual · FY2026 estimated <span class="tag-est">EST</span></div>
+    <div class="bars" id="revbars">
+      <div class="bar-col"><div class="bar" data-h="55"><span class="top">$168B</span></div><div class="bar-x">FY21</div></div>
+      <div class="bar-col"><div class="bar" data-h="65"><span class="top">$198B</span></div><div class="bar-x">FY22</div></div>
+      <div class="bar-col"><div class="bar" data-h="70"><span class="top">$212B</span></div><div class="bar-x">FY23</div></div>
+      <div class="bar-col"><div class="bar" data-h="80"><span class="top">$245B</span></div><div class="bar-x">FY24</div></div>
+      <div class="bar-col"><div class="bar" data-h="92"><span class="top">$282B</span></div><div class="bar-x">FY25</div></div>
+      <div class="bar-col"><div class="bar est" data-h="100"><span class="top">~$305B</span></div><div class="bar-x">FY26E</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--azure)"></span>Reported</span>
+      <span><span class="swatch" style="background:var(--amber)"></span>Estimate [EST]</span>
+    </div>
+  </div>
+
+  <div class="chartbox" id="fcfline">
+    <div class="ct">Free cash flow, fiscal year ($B)</div>
+    <div class="cs">FCF dipped in FY23, recovered in FY24, then flattened in FY25 as capex accelerated — the early shadow of the AI build-out</div>
+    <svg class="line" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="fcfg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3aa0ff" stop-opacity=".35"/>
+          <stop offset="1" stop-color="#3aa0ff" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- points: FY21 56.1, FY22 65.1, FY23 59.5, FY24 74.1, FY25 71.6 ; y scaled 40..80 -> 200..20 -->
+      <path id="fcfarea" d="M30,116 L150,68 L270,98 L390,30 L510,43 L510,210 L30,210 Z" fill="url(#fcfg)" opacity="0"/>
+      <path id="fcfcurve" d="M30,116 L150,68 L270,98 L390,30 L510,43" fill="none" stroke="#3aa0ff" stroke-width="2.5"/>
+      <g font-family="IBM Plex Mono" font-size="12" fill="#62708e">
+        <text x="30" y="138">$56B</text><text x="120" y="60">$65B</text>
+        <text x="248" y="120">$59B</text><text x="362" y="22">$74B</text><text x="486" y="36">$72B</text>
+        <text x="22" y="205">FY21</text><text x="142" y="205">FY22</text><text x="262" y="205">FY23</text>
+        <text x="382" y="205">FY24</text><text x="500" y="205">FY25</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Metric</th><th class="num">FY2023</th><th class="num">FY2024</th><th class="num">FY2025</th><th class="num">Latest Q (FQ3'26)</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td class="num">$211.9B</td><td class="num">$245.1B</td><td class="num">$281.7B</td><td class="num">$82.9B</td></tr>
+        <tr><td>Revenue growth (YoY)</td><td class="num">+7%</td><td class="num">+16%</td><td class="num pos">+15%</td><td class="num pos">+18%</td></tr>
+        <tr><td>Net income</td><td class="num">$72.4B <span class="tag-est">EST</span></td><td class="num">$88.1B <span class="tag-est">EST</span></td><td class="num">$101.8B</td><td class="num">$31.8B</td></tr>
+        <tr><td>Diluted EPS</td><td class="num">$9.68 <span class="tag-est">EST</span></td><td class="num">$11.80 <span class="tag-est">EST</span></td><td class="num">$13.64 <span class="tag-est">EST</span></td><td class="num">$4.27</td></tr>
+        <tr><td>Operating margin</td><td class="num">~42% <span class="tag-est">EST</span></td><td class="num">~45% <span class="tag-est">EST</span></td><td class="num">~46% <span class="tag-est">EST</span></td><td class="num">46.3%</td></tr>
+        <tr><td>Free cash flow</td><td class="num">$59.5B</td><td class="num">$74.1B</td><td class="num">$71.6B</td><td class="num">n/d</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Multi-year net income, EPS and operating margin are reconstructed from public summaries and marked [EST]; FY2025 net income ($101.8B), FY revenue, FCF, and the FQ3'26 figures are from Microsoft's releases. Confidence: revenue/FCF High; reconstructed EPS Medium.</p>
+
+  <div class="callout">
+    <div class="q">THE LATEST QUARTER — WHAT BEAT, WHAT MISSED</div>
+    <p><strong>Beat:</strong> revenue ($82.9B vs ~$81.5B consensus), EPS ($4.27, +23%), Azure (~40% vs 37–38% guided), Microsoft Cloud ($54.5B, first >$50B quarter). <strong>The overhang:</strong> not an earnings miss but the ~$190B FY capex guide and tight capacity commentary — investors are paying for AI today and waiting for the return.</p>
+  </div>
+</div></section>
+
+<!-- ===================== 4 · BALANCE SHEET & CAPITAL RETURNS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Balance sheet &amp; capital returns</h2></div>
+  <p class="lede">One of a handful of companies with effectively a fortress balance sheet — net cash, prodigious cash generation, and a long record of shrinking the share count. The tension now is capex competing with buybacks for that cash.</p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">Strength</div>
+      <h3>Balance sheet</h3>
+      <div class="row"><span class="lbl">Net position</span><span class="val">Net cash <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">FY25 free cash flow</span><span class="val">$71.6B</span></div>
+      <div class="row"><span class="lbl">Credit quality</span><span class="val">AAA-tier <span class="tag-est">EST</span></span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Dividend</div>
+      <h3>Income</h3>
+      <div class="row"><span class="lbl">Quarterly dividend</span><span class="val">$0.83</span></div>
+      <div class="row"><span class="lbl">FY25 paid</span><span class="val">$3.32</span></div>
+      <div class="row"><span class="lbl">Yield</span><span class="val">~0.9%</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Buybacks</div>
+      <h3>Repurchases</h3>
+      <div class="row"><span class="lbl">FY25 buyback</span><span class="val">~$18.4B</span></div>
+      <div class="row"><span class="lbl">Authorization (2024)</span><span class="val">$60B</span></div>
+      <div class="row"><span class="lbl">Share count</span><span class="val">~7.43B, flat</span></div>
+    </div>
+  </div>
+  <div class="callout amber">
+    <div class="q">THE PER-SHARE CATCH</div>
+    <p>Buybacks (~$18B/yr) have lately only offset stock-based compensation rather than meaningfully shrinking the count — shares outstanding are roughly flat. With ~$190B of capex now competing for cash, don't expect aggressive per-share accretion from repurchases in the near term. Financial Strength Score: <strong style="color:var(--azure-soft)">10 / 10</strong>. <span class="conf">Confidence: High</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 5 · VALUATION ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Valuation</h2></div>
+  <p class="lede">At ~23× trailing earnings, Microsoft trades below both its own recent history (often 30–37× over the past five years) and the mega-cap software/AI peer set. Peer multiples below are illustrative estimates as of mid-2026 and are marked [EST].</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Company</th><th class="num">Mkt cap</th><th class="num">Rev growth</th><th class="num">Gross margin</th><th class="num">EV/Rev</th><th class="num">P/E</th><th class="num">FCF yield</th></tr></thead>
+      <tbody>
+        <tr class="self"><td>Microsoft (MSFT)</td><td class="num">$2.81T</td><td class="num">+18%</td><td class="num">~69%</td><td class="num">~9.5×</td><td class="num">~23×</td><td class="num">~2.5%</td></tr>
+        <tr><td>Apple (AAPL) <span class="tag-est">EST</span></td><td class="num">~$3.3T</td><td class="num">~+6%</td><td class="num">~46%</td><td class="num">~8×</td><td class="num">~30×</td><td class="num">~3.0%</td></tr>
+        <tr><td>Alphabet (GOOGL) <span class="tag-est">EST</span></td><td class="num">~$2.3T</td><td class="num">~+13%</td><td class="num">~58%</td><td class="num">~6×</td><td class="num">~21×</td><td class="num">~3.5%</td></tr>
+        <tr><td>Amazon (AMZN) <span class="tag-est">EST</span></td><td class="num">~$2.2T</td><td class="num">~+11%</td><td class="num">~49%</td><td class="num">~3×</td><td class="num">~38×</td><td class="num">~2.0%</td></tr>
+        <tr><td>Nvidia (NVDA) <span class="tag-est">EST</span></td><td class="num">~$3.5T</td><td class="num">~+50%</td><td class="num">~75%</td><td class="num">~18×</td><td class="num">~38×</td><td class="num">~1.5%</td></tr>
+        <tr><td>Oracle (ORCL) <span class="tag-est">EST</span></td><td class="num">~$0.5T</td><td class="num">~+15%</td><td class="num">~70%</td><td class="num">~9×</td><td class="num">~30×</td><td class="num">~1.5%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card">
+      <div class="corner">vs its own past</div>
+      <h3>Cheap relative to history</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">A ~23× P/E sits near the low end of Microsoft's last five years, when it routinely commanded 30×+. On its own track record the stock looks inexpensive — provided growth and margins hold through the capex cycle. <span class="conf">Confidence: Med</span></p>
+    </div>
+    <div class="card">
+      <div class="corner">Independent mark</div>
+      <h3>Analyst consensus</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">~55 analysts rate MSFT a consensus <strong>Strong Buy</strong>, ~95% Buy with zero Sells, average target ~$561 (S&amp;P Global, 4 Jun 2026) — roughly +47% from the current price. These are <em>other people's</em> estimates, not a recommendation here. <span class="conf">Confidence: High (that this is consensus)</span></p>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">OUR FAIR-VALUE RANGE — ILLUSTRATIVE [EST]</div>
+    <p><strong>~$430–$520</strong>, midpoint ~$475. Built from ~12–14% forward earnings growth and a 26–29× multiple — a partial re-rate from today's ~23× as the market gains confidence the AI capex earns acceptable returns. <strong>What must be true for ~$382 to make sense:</strong> the market is implicitly assuming the AI build-out compresses returns and that growth normalises toward the low-teens with little multiple recovery. <span class="conf">Confidence: Low–Med (estimate, not a forecast)</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 6 · GOVERNANCE ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Governance &amp; management</h2></div>
+  <p class="lede">Among the cleaner governance profiles in mega-cap tech: a single class of stock (one share, one vote), an independent board, and a CEO with an exceptional capital-allocation record — offset by the concentration of Chair and CEO in one person.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Strengths</div>
+      <h3 style="color:var(--green)">What's good</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">No dual-class shares — public holders' votes count fully. Satya Nadella (CEO since 2014) engineered the cloud pivot and the early OpenAI partnership; capital allocation (Azure, GitHub, LinkedIn, the $69B Activision deal) has largely created value. Mostly independent board.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Watch items</div>
+      <h3 style="color:var(--amber)">What to watch</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Nadella holds both Chair and CEO roles, concentrating power. Insider ownership is minimal (typical for a professionally-managed mega-cap). The single biggest capital-allocation test of the era — the ~$190B AI capex bet — is still unproven. Governance Score: <strong style="color:var(--azure-soft)">8 / 10</strong>.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 7 · RISK REGISTER ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">07</span><h2>Risk register</h2></div>
+  <p class="lede">Material risks, highest-severity first. Scores (1–10) are analytical opinion, not fact.</p>
+  <div id="risks" style="margin-top:30px">
+    <div class="risk-row"><div class="risk-name">AI capex &amp; return on investment</div><div class="meter"><div class="track"><div class="fill" data-w="80" style="background:var(--red)"></div></div><span class="sc">8</span></div><div class="risk-why">~$190B FY capex and the depreciation that follows could compress FCF and ROIC for years if AI demand or pricing disappoints.</div></div>
+    <div class="risk-row"><div class="risk-name">Margin &amp; cost pressure</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amber)"></div></div><span class="sc">7</span></div><div class="risk-why">Rising depreciation, energy, and memory costs (a stated capex driver) push against the historically expanding margin.</div></div>
+    <div class="risk-row"><div class="risk-name">Azure deceleration / capacity</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amber)"></div></div><span class="sc">7</span></div><div class="risk-why">The growth story leans heavily on Azure staying near 30–40%; capacity constraints or demand softness would hit the core thesis.</div></div>
+    <div class="risk-row"><div class="risk-name">Valuation</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amber)"></div></div><span class="sc">6</span></div><div class="risk-why">Cheap vs its own history, but ~23× and a $2.8T cap still price in durable mid-teens growth — little margin for a stumble.</div></div>
+    <div class="risk-row"><div class="risk-name">Regulatory / antitrust</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amber)"></div></div><span class="sc">6</span></div><div class="risk-why">Global scrutiny of bundling (Teams), cloud practices, and AI; remedies could affect distribution and pricing power.</div></div>
+    <div class="risk-row"><div class="risk-name">OpenAI dependence / key partnership</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amber)"></div></div><span class="sc">6</span></div><div class="risk-why">Much of the AI narrative rests on the OpenAI relationship; shifts in its terms, economics, or governance carry strategic risk.</div></div>
+    <div class="risk-row"><div class="risk-name">Competition</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amber)"></div></div><span class="sc">6</span></div><div class="risk-why">AWS and Google Cloud compete hard in cloud/AI; commoditisation of model access could pressure cloud economics.</div></div>
+    <div class="risk-row"><div class="risk-name">Concentration on Microsoft Cloud</div><div class="meter"><div class="track"><div class="fill" data-w="50" style="background:var(--azure)"></div></div><span class="sc">5</span></div><div class="risk-why">Cloud is now the dominant profit driver; a cloud-specific shock would matter more than ever to the whole.</div></div>
+    <div class="risk-row"><div class="risk-name">Macro / enterprise IT cyclicality</div><div class="meter"><div class="track"><div class="fill" data-w="50" style="background:var(--azure)"></div></div><span class="sc">5</span></div><div class="risk-why">A sharp enterprise-spending downturn would slow seat growth, Azure consumption, and Windows/devices together.</div></div>
+  </div>
+</div></section>
+
+<!-- ===================== 8 · CATALYSTS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">08</span><h2>Catalysts &amp; what to watch</h2></div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Confirms the thesis</div>
+      <h3 style="color:var(--green)">Bull confirmations</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Next earnings (FQ4 FY2026, late Jul 2026): Azure holding ~37–40%; signs of capex <em>peaking</em> and FCF re-inflecting; tangible Copilot seat monetisation; commentary that AI workloads are filling the new capacity profitably.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Breaks the thesis</div>
+      <h3 style="color:var(--red)">Bear triggers</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Capex guidance rising <em>again</em> without revenue to match; Azure decelerating below mid-30s; operating margin rolling over as depreciation bites; weak Copilot attach; adverse antitrust remedies.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 9 · SCENARIOS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Scenarios</h2></div>
+  <p class="lede">Illustrative one-year scenarios — probabilities and targets are estimates for framing, not forecasts. <span class="tag-est">EST</span></p>
+  <div class="scn">
+    <div class="scn-card bear">
+      <div class="name">Bear</div><div class="prob">25%</div>
+      <div class="tgt">~$320 target</div>
+      <p class="asm">Capex keeps climbing, AI ROI stays unproven, Azure slips toward high-20s, multiple compresses toward ~20×. FCF stays flat under the capex weight.</p>
+    </div>
+    <div class="scn-card base">
+      <div class="name">Base</div><div class="prob">50%</div>
+      <div class="tgt">~$470 target</div>
+      <p class="asm">Azure holds ~mid-30s%, capex plateaus, margins prove resilient, and the multiple partially re-rates to ~26×. Steady mid-teens earnings growth.</p>
+    </div>
+    <div class="scn-card bull">
+      <div class="name">Bull</div><div class="prob">25%</div>
+      <div class="tgt">~$600 target</div>
+      <p class="asm">AI monetisation inflects (Copilot + Azure AI), capex is revealed as high-return, FCF re-accelerates, and the stock re-rates back toward its historical ~30×.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 10 · BULL VS BEAR ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">10</span><h2>Bull vs bear</h2></div>
+  <div class="bb">
+    <div class="bb-col bull">
+      <div class="bb-head"><span>Bull case</span><span>6 points</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">Revenue +18% and EPS +23% last quarter.</div><div class="bb-why">A $280B+ company is still growing like a much smaller one — rare durability.</div></div>
+        <div class="bb-item"><div class="bb-fact">Azure grew ~40%, beating guidance.</div><div class="bb-why">The most important number in the story is accelerating, not fading.</div></div>
+        <div class="bb-item"><div class="bb-fact">~46% operating margin; $70B+ FCF.</div><div class="bb-why">Best-in-class profitability funds the AI bet without external capital.</div></div>
+        <div class="bb-item"><div class="bb-fact">~23× P/E, below its own 5-yr norm.</div><div class="bb-why">Multiple compression has done part of the de-risking already.</div></div>
+        <div class="bb-item"><div class="bb-fact">Single-class shares, strong governance.</div><div class="bb-why">Public shareholders' votes count; cleaner than dual-class peers.</div></div>
+        <div class="bb-item"><div class="bb-fact">Consensus Strong Buy, ~$561 target.</div><div class="bb-why">~55 analysts see meaningful upside (their estimate, not ours).</div></div>
+      </div>
+    </div>
+    <div class="bb-col bear">
+      <div class="bb-head"><span>Bear case</span><span>6 points</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">~$190B FY capex guide.</div><div class="bb-why">Turns an asset-light compounder into a capital-intensive one; ROI unproven.</div></div>
+        <div class="bb-item"><div class="bb-fact">FCF flat in FY25 ($71.6B).</div><div class="bb-why">The cash machine has already stalled as capex ramps.</div></div>
+        <div class="bb-item"><div class="bb-fact">Rising depreciation &amp; memory costs.</div><div class="bb-why">A new structural cost layer threatens the prized margin trajectory.</div></div>
+        <div class="bb-item"><div class="bb-fact">Down ~31% from its 2025 high.</div><div class="bb-why">The market is actively re-pricing the AI bet — momentum is negative.</div></div>
+        <div class="bb-item"><div class="bb-fact">Buybacks only offset SBC.</div><div class="bb-why">Flat share count means little per-share help while capex eats cash.</div></div>
+        <div class="bb-item"><div class="bb-fact">~$2.8T cap, regulatory target.</div><div class="bb-why">Law of large numbers plus antitrust scrutiny cap the upside math.</div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 11 · SCORECARD + VERDICT ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">11</span><h2>Final scorecard &amp; verdict</h2></div>
+  <p class="lede">Ten categories scored 1–10 (analytical opinion). Overall is the equal-weighted average × 10.</p>
+  <div class="score-grid" id="scores">
+    <div class="score-line"><span class="nm">Business Quality</span><span class="track"><span class="fill" data-w="90"></span></span><span class="n">9</span></div>
+    <div class="score-line"><span class="nm">Competitive Moat</span><span class="track"><span class="fill" data-w="90"></span></span><span class="n">9</span></div>
+    <div class="score-line"><span class="nm">Management</span><span class="track"><span class="fill" data-w="80"></span></span><span class="n">8</span></div>
+    <div class="score-line"><span class="nm">Governance</span><span class="track"><span class="fill" data-w="80"></span></span><span class="n">8</span></div>
+    <div class="score-line"><span class="nm">Financial Strength</span><span class="track"><span class="fill" data-w="100"></span></span><span class="n">10</span></div>
+    <div class="score-line"><span class="nm">Growth</span><span class="track"><span class="fill" data-w="80"></span></span><span class="n">8</span></div>
+    <div class="score-line"><span class="nm">Profitability</span><span class="track"><span class="fill" data-w="90"></span></span><span class="n">9</span></div>
+    <div class="score-line"><span class="nm">Valuation</span><span class="track"><span class="fill" data-w="60"></span></span><span class="n">6</span></div>
+    <div class="score-line"><span class="nm">Capital Returns</span><span class="track"><span class="fill" data-w="70"></span></span><span class="n">7</span></div>
+    <div class="score-line"><span class="nm">Risk Profile</span><span class="track"><span class="fill" data-w="70"></span></span><span class="n">7</span></div>
+  </div>
+
+  <div class="verdict-box">
+    <div class="verdict-label">Educational verdict · scale: Strong Sell → Strong Buy</div>
+    <div class="verdict-word">Buy</div>
+    <div class="verdict-score">Overall score · 81 / 100 · equal-weighted average of ten categories</div>
+    <p class="verdict-reason">A best-in-class franchise trading below its own historical multiple after a year-long de-rating driven by AI-capex fear rather than any deterioration in the business — revenue still grew 18% and Azure ~40% last quarter. The quality, balance sheet and governance are exceptional; the live debate is purely about whether ~$190B of annual capex earns its keep. For a long-horizon, education-only lens the risk/reward looks favourable, but this is explicitly <em>not</em> personalised advice and we are not licensed advisors.</p>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><div class="corner" style="color:var(--green)">Biggest reason bulls may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">You're buying the clearest enterprise-AI distribution channel on earth — Azure + 365 + Copilot — at ~23× and below its own norm, while it still compounds in the high teens. If AI capex earns its cost, today looks like a discount.</p></div>
+    <div class="card"><div class="corner" style="color:var(--red)">Biggest reason bears may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">A ~$190B capex wave has already flattened free cash flow and will lift depreciation for years. If AI demand or pricing disappoints, the famous margin and FCF profile erodes — and ~$2.8T leaves little room for error.</p></div>
+  </div>
+</div></section>
+
+<!-- ===================== DISCLAIMER ===================== -->
+<div class="disc"><div class="wrap">
+  <p class="big">Educational only — not financial advice. Prices shown are as of the generation date and will have changed. Do your own research.</p>
+  <p>Figures drawn from Microsoft's FY2025 and FQ3 FY2026 earnings releases / SEC filings (8-K, 10-Q), the Microsoft Investor Relations site, and reporting/aggregation by CNBC, Morningstar, Macrotrends, Bullfincher, StockAnalysis and S&amp;P Global. Multi-year EPS/margins, segment splits, peer multiples and the net-cash position are reconstructed estimates and marked [EST]. Scores, the fair-value range, scenarios, probabilities and the verdict are analytical opinion, not fact, and not a recommendation. The author is not a licensed financial advisor.</p>
+  <p class="src-note">Generated 2026-06-19 (UTC) · prompt version e7c98f2 · live market data changes constantly — look up MSFT for the current price.</p>
+</div></div>
+</main>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target;
+      if(el.id==='revbars'){ el.querySelectorAll('.bar').forEach(b=>{ b.style.height=b.dataset.h+'%'; }); }
+      if(el.id==='risks' || el.id==='scores'){ el.querySelectorAll('.fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; }); }
+      if(el.id==='fcfline'){
+        const c=document.getElementById('fcfcurve'), a=document.getElementById('fcfarea');
+        const len=c.getTotalLength();
+        c.style.strokeDasharray=len; c.style.strokeDashoffset=len; c.getBoundingClientRect();
+        c.style.transition='stroke-dashoffset 1.6s ease'; c.style.strokeDashoffset='0';
+        setTimeout(()=>{a.style.transition='opacity 1s ease';a.style.opacity='1';},700);
+      }
+      io.unobserve(el);
+    });
+  },{threshold:.3});
+  ['revbars','risks','scores','fcfline'].forEach(id=>{ const el=document.getElementById(id); if(el) io.observe(el); });
+  document.querySelectorAll('#revbars .bar').forEach(b=>b.style.height='0%');
+  document.querySelectorAll('#risks .fill,#scores .fill').forEach(f=>f.style.width='0%');
+</script>
+</body>
+</html>
