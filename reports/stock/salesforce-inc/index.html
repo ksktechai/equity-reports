@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- report-meta: type=stock; slug=salesforce-inc; name=Salesforce Inc; generated=2026-06-19; prompt=3090237 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salesforce Stock Analysis · CRM</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap');
+
+  :root{
+    --void:#041326;
+    --deep:#06203f;
+    --panel:#0a2c54;
+    --panel-2:#0c305c99;
+    --line:#1d4878;
+    --ink:#eaf2fb;
+    --mute:#9bb4d4;
+    --faint:#6486ad;
+    --sf-blue:#00a1e0;       /* Salesforce blue */
+    --sf-cyan:#4cc8ff;
+    --sf-navy:#032d60;
+    --cloud:#cfe9fb;
+    --green:#46d39a;
+    --amber:#f2b441;
+    --red:#ff5470;
+    --grid:rgba(0,161,224,.05);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1100px 540px at 80% -8%, rgba(0,161,224,.16), transparent 60%),
+      radial-gradient(760px 420px at 8% 2%, rgba(76,200,255,.10), transparent 55%),
+      radial-gradient(900px 500px at 50% 110%, rgba(3,45,96,.5), transparent 60%),
+      var(--void);
+    color:var(--ink);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* faint cloud/sky backdrop */
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6;
+    background-image:
+      radial-gradient(closest-side at 18% 22%, rgba(0,161,224,.10), transparent),
+      radial-gradient(closest-side at 72% 38%, rgba(76,200,255,.08), transparent),
+      radial-gradient(closest-side at 40% 78%, rgba(0,161,224,.07), transparent),
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:auto,auto,auto,52px 52px,52px 52px;
+    mask-image:radial-gradient(circle at 50% 0%,#000,transparent 78%);
+    -webkit-mask-image:radial-gradient(circle at 50% 0%,#000,transparent 78%)}
+
+  main{position:relative;z-index:1}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--sf-cyan)}
+
+  /* cloud mark */
+  .cloudmark{display:inline-block;width:40px;height:28px;vertical-align:middle;margin-right:10px}
+
+  /* HERO */
+  header.hero{position:relative;padding:84px 0 56px;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero-inner{position:relative;z-index:2}
+  .hero-tag{display:flex;gap:14px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .pill{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+    padding:5px 11px;border:1px solid var(--line);border-radius:100px;color:var(--mute);background:var(--panel-2)}
+  .pill.live{color:var(--green);border-color:rgba(70,211,154,.4)}
+  .pill.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--green);margin-right:7px;vertical-align:middle;box-shadow:0 0 8px var(--green);
+    animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .pill.down{color:var(--red);border-color:rgba(255,84,112,.4)}
+
+  h1.title{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(40px,7vw,76px);
+    line-height:1.02;letter-spacing:-.02em;margin:8px 0 6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  h1.title .ticker{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.32em;
+    letter-spacing:.05em;color:var(--sf-cyan);vertical-align:middle;border:1px solid rgba(0,161,224,.45);
+    border-radius:8px;padding:6px 12px;margin-left:6px;background:rgba(0,161,224,.08)}
+  .sub{color:var(--mute);max-width:64ch;font-size:17px;margin-top:14px}
+
+  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:44px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+  .strip .cell{background:var(--deep);padding:20px 18px}
+  .strip .v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(20px,2.6vw,27px);letter-spacing:-.01em}
+  .strip .v.azure{color:var(--sf-cyan)} .strip .v.down{color:var(--red)} .strip .v.up{color:var(--green)}
+  .strip .k{font-size:11px;color:var(--faint);margin-top:6px;font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.04em;text-transform:uppercase}
+  .asof{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);margin-top:18px}
+  .note{font-size:13px;color:var(--faint);margin-top:14px;font-style:italic}
+
+  /* sections */
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--sf-cyan);
+    border:1px solid rgba(0,161,224,.3);border-radius:6px;padding:2px 8px}
+  h2{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em;line-height:1.1}
+  .lede{color:var(--mute);max-width:70ch;margin-top:14px;font-size:16px}
+
+  /* cards */
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:linear-gradient(180deg,var(--panel),var(--deep));border:1px solid var(--line);
+    border-radius:16px;padding:24px;position:relative;overflow:hidden}
+  .card .corner{position:absolute;top:0;right:0;font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:.1em;color:var(--faint);padding:9px 12px;text-transform:uppercase}
+  .card h3{font-size:20px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .seg-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute);margin-bottom:14px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;
+    border-top:1px solid var(--line);font-size:14px}
+  .row:first-of-type{border-top:none}
+  .row .lbl{color:var(--faint)} .row .val{font-family:'IBM Plex Mono',monospace;font-weight:500}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot.blue{background:var(--sf-blue);box-shadow:0 0 10px var(--sf-blue)}
+  .dot.cyan{background:var(--sf-cyan);box-shadow:0 0 10px var(--sf-cyan)}
+  .dot.green{background:var(--green);box-shadow:0 0 10px var(--green)}
+
+  .callout{margin-top:28px;border-left:2px solid var(--sf-blue);
+    background:linear-gradient(90deg,rgba(0,161,224,.09),transparent);padding:18px 22px;border-radius:0 12px 12px 0}
+  .callout .q{font-weight:600;color:var(--sf-cyan);font-size:14px;margin-bottom:6px;
+    font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+  .callout p{color:var(--mute);font-size:15px}
+  .callout.amber{border-color:var(--amber);background:linear-gradient(90deg,rgba(242,180,65,.08),transparent)}
+  .callout.amber .q{color:var(--amber)}
+
+  /* charts */
+  .chartbox{margin-top:34px;background:var(--deep);border:1px solid var(--line);border-radius:16px;padding:26px 24px 18px}
+  .chartbox .ct{font-size:13px;color:var(--mute);margin-bottom:2px}
+  .chartbox .cs{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-bottom:22px}
+  .bars{display:flex;align-items:flex-end;gap:clamp(8px,3vw,30px);height:230px;padding-left:8px}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:100%;max-width:62px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--sf-blue),rgba(0,161,224,.22));
+    transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+  .bar.est{background:linear-gradient(180deg,var(--amber),rgba(242,180,65,.2))}
+  .bar .top{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+  .bar-x{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-top:10px}
+  .legend{display:flex;gap:18px;margin-top:18px;font-size:11px;color:var(--faint);
+    font-family:'IBM Plex Mono',monospace;flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .swatch{width:11px;height:11px;border-radius:3px}
+  svg.line{width:100%;height:auto;display:block;margin-top:6px}
+
+  /* tables */
+  .tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--deep);overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
+  th{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--faint);background:var(--panel)}
+  td{color:var(--ink)}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right}
+  tr.self td{background:rgba(0,161,224,.08)}
+  .tag-est{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--amber);
+    border:1px solid rgba(242,180,65,.35);border-radius:4px;padding:1px 5px;margin-left:6px}
+  .conf{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--faint);
+    border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:6px;text-transform:uppercase;letter-spacing:.06em}
+  .pos{color:var(--green)}.neg{color:var(--red)}
+
+  /* risk meter */
+  .risk-row{display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center;
+    padding:14px 0;border-top:1px solid var(--line)}
+  .risk-row:first-child{border-top:none}
+  .risk-name{font-weight:500;font-size:15px}
+  .risk-why{color:var(--faint);font-size:13px;margin-top:3px;grid-column:1/-1}
+  .meter{display:flex;align-items:center;gap:11px}
+  .meter .track{width:130px;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .meter .fill{height:100%;border-radius:4px}
+  .meter .sc{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;width:30px;text-align:right}
+
+  /* bull/bear */
+  .bb{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+  .bb-col{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .bb-head{padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .bb.bull .bb-head{background:rgba(70,211,154,.1);color:var(--green);border-bottom:1px solid rgba(70,211,154,.25)}
+  .bb.bear .bb-head{background:rgba(255,84,112,.1);color:var(--red);border-bottom:1px solid rgba(255,84,112,.25)}
+  .bb-body{padding:8px 22px 18px}
+  .bb-item{padding:15px 0;border-top:1px solid var(--line)}
+  .bb-item:first-child{border-top:none}
+  .bb-fact{font-size:14px;font-weight:500;margin-bottom:4px}
+  .bb-why{font-size:13px;color:var(--faint)}
+
+  /* scenarios */
+  .scn{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .scn-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--deep);position:relative}
+  .scn-card .prob{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:-.02em}
+  .scn-card .name{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+  .scn-card.bear .prob{color:var(--red)} .scn-card.bear .name{color:var(--red)}
+  .scn-card.base .prob{color:var(--sf-cyan)} .scn-card.base .name{color:var(--sf-cyan)}
+  .scn-card.bull .prob{color:var(--green)} .scn-card.bull .name{color:var(--green)}
+  .scn-card .tgt{font-size:15px;margin:12px 0 4px;font-weight:600}
+  .scn-card .asm{font-size:13px;color:var(--faint)}
+
+  /* verdict + scorecard */
+  .verdict-box{margin-top:30px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(160deg,var(--panel),var(--void));padding:36px;text-align:center;position:relative;overflow:hidden}
+  .verdict-box::before{content:"";position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+    width:420px;height:420px;background:radial-gradient(circle,rgba(0,161,224,.16),transparent 70%)}
+  .verdict-label{position:relative;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;
+    text-transform:uppercase;font-size:12px;color:var(--faint);margin-bottom:14px}
+  .verdict-word{position:relative;font-family:'Newsreader',serif;font-size:clamp(44px,8vw,72px);
+    color:var(--sf-cyan);font-weight:500;letter-spacing:-.01em}
+  .verdict-score{position:relative;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--mute);margin-top:8px}
+  .verdict-reason{position:relative;max-width:66ch;margin:22px auto 0;color:var(--mute);font-size:15px}
+
+  .score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 28px;margin-top:30px}
+  .score-line{display:flex;align-items:center;gap:14px}
+  .score-line .nm{flex:none;width:140px;font-size:13px;color:var(--mute)}
+  .score-line .track{flex:1;height:6px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .score-line .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--sf-blue),var(--sf-cyan));
+    width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .score-line .n{font-family:'IBM Plex Mono',monospace;font-size:13px;width:34px;text-align:right;font-weight:600}
+
+  /* disclaimer */
+  .disc{padding:48px 0 70px;text-align:center}
+  .disc p{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);
+    letter-spacing:.04em;max-width:66ch;margin:0 auto}
+  .disc .big{color:var(--mute);font-size:13px;margin-bottom:10px}
+  .src-note{font-size:12px;color:var(--faint);margin-top:24px;line-height:1.7}
+
+  @media(max-width:860px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    .g3,.g2,.scn,.score-grid{grid-template-columns:1fr}
+    .bb{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<main>
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-tag">
+      <span class="pill live">Trading live · NYSE</span>
+      <span class="pill down">−43% from 2024 high</span>
+      <span class="pill">Educational · not advice</span>
+    </div>
+    <div class="eyebrow">Institutional Stock Teardown</div>
+    <h1 class="title">
+      <svg class="cloudmark" viewBox="0 0 64 44" aria-hidden="true"><path d="M50 30a10 10 0 0 0-2.3-19.7 14 14 0 0 0-26.6-2.1A11 11 0 0 0 13 30z" fill="none" stroke="#00a1e0" stroke-width="3.2" stroke-linejoin="round"/></svg>
+      Salesforce<span class="ticker">CRM</span></h1>
+    <p class="sub">The company that defined cloud CRM now generates ~$14B of free cash flow at 78% gross margins — yet the stock sits at a 52-week low as investors ask whether agentic AI helps Salesforce or quietly dismantles the per-seat model it was built on.</p>
+
+    <div class="strip">
+      <div class="cell"><div class="v azure">$155.02</div><div class="k">Price · 17 Jun 2026</div></div>
+      <div class="cell"><div class="v">~$132B <span class="tag-est">EST</span></div><div class="k">Market cap</div></div>
+      <div class="cell"><div class="v">~18×</div><div class="k">P/E (TTM, GAAP)</div></div>
+      <div class="cell"><div class="v up">+13%</div><div class="k">Latest qtr revenue</div></div>
+      <div class="cell"><div class="v down">$154–$277</div><div class="k">52-week range</div></div>
+    </div>
+    <p class="asof">Price as of 17 Jun 2026 close; market cap reflects the post-ASR reduced share count [EST]. The live price will have moved — look up CRM for where it trades now.</p>
+    <p class="note">Analysis complexity: <strong style="color:var(--sf-cyan)">8 / 10</strong> — clean single-class structure, but an AI-disruption debate over the seat model <em>and</em> a balance sheet just transformed by a $25B debt-funded buyback make the valuation genuinely hard to call.</p>
+  </div>
+</header>
+
+<!-- ===================== 1 · EXEC SUMMARY ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>The one-paragraph version</h2></div>
+  <p class="lede">Salesforce sells cloud software that companies use to run sales, customer service, marketing, commerce, analytics and internal collaboration — Sales Cloud, Service Cloud, Marketing Cloud, Slack, Tableau, MuleSoft, Data Cloud and, increasingly, its Agentforce AI agents. In Q1 FY2027 (quarter ended 30 Apr 2026) revenue rose 13% to $11.13B with record operating margins, but the shares trade near a 52-week low because organic growth has slowed to ~9–10%, the market fears AI agents could erode seat-based subscriptions, and management funded a $25B accelerated buyback with new debt — converting a former net-cash balance sheet into a net-debt one and halving the free-cash-flow growth guide.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Bull thesis · one line</div>
+      <h3 style="color:var(--green)">The bull pull</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">A category-defining enterprise franchise at ~11× non-GAAP earnings and an ~11% free-cash-flow yield, with Agentforce AI revenue up 205% — a cheap re-rating candidate if AI turns out to <em>expand</em> Salesforce's wallet rather than shrink it. <span class="conf">Confidence: Med</span></p>
+    </div>
+    <div class="card">
+      <div class="corner">Bear thesis · one line</div>
+      <h3 style="color:var(--red)">The bear weight</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Growth has decelerated to single digits and may be propped up by M&amp;A (Informatica), while agentic AI threatens the per-seat model — and a freshly added $25B of debt removes the balance-sheet cushion just as the thesis gets riskiest. <span class="conf">Confidence: Med</span></p>
+    </div>
+  </div>
+  <div class="callout amber">
+    <div class="q">WHAT CHANGED MOST RECENTLY</div>
+    <p>Q1 FY27 beat on revenue ($11.13B, +13%) and EPS (non-GAAP $3.88, +50%; GAAP $2.42, +52%), with non-GAAP operating margin at a record 34.8% and Agentforce reaching ~$1.2B annualized revenue. But Salesforce <strong>raised FY27 revenue guidance to $45.9–46.2B while cutting free-cash-flow growth guidance to ~4–5%</strong> (from 9–10%) to service the $25B accelerated share repurchase — the market read the debt-funded buyback as a defensive move and sold the stock.</p>
+  </div>
+</div></section>
+
+<!-- ===================== 2 · BUSINESS MODEL ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2>What Salesforce actually sells</h2></div>
+  <p class="lede">A subscription software suite sold mostly per user, per month. Salesforce reports one segment but discloses revenue by service offering; the groupings and figures below are approximate, based on its FY2026 service-revenue mix, and are marked as estimates. <span class="tag-est">EST</span></p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">~45% of revenue</div>
+      <h3><span class="dot blue"></span>Sales &amp; Service Cloud</h3>
+      <div class="seg-tag">The core CRM · sales + customer support</div>
+      <div class="row"><span class="lbl">Est. FY26 revenue</span><span class="val">~$18B <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">Model</span><span class="val">Per-seat subscription</span></div>
+      <div class="row"><span class="lbl">Role</span><span class="val">Mature, cash engine</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">~30% of revenue</div>
+      <h3><span class="dot cyan"></span>Data, Integration &amp; Analytics</h3>
+      <div class="seg-tag">Data Cloud · MuleSoft · Tableau · Informatica</div>
+      <div class="row"><span class="lbl">Est. FY26 revenue</span><span class="val">~$12B <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">Driver</span><span class="val">Data Cloud, M&amp;A</span></div>
+      <div class="row"><span class="lbl">Role</span><span class="val">AI fuel layer</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">~25% of revenue</div>
+      <h3><span class="dot green"></span>Platform, Slack &amp; Agentforce</h3>
+      <div class="seg-tag">App platform · Slack · AI agents · Marketing</div>
+      <div class="row"><span class="lbl">Est. FY26 revenue</span><span class="val">~$11B <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">Agentforce ARR</span><span class="val pos">~$1.2B, +205%</span></div>
+      <div class="row"><span class="lbl">Role</span><span class="val">The growth bet</span></div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">DO ECONOMICS IMPROVE WITH SCALE?</div>
+    <p>Yes on cost — gross margin has climbed from ~73% (FY22) to ~78% and non-GAAP operating margin hit a record 34.8% last quarter as the post-2023 efficiency drive stuck. The unresolved question is on the <em>top line</em>: the historic engine was selling more seats at higher prices, and Agentforce's consumption (per-conversation) pricing is a deliberate hedge against AI reducing the number of human seats customers need. Net revenue retention, once well above 120%, has drifted toward ~%-low-teens growth. <span class="conf">Confidence: Med</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 3 · FINANCIAL TRAJECTORY ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>The financial trajectory</h2></div>
+  <p class="lede">Salesforce's fiscal year ends 31 January. The story of the last five years is not the top line — revenue compounded a steady ~12% — but the <em>margin transformation</em>: GAAP operating margin went from ~2% to ~20% and net income from $0.2B to $7.5B after activist pressure forced discipline in 2023.</p>
+
+  <div class="chartbox">
+    <div class="ct">Total revenue, fiscal year ($B)</div>
+    <div class="cs">FY2022–FY2026 actual · FY2027 = midpoint of company guidance <span class="tag-est">EST</span></div>
+    <div class="bars" id="revbars">
+      <div class="bar-col"><div class="bar" data-h="58"><span class="top">$26.5B</span></div><div class="bar-x">FY22</div></div>
+      <div class="bar-col"><div class="bar" data-h="68"><span class="top">$31.4B</span></div><div class="bar-x">FY23</div></div>
+      <div class="bar-col"><div class="bar" data-h="76"><span class="top">$34.9B</span></div><div class="bar-x">FY24</div></div>
+      <div class="bar-col"><div class="bar" data-h="82"><span class="top">$37.9B</span></div><div class="bar-x">FY25</div></div>
+      <div class="bar-col"><div class="bar" data-h="90"><span class="top">$41.5B</span></div><div class="bar-x">FY26</div></div>
+      <div class="bar-col"><div class="bar est" data-h="100"><span class="top">~$46B</span></div><div class="bar-x">FY27E</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--sf-blue)"></span>Reported</span>
+      <span><span class="swatch" style="background:var(--amber)"></span>Guidance midpoint [EST]</span>
+    </div>
+  </div>
+
+  <div class="chartbox" id="fcfline">
+    <div class="ct">Free cash flow, fiscal year ($B)</div>
+    <div class="cs">FCF more than doubled in three years as margins expanded — but FY27 growth is guided to just ~4–5% because of debt service on the $25B buyback</div>
+    <svg class="line" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="fcfg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#00a1e0" stop-opacity=".35"/>
+          <stop offset="1" stop-color="#00a1e0" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- FY22 5.3, FY23 6.3, FY24 9.5, FY25 12.4, FY26 14.4 ; y = 200-(val-5)*18 -->
+      <path id="fcfarea" d="M30,195 L150,176 L270,119 L390,66 L510,31 L510,210 L30,210 Z" fill="url(#fcfg)" opacity="0"/>
+      <path id="fcfcurve" d="M30,195 L150,176 L270,119 L390,66 L510,31" fill="none" stroke="#00a1e0" stroke-width="2.5"/>
+      <g font-family="IBM Plex Mono" font-size="12" fill="#6486ad">
+        <text x="30" y="188">$5.3B</text><text x="120" y="168">$6.3B</text>
+        <text x="248" y="111">$9.5B</text><text x="362" y="58">$12.4B</text><text x="476" y="24">$14.4B</text>
+        <text x="22" y="205">FY22</text><text x="142" y="205">FY23</text><text x="262" y="205">FY24</text>
+        <text x="382" y="205">FY25</text><text x="500" y="205">FY26</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Metric</th><th class="num">FY2023</th><th class="num">FY2024</th><th class="num">FY2025</th><th class="num">FY2026</th><th class="num">Latest Q (Q1'27)</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td class="num">$31.4B</td><td class="num">$34.9B</td><td class="num">$37.9B</td><td class="num">$41.5B</td><td class="num">$11.13B</td></tr>
+        <tr><td>Revenue growth (YoY)</td><td class="num">+18%</td><td class="num">+11%</td><td class="num">+9%</td><td class="num pos">+10%</td><td class="num pos">+13%</td></tr>
+        <tr><td>Gross margin</td><td class="num">73.3%</td><td class="num">75.5%</td><td class="num">77.2%</td><td class="num">77.7%</td><td class="num">~78%</td></tr>
+        <tr><td>Net income (GAAP)</td><td class="num">$0.21B</td><td class="num">$4.14B</td><td class="num">$6.20B</td><td class="num">$7.46B</td><td class="num">$2.29B <span class="tag-est">EST</span></td></tr>
+        <tr><td>Diluted EPS (GAAP)</td><td class="num">$0.21</td><td class="num">$4.20</td><td class="num">$6.36</td><td class="num">$7.80</td><td class="num">$2.42</td></tr>
+        <tr><td>GAAP operating margin</td><td class="num">3.3%</td><td class="num">14.4%</td><td class="num">19.0%</td><td class="num">20.1%</td><td class="num">21.1%</td></tr>
+        <tr><td>Free cash flow</td><td class="num">$6.3B</td><td class="num">$9.5B</td><td class="num">$12.4B</td><td class="num">$14.4B</td><td class="num">n/d</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">FY revenue, EPS, margins and FCF are from Salesforce earnings releases / SEC filings; Q1'27 net income is implied from EPS × shares [EST]. Multi-year revenue CAGR (FY22→FY26) ≈ 12%; FCF CAGR (FY23→FY26) ≈ 32%. Confidence: reported figures High; derived items Medium.</p>
+
+  <div class="callout">
+    <div class="q">THE LATEST QUARTER — WHAT BEAT, WHAT MISSED</div>
+    <p><strong>Beat:</strong> revenue ($11.13B vs ~$10.9B consensus, +13%), non-GAAP EPS ($3.88, +50%), record margins, and cRPO (current remaining performance obligation) of $33.6B, +14% — a forward booking signal. <strong>The disappointment:</strong> not the quarter but the guide — full-year FCF growth was cut to ~4–5% to fund the $25B buyback with debt, and ~3 points of the headline growth comes from the Informatica acquisition rather than the core. Q2 revenue is guided to $11.27–11.35B (+10–11%).</p>
+  </div>
+</div></section>
+
+<!-- ===================== 4 · BALANCE SHEET & CAPITAL RETURNS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Balance sheet &amp; capital returns</h2></div>
+  <p class="lede">This is the section that changed most in 2026. Salesforce had long carried roughly net-cash; to fund a $25B accelerated share repurchase it issued ~$24.8B of new debt, moving to a net-debt position with bonds maturing as far out as the 2060s. The trade: aggressive per-share accretion now, less flexibility and lower FCF growth later.</p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">After the ASR</div>
+      <h3>Balance sheet</h3>
+      <div class="row"><span class="lbl">Cash &amp; equivalents</span><span class="val">~$8.9B</span></div>
+      <div class="row"><span class="lbl">Total debt</span><span class="val">~$33B <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">Net position</span><span class="val neg">Net debt ~$24B <span class="tag-est">EST</span></span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Dividend</div>
+      <h3>Income</h3>
+      <div class="row"><span class="lbl">Quarterly dividend</span><span class="val">$0.44</span></div>
+      <div class="row"><span class="lbl">Annualized</span><span class="val">$1.76</span></div>
+      <div class="row"><span class="lbl">Yield</span><span class="val">~1.1%</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Buybacks</div>
+      <h3>Repurchases</h3>
+      <div class="row"><span class="lbl">Authorization</span><span class="val">$50B</span></div>
+      <div class="row"><span class="lbl">Accelerated repurchase</span><span class="val">$25B ASR</span></div>
+      <div class="row"><span class="lbl">Shares (FY25→now)</span><span class="val pos">~974M → ~853M</span></div>
+    </div>
+  </div>
+  <div class="callout amber">
+    <div class="q">THE LEVERAGE TRADE-OFF</div>
+    <p>The ASR delivered ~103M shares upfront (≈80% of the total), shrinking the count by &gt;10% and lifting Q1 non-GAAP EPS by ~$0.23. Per-share value rises — but the company now has interest expense, a net-debt balance sheet for the first time in years, and FY27 FCF growth guided to ~4–5% rather than ~9–10%. Buying back stock at a 52-week low can be smart capital allocation; doing it with borrowed money raises the stakes if growth disappoints. Financial Strength Score: <strong style="color:var(--sf-cyan)">6 / 10</strong>. <span class="conf">Confidence: Med</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 5 · VALUATION ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Valuation</h2></div>
+  <p class="lede">On almost every measure Salesforce is cheap versus its own history and its peer set: ~3.6× EV/revenue (it traded 6–9× in 2018–2021), ~11× forward non-GAAP earnings, and an ~11% free-cash-flow yield. The debate is whether that's a bargain or a value trap. Peer multiples below are illustrative estimates as of mid-2026 and are marked [EST].</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Company</th><th class="num">Mkt cap</th><th class="num">Rev growth</th><th class="num">Gross margin</th><th class="num">EV/Rev</th><th class="num">P/E (fwd)</th><th class="num">FCF yield</th></tr></thead>
+      <tbody>
+        <tr class="self"><td>Salesforce (CRM)</td><td class="num">~$132B</td><td class="num">~+10%</td><td class="num">~78%</td><td class="num">~3.6×</td><td class="num">~19× / 11×*</td><td class="num">~11%</td></tr>
+        <tr><td>ServiceNow (NOW) <span class="tag-est">EST</span></td><td class="num">~$200B</td><td class="num">~+22%</td><td class="num">~80%</td><td class="num">~14×</td><td class="num">~21×</td><td class="num">~2.5%</td></tr>
+        <tr><td>Microsoft (MSFT) <span class="tag-est">EST</span></td><td class="num">~$2.8T</td><td class="num">~+18%</td><td class="num">~69%</td><td class="num">~9.5×</td><td class="num">~23×</td><td class="num">~2.5%</td></tr>
+        <tr><td>Oracle (ORCL) <span class="tag-est">EST</span></td><td class="num">~$0.6T</td><td class="num">~+15%</td><td class="num">~70%</td><td class="num">~9×</td><td class="num">~27×</td><td class="num">~1.5%</td></tr>
+        <tr><td>SAP (SAP) <span class="tag-est">EST</span></td><td class="num">~$0.3T</td><td class="num">~+10%</td><td class="num">~73%</td><td class="num">~7×</td><td class="num">~42×</td><td class="num">~2.5%</td></tr>
+        <tr><td>Adobe (ADBE) <span class="tag-est">EST</span></td><td class="num">~$160B</td><td class="num">~+10%</td><td class="num">~89%</td><td class="num">~7×</td><td class="num">~18×</td><td class="num">~6%</td></tr>
+        <tr><td>Workday (WDAY) <span class="tag-est">EST</span></td><td class="num">~$60B</td><td class="num">~+13%</td><td class="num">~76%</td><td class="num">~6×</td><td class="num">~24×</td><td class="num">~4%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">*Salesforce P/E shown two ways: ~19× on FY27 GAAP EPS guidance (~$7.96) and ~11× on FY27 non-GAAP EPS guidance (~$14.09). Salesforce sits at a clear discount to the software peer median on EV/revenue and FCF yield, but it also has the <em>slowest</em> growth in the group — the discount is partly deserved.</p>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card">
+      <div class="corner">vs its own past</div>
+      <h3>Historically cheap</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">At ~3.6× EV/revenue and ~11× non-GAAP earnings, Salesforce trades at roughly half its 2018–2021 multiples, when slowing growth was unthinkable. On its own track record the stock is inexpensive — the market is pricing a structural, not cyclical, slowdown. <span class="conf">Confidence: Med</span></p>
+    </div>
+    <div class="card">
+      <div class="corner">Independent mark</div>
+      <h3>Analyst consensus</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">~39 analysts lean Buy vs 2 Sell, with an average 12-month target around <strong>~$254</strong> (MarketBeat, mid-2026) — well above the ~$155 price, though several firms cut fair-value estimates in 2026 over the AI-growth question. These are <em>other people's</em> estimates, not a recommendation here. <span class="conf">Confidence: High (that this is consensus)</span></p>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">OUR FAIR-VALUE RANGE — ILLUSTRATIVE [EST]</div>
+    <p><strong>~$175–$240</strong>, midpoint ~$205. Built from ~$14–15B of normalized free cash flow at a 6–7% yield, cross-checked against ~13–17× non-GAAP earnings — a partial re-rate from today's ~11× if growth stabilizes in the high-single to low-double digits and Agentforce shows it can monetize. <strong>What must be true for ~$155 to make sense:</strong> the market is implicitly assuming durable mid-single-digit growth, that agentic AI is a net headwind to seats, and that the new leverage caps the upside. If AI proves additive, today looks cheap; if it cannibalizes seats, today may be fair. <span class="conf">Confidence: Low–Med (estimate, not a forecast)</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 6 · GOVERNANCE ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Governance &amp; management</h2></div>
+  <p class="lede">Founder-led with a single class of stock — public holders' votes count fully — but with a long, mixed record on big acquisitions and a recent history of activist intervention that reshaped how the company is run.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Strengths</div>
+      <h3 style="color:var(--green)">What's good</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">No dual-class shares — one share, one vote. Marc Benioff (co-founder, Chair &amp; CEO since 1999) is a genuine product visionary who built the category. After activists (Elliott, Starboard and others) pushed in 2023, margins roughly doubled and the company embraced buybacks and a dividend — a real, value-creating course-correction.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Watch items</div>
+      <h3 style="color:var(--amber)">What to watch</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Combined Chair/CEO concentrates power, and insider ownership is modest (~3%). The M&amp;A record is mixed: Slack ($27.7B) and Tableau ($15.7B) drew criticism on price, and the company keeps acquiring (Informatica). Co-CEO and senior-leadership turnover has been notable. The debt-funded buyback is itself a capital-allocation call to judge. Governance Score: <strong style="color:var(--sf-cyan)">7 / 10</strong>.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 7 · RISK REGISTER ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">07</span><h2>Risk register</h2></div>
+  <p class="lede">Material risks, highest-severity first. Scores (1–10) are analytical opinion, not fact.</p>
+  <div id="risks" style="margin-top:30px">
+    <div class="risk-row"><div class="risk-name">AI disruption of the seat model</div><div class="meter"><div class="track"><div class="fill" data-w="90" style="background:var(--red)"></div></div><span class="sc">9</span></div><div class="risk-why">If agentic AI lets customers do more with fewer human seats, the per-user subscription base that built Salesforce could shrink faster than Agentforce consumption revenue replaces it.</div></div>
+    <div class="risk-row"><div class="risk-name">Growth deceleration</div><div class="meter"><div class="track"><div class="fill" data-w="80" style="background:var(--red)"></div></div><span class="sc">8</span></div><div class="risk-why">Organic growth has slowed to ~9–10% — the slowest in company history — and part of the headline rate now leans on acquisitions like Informatica.</div></div>
+    <div class="risk-row"><div class="risk-name">Balance-sheet leverage</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amber)"></div></div><span class="sc">7</span></div><div class="risk-why">A ~$24.8B debt issuance to fund the ASR ended the net-cash era, added interest expense, and cut FCF-growth guidance roughly in half.</div></div>
+    <div class="risk-row"><div class="risk-name">Competition</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amber)"></div></div><span class="sc">7</span></div><div class="risk-why">Microsoft (Dynamics + Copilot bundling), ServiceNow's faster growth, SAP, HubSpot and AI-native startups all attack different parts of the suite.</div></div>
+    <div class="risk-row"><div class="risk-name">M&amp;A integration &amp; allocation</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amber)"></div></div><span class="sc">6</span></div><div class="risk-why">A long acquisitive history (Slack, Tableau, MuleSoft, now Informatica) with a mixed value record; integration and goodwill risk recur.</div></div>
+    <div class="risk-row"><div class="risk-name">Valuation / sentiment</div><div class="meter"><div class="track"><div class="fill" data-w="50" style="background:var(--sf-blue)"></div></div><span class="sc">5</span></div><div class="risk-why">Already de-rated to ~11× non-GAAP, so downside from the multiple is limited — but a value trap can stay cheap for years if growth keeps fading.</div></div>
+    <div class="risk-row"><div class="risk-name">Key-person (Benioff)</div><div class="meter"><div class="track"><div class="fill" data-w="50" style="background:var(--sf-blue)"></div></div><span class="sc">5</span></div><div class="risk-why">The strategy, brand and culture are closely tied to the founder-CEO; succession is unproven after repeated No.2 departures.</div></div>
+    <div class="risk-row"><div class="risk-name">Macro / IT spending cyclicality</div><div class="meter"><div class="track"><div class="fill" data-w="50" style="background:var(--sf-blue)"></div></div><span class="sc">5</span></div><div class="risk-why">Enterprise software budgets and seat counts are sensitive to hiring and macro; a downturn slows new bookings and expansion.</div></div>
+    <div class="risk-row"><div class="risk-name">Regulatory / data privacy</div><div class="meter"><div class="track"><div class="fill" data-w="40" style="background:var(--sf-blue)"></div></div><span class="sc">4</span></div><div class="risk-why">As a custodian of customer data and an active acquirer, exposure to privacy rules and acquisition scrutiny exists but is manageable.</div></div>
+    <div class="risk-row"><div class="risk-name">Customer concentration</div><div class="meter"><div class="track"><div class="fill" data-w="20" style="background:var(--sf-blue)"></div></div><span class="sc">2</span></div><div class="risk-why">Highly diversified across tens of thousands of enterprise customers and industries — low single-customer dependency.</div></div>
+  </div>
+</div></section>
+
+<!-- ===================== 8 · CATALYSTS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">08</span><h2>Catalysts &amp; what to watch</h2></div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Confirms the thesis</div>
+      <h3 style="color:var(--green)">Bull confirmations</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Next earnings (Q2 FY27, ~late Aug 2026): Agentforce ARR scaling well past $1.2B; cRPO growth re-accelerating; <em>organic</em> growth (ex-Informatica) stabilizing or improving; evidence that AI agents drive net-new spend rather than replace seats; continued margin expansion.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Breaks the thesis</div>
+      <h3 style="color:var(--red)">Bear triggers</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">cRPO decelerating; net revenue retention slipping further; Agentforce revenue flattering on hype but not converting; seat counts at large customers shrinking; another large debt-funded deal; guidance cuts that aren't explained by FX or M&amp;A timing.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 9 · SCENARIOS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Scenarios</h2></div>
+  <p class="lede">Illustrative one-year scenarios — probabilities and targets are estimates for framing, not forecasts. <span class="tag-est">EST</span></p>
+  <div class="scn">
+    <div class="scn-card bear">
+      <div class="name">Bear</div><div class="prob">30%</div>
+      <div class="tgt">~$115 target</div>
+      <p class="asm">Agentic AI cannibalizes seats, organic growth fades toward low-single digits, Agentforce underwhelms, and the multiple stays stuck near ~9–10× while leverage weighs on sentiment.</p>
+    </div>
+    <div class="scn-card base">
+      <div class="name">Base</div><div class="prob">45%</div>
+      <div class="tgt">~$195 target</div>
+      <p class="asm">Growth holds ~8–10%, margins keep expanding, Agentforce monetizes gradually, buybacks shrink the share count, and the multiple re-rates modestly toward ~13–14× non-GAAP.</p>
+    </div>
+    <div class="scn-card bull">
+      <div class="name">Bull</div><div class="prob">25%</div>
+      <div class="tgt">~$275 target</div>
+      <p class="asm">Agentforce consumption revenue inflects, AI proves additive to wallet share, growth re-accelerates to low-teens, and the stock re-rates toward ~18–20× non-GAAP as the value-trap fear lifts.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 10 · BULL VS BEAR ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">10</span><h2>Bull vs bear</h2></div>
+  <div class="bb">
+    <div class="bb-col bull">
+      <div class="bb-head"><span>Bull case</span><span>6 points</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">~11× non-GAAP earnings, ~11% FCF yield.</div><div class="bb-why">A category leader priced like a no-growth business — limited multiple downside if results merely hold.</div></div>
+        <div class="bb-item"><div class="bb-fact">Agentforce ARR ~$1.2B, +205%.</div><div class="bb-why">Early but real proof the AI pivot can monetize, and a hedge against seat erosion via consumption pricing.</div></div>
+        <div class="bb-item"><div class="bb-fact">Record 34.8% non-GAAP operating margin.</div><div class="bb-why">The 2023 efficiency drive stuck — profitability keeps expanding even as growth slows.</div></div>
+        <div class="bb-item"><div class="bb-fact">~$14B FCF; gross margin ~78%.</div><div class="bb-why">Generates more free cash than several software peers combined; funds buybacks and the AI build.</div></div>
+        <div class="bb-item"><div class="bb-fact">Share count down ~974M → ~853M.</div><div class="bb-why">Buying back &gt;10% of the company near a 52-week low is meaningfully per-share accretive.</div></div>
+        <div class="bb-item"><div class="bb-fact">cRPO $33.6B, +14%; single-class stock.</div><div class="bb-why">Forward bookings still growing double digits, with cleaner governance than dual-class peers.</div></div>
+      </div>
+    </div>
+    <div class="bb-col bear">
+      <div class="bb-head"><span>Bear case</span><span>6 points</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">Organic growth ~9–10%, slowest ever.</div><div class="bb-why">The hyper-growth premium is gone; the suite may be maturing into a GDP-plus grower.</div></div>
+        <div class="bb-item"><div class="bb-fact">Agentic AI threatens the seat model.</div><div class="bb-why">If customers need fewer human users, the per-seat base that built Salesforce could shrink structurally.</div></div>
+        <div class="bb-item"><div class="bb-fact">$25B buyback funded with ~$24.8B debt.</div><div class="bb-why">Ended the net-cash era and cut FCF-growth guidance to ~4–5% — financial engineering, not demand.</div></div>
+        <div class="bb-item"><div class="bb-fact">~3 pts of growth comes from Informatica.</div><div class="bb-why">Headline growth flattered by M&amp;A; the organic core is decelerating underneath.</div></div>
+        <div class="bb-item"><div class="bb-fact">Down ~43% from the 2024 high.</div><div class="bb-why">A sustained downtrend; cheap stocks can stay cheap if the growth story keeps eroding.</div></div>
+        <div class="bb-item"><div class="bb-fact">Microsoft bundles CRM into Copilot/Dynamics.</div><div class="bb-why">A deep-pocketed competitor can attack pricing and distribution across the whole suite.</div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 11 · SCORECARD + VERDICT ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">11</span><h2>Final scorecard &amp; verdict</h2></div>
+  <p class="lede">Ten categories scored 1–10 (analytical opinion). Overall is the equal-weighted average × 10.</p>
+  <div class="score-grid" id="scores">
+    <div class="score-line"><span class="nm">Business Quality</span><span class="track"><span class="fill" data-w="80"></span></span><span class="n">8</span></div>
+    <div class="score-line"><span class="nm">Competitive Moat</span><span class="track"><span class="fill" data-w="70"></span></span><span class="n">7</span></div>
+    <div class="score-line"><span class="nm">Management</span><span class="track"><span class="fill" data-w="60"></span></span><span class="n">6</span></div>
+    <div class="score-line"><span class="nm">Governance</span><span class="track"><span class="fill" data-w="70"></span></span><span class="n">7</span></div>
+    <div class="score-line"><span class="nm">Financial Strength</span><span class="track"><span class="fill" data-w="60"></span></span><span class="n">6</span></div>
+    <div class="score-line"><span class="nm">Growth</span><span class="track"><span class="fill" data-w="50"></span></span><span class="n">5</span></div>
+    <div class="score-line"><span class="nm">Profitability</span><span class="track"><span class="fill" data-w="80"></span></span><span class="n">8</span></div>
+    <div class="score-line"><span class="nm">Valuation</span><span class="track"><span class="fill" data-w="80"></span></span><span class="n">8</span></div>
+    <div class="score-line"><span class="nm">Capital Returns</span><span class="track"><span class="fill" data-w="70"></span></span><span class="n">7</span></div>
+    <div class="score-line"><span class="nm">Risk Profile</span><span class="track"><span class="fill" data-w="50"></span></span><span class="n">5</span></div>
+  </div>
+
+  <div class="verdict-box">
+    <div class="verdict-label">Educational verdict · scale: Strong Sell → Strong Buy</div>
+    <div class="verdict-word">Buy</div>
+    <div class="verdict-score">Overall score · 67 / 100 · equal-weighted average of ten categories</div>
+    <p class="verdict-reason">A contrarian, valuation-driven call — not a quality call. The overall score is middling because growth has genuinely slowed and the balance sheet just took on leverage. But at ~11× non-GAAP earnings, an ~11% FCF yield, 78% gross margins and a 52-week low, the asymmetry favors patient buyers <em>if</em> agentic AI proves additive rather than cannibalistic — which is the single swing factor for the whole thesis. This is explicitly <em>not</em> personalised advice and we are not licensed advisors; a reader who believes AI will erode the seat model should treat this as "Neutral."</p>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><div class="corner" style="color:var(--green)">Biggest reason bulls may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">You're buying the system of record for enterprise customer data — the layer AI agents need to act on — at half its historical multiple and an ~11% FCF yield. If Agentforce turns AI into a wallet-share expander, both earnings and the multiple can re-rate from a very low base.</p></div>
+    <div class="card"><div class="corner" style="color:var(--red)">Biggest reason bears may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">The entire model is priced per human seat, and the clearest use of agentic AI is to need fewer of them. If that plays out, revenue decays structurally while ~$25B of new debt sits on the books — a cheap multiple on a shrinking base is a value trap, not a bargain.</p></div>
+  </div>
+</div></section>
+
+<!-- ===================== DISCLAIMER ===================== -->
+<div class="disc"><div class="wrap">
+  <p class="big">Educational only — not financial advice. Prices shown are as of the generation date and will have changed. Do your own research.</p>
+  <p>Figures drawn from Salesforce's FY2026 and Q1 FY2027 earnings releases / SEC filings (8-K, 10-Q), the Salesforce Investor Relations site, and reporting/aggregation by CNBC, Fortune, Seeking Alpha, MarketBeat, Macrotrends and StockAnalysis. Segment splits, market cap, net-debt and peer multiples are reconstructed estimates and marked [EST]. Scores, the fair-value range, scenarios, probabilities and the verdict are analytical opinion, not fact, and not a recommendation. The author is not a licensed financial advisor.</p>
+  <p class="src-note">Generated 2026-06-19 (UTC) · prompt version 3090237 · live market data changes constantly — look up CRM for the current price.</p>
+</div></div>
+</main>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target;
+      if(el.id==='revbars'){ el.querySelectorAll('.bar').forEach(b=>{ b.style.height=b.dataset.h+'%'; }); }
+      if(el.id==='risks' || el.id==='scores'){ el.querySelectorAll('.fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; }); }
+      if(el.id==='fcfline'){
+        const c=document.getElementById('fcfcurve'), a=document.getElementById('fcfarea');
+        const len=c.getTotalLength();
+        c.style.strokeDasharray=len; c.style.strokeDashoffset=len; c.getBoundingClientRect();
+        c.style.transition='stroke-dashoffset 1.6s ease'; c.style.strokeDashoffset='0';
+        setTimeout(()=>{a.style.transition='opacity 1s ease';a.style.opacity='1';},700);
+      }
+      io.unobserve(el);
+    });
+  },{threshold:.3});
+  ['revbars','risks','scores','fcfline'].forEach(id=>{ const el=document.getElementById(id); if(el) io.observe(el); });
+  document.querySelectorAll('#revbars .bar').forEach(b=>b.style.height='0%');
+  document.querySelectorAll('#risks .fill,#scores .fill').forEach(f=>f.style.width='0%');
+</script>
+</body>
+</html>
