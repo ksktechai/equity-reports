@@ -1,0 +1,101 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="Equity Reports Architecture" id="equity-reports-arch">
+    <mxGraphModel dx="900" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="950" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Equity Reports — static, education-only pipeline (no backend, no CI)" style="text;html=1;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="160" y="10" width="640" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Operator -->
+        <mxCell id="op" value="You / operator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="55" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Entry points group -->
+        <mxCell id="entry" value="Entry points · subscription auth (no ANTHROPIC_API_KEY)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#6c8ebf;dashed=1;verticalAlign=top;fontStyle=2;fontColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="150" y="120" width="640" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="cli" value="new-report.sh&#10;(local CLI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="200" y="155" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="slash" value="/ipo-report · /stock-report&#10;(Claude Code slash commands)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="540" y="155" width="210" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- slug helper -->
+        <mxCell id="slug" value="slugify.sh&#10;canonical &quot;name → slug&quot; (one source of truth)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="360" y="245" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- prompts -->
+        <mxCell id="prompts" value="prompts/ipo-analysis.md&#10;prompts/stock-analysis.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="60" y="340" width="190" height="50" as="geometry" />
+        </mxCell>
+        <!-- web -->
+        <mxCell id="web" value="Web research&#10;SEC filings · IR · news" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="710" y="340" width="190" height="50" as="geometry" />
+        </mxCell>
+        <!-- claude -->
+        <mxCell id="claude" value="claude -p  (Opus, subscription)&#10;tools: WebSearch · WebFetch · Read · Write" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="335" width="260" height="60" as="geometry" />
+        </mxCell>
+        <!-- progress -->
+        <mxCell id="progress" value="stream-progress.js&#10;stream-json → live terminal progress" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="350" y="425" width="260" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- report output -->
+        <mxCell id="report" value="reports/&lt;type&gt;/&lt;slug&gt;/index.html&#10;self-contained HTML + &lt;!-- report-meta --&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="510" width="280" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- pipeline group -->
+        <mxCell id="post" value="Post-processing pipeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#82b366;dashed=1;verticalAlign=top;fontStyle=2;fontColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="80" y="595" width="700" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="guard" value="guardrails&#10;exists · strip fences · is-HTML" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="110" y="630" width="220" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="index" value="build-index.js&#10;reads every report-meta → root index.html" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="380" y="630" width="280" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- git + publish -->
+        <mxCell id="git" value="git commit + push (main)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="385" y="720" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gh" value="GitHub repo (public, owner-only push)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="360" y="785" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pages" value="GitHub Pages (deploy from main /root)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="360" y="850" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="browser" value="Browser / readers&#10;&lt;user&gt;.github.io/equity-reports/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="905" width="210" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- edges -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="op" target="cli"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="op" target="slash"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="cli" target="slug"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="slash" target="slug"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="slug" target="claude"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" value="prompt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="prompts" target="claude"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" value="research" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=block;endArrow=block;dashed=1;" edge="1" parent="1" source="claude" target="web"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e8" value="stream-json" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;" edge="1" parent="1" source="claude" target="progress"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e9" value="Write tool" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontStyle=1;" edge="1" parent="1" source="claude" target="report"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="report" target="guard"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="guard" target="index"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="index" target="git"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e13" value="report html" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="report" target="git"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="git" target="gh"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e15" value="auto-build" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="gh" target="pages"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e16" value="serves" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="pages" target="browser"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

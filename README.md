@@ -39,9 +39,16 @@ equity-reports/
 │   └── build-index.js         # regenerates the root index.html from reports/
 ├── .claude/
 │   └── commands/              # optional Claude Code slash commands (/ipo-report, /stock-report)
+├── docs/
+│   ├── ARCHITECTURE.md        # architecture overview + color diagram (Mermaid)
+│   └── architecture.drawio    # editable draw.io source for the diagram
 ├── index.html                 # auto-generated landing page linking every report
+├── CLAUDE.md                  # conventions for Claude Code sessions
 └── README.md
 ```
+
+See **[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)** for a color diagram of how a company
+name becomes a published report (entry points → generation → post-processing → GitHub Pages).
 
 `slug` = lowercased, hyphenated company name (e.g. "Alphabet" -> `alphabet`). The transform
 lives in exactly one place, `scripts/slugify.sh`, which both `new-report.sh` and the slash
