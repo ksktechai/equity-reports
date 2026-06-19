@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- report-meta: type=stock; slug=vanguard-sp-500-etf; name=Vanguard S&P 500 ETF; generated=2026-06-19; prompt=4c7e260 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vanguard S&P 500 ETF Analysis · VOO</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ink-bg:#0b0e15;
+    --deep:#10141e;
+    --panel:#161b28;
+    --panel-2:#161b2899;
+    --line:#262d3e;
+    --paper:#ece6d8;          /* ledger parchment */
+    --ink:#e9ecf3;
+    --mute:#9099ad;
+    --faint:#646d84;
+    --crimson:#e0394f;        /* Vanguard red */
+    --crimson-soft:#ff6c80;
+    --gold:#d9b779;           /* classic / stewardship */
+    --gold-soft:#ecd29b;
+    --green:#43c98c;
+    --amber:#f0b740;
+    --red:#ff5470;
+    --blue:#5aa2e8;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1100px 560px at 82% -8%, rgba(224,57,79,.10), transparent 60%),
+      radial-gradient(900px 480px at 8% 4%, rgba(217,183,121,.06), transparent 55%),
+      var(--ink-bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---- ledger pinstripe backdrop ---- */
+  .ledger{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background-image:
+      linear-gradient(90deg, rgba(217,183,121,.04) 1px, transparent 1px);
+    background-size:60px 100%;}
+  .tape{position:fixed;top:0;left:0;right:0;height:2px;z-index:0;pointer-events:none;
+    background:linear-gradient(90deg,transparent,var(--crimson),var(--gold),transparent);
+    opacity:.4}
+
+  main{position:relative;z-index:1}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--gold-soft);}
+  .eyebrow.crimson{color:var(--crimson-soft)}
+
+  /* ---- HERO ---- */
+  header.hero{position:relative;padding:84px 0 56px;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero-inner{position:relative;z-index:2}
+  .hero-tag{display:flex;gap:14px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .pill{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+    padding:5px 11px;border:1px solid var(--line);border-radius:100px;color:var(--mute);background:var(--panel-2)}
+  .pill.live{color:var(--green);border-color:rgba(67,201,140,.4)}
+  .pill.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--green);margin-right:7px;vertical-align:middle;box-shadow:0 0 8px var(--green);
+    animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  h1.title{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(40px,7vw,74px);
+    line-height:1.02;letter-spacing:-.02em;margin:8px 0 6px}
+  h1.title .ticker{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.32em;
+    letter-spacing:.05em;color:var(--crimson);vertical-align:middle;border:1px solid rgba(224,57,79,.4);
+    border-radius:8px;padding:6px 12px;margin-left:14px;position:relative;top:-.18em;background:rgba(224,57,79,.07)}
+  .sub{color:var(--mute);max-width:62ch;font-size:17px;margin-top:14px}
+
+  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:44px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+  .strip .cell{background:var(--deep);padding:20px 18px}
+  .strip .v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(20px,2.6vw,27px);letter-spacing:-.01em}
+  .strip .v.crimson{color:var(--crimson-soft)}
+  .strip .v.gold{color:var(--gold-soft)}
+  .strip .k{font-size:11px;color:var(--faint);margin-top:6px;font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.04em;text-transform:uppercase}
+  .note{font-size:13px;color:var(--faint);margin-top:18px;font-style:italic}
+
+  /* ---- sections ---- */
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--crimson);
+    border:1px solid rgba(224,57,79,.3);border-radius:6px;padding:2px 8px}
+  h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em;line-height:1.1}
+  .lede{color:var(--mute);max-width:70ch;margin-top:14px;font-size:16px}
+
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:linear-gradient(180deg,var(--panel),var(--deep));border:1px solid var(--line);
+    border-radius:16px;padding:24px;position:relative;overflow:hidden}
+  .card .corner{position:absolute;top:0;right:0;font-family:'IBM Plex Mono',monospace;font-size:10px;
+    letter-spacing:.1em;color:var(--faint);padding:9px 12px;text-transform:uppercase}
+  .card h3{font-size:20px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .seg-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute);margin-bottom:18px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;
+    border-top:1px solid var(--line);font-size:14px}
+  .row:first-of-type{border-top:none}
+  .row .lbl{color:var(--faint)}
+  .row .val{font-family:'IBM Plex Mono',monospace;font-weight:500}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot.crimson{background:var(--crimson);box-shadow:0 0 10px var(--crimson)}
+  .dot.gold{background:var(--gold);box-shadow:0 0 10px var(--gold)}
+  .dot.blue{background:var(--blue);box-shadow:0 0 10px var(--blue)}
+
+  .callout{margin-top:28px;border-left:2px solid var(--crimson);
+    background:linear-gradient(90deg,rgba(224,57,79,.07),transparent);padding:18px 22px;border-radius:0 12px 12px 0}
+  .callout .q{font-weight:600;color:var(--crimson-soft);font-size:14px;margin-bottom:6px;
+    font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+  .callout p{color:var(--mute);font-size:15px}
+  .callout.gold{border-color:var(--gold)}
+  .callout.gold .q{color:var(--gold-soft)}
+  .callout.gold{background:linear-gradient(90deg,rgba(217,183,121,.08),transparent)}
+
+  /* ---- charts ---- */
+  .chartbox{margin-top:34px;background:var(--deep);border:1px solid var(--line);border-radius:16px;padding:26px 24px 18px}
+  .chartbox .ct{font-size:13px;color:var(--mute);margin-bottom:2px}
+  .chartbox .cs{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-bottom:22px}
+  .bars{display:flex;align-items:flex-end;gap:clamp(6px,2.4vw,26px);height:230px;padding-left:8px}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:100%;max-width:60px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--crimson),rgba(224,57,79,.22));transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+  .bar.neg{background:linear-gradient(180deg,var(--red),rgba(255,84,112,.2))}
+  .bar.gold{background:linear-gradient(180deg,var(--gold),rgba(217,183,121,.2))}
+  .bar .top{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+  .bar-x{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-top:10px}
+  .legend{display:flex;gap:18px;margin-top:18px;font-size:11px;color:var(--faint);
+    font-family:'IBM Plex Mono',monospace;flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .swatch{width:11px;height:11px;border-radius:3px}
+  svg.line{width:100%;height:auto;display:block;margin-top:6px}
+
+  /* ---- tables ---- */
+  .tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--deep)}
+  .tbl-scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
+  th{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--faint);background:var(--panel)}
+  td{color:var(--ink)}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right}
+  .tag-est{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--amber);
+    border:1px solid rgba(240,183,64,.35);border-radius:4px;padding:1px 5px;margin-left:6px}
+  .pos{color:var(--green)}.neg{color:var(--red)}
+  .me-row{background:rgba(224,57,79,.06)}
+
+  /* risk meter */
+  .risk-row{display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center;
+    padding:14px 0;border-top:1px solid var(--line)}
+  .risk-row:first-child{border-top:none}
+  .risk-name{font-weight:500;font-size:15px}
+  .risk-why{color:var(--faint);font-size:13px;margin-top:3px;grid-column:1/-1}
+  .meter{display:flex;align-items:center;gap:11px}
+  .meter .track{width:130px;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .meter .fill{height:100%;border-radius:4px}
+  .meter .sc{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;width:30px;text-align:right}
+
+  /* bull/bear */
+  .bb{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+  .bb-col{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .bb-head{padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .bb.bull .bb-head{background:rgba(67,201,140,.1);color:var(--green);border-bottom:1px solid rgba(67,201,140,.25)}
+  .bb.bear .bb-head{background:rgba(255,84,112,.1);color:var(--red);border-bottom:1px solid rgba(255,84,112,.25)}
+  .bb-body{padding:8px 22px 18px}
+  .bb-item{padding:15px 0;border-top:1px solid var(--line)}
+  .bb-item:first-child{border-top:none}
+  .bb-fact{font-size:14px;font-weight:500;margin-bottom:4px}
+  .bb-why{font-size:13px;color:var(--faint)}
+
+  /* scenarios */
+  .scn{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .scn-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--deep);position:relative}
+  .scn-card .prob{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:-.02em}
+  .scn-card .name{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+  .scn-card.bear .prob{color:var(--red)} .scn-card.bear .name{color:var(--red)}
+  .scn-card.base .prob{color:var(--gold-soft)} .scn-card.base .name{color:var(--gold-soft)}
+  .scn-card.bull .prob{color:var(--green)} .scn-card.bull .name{color:var(--green)}
+  .scn-card .tgt{font-size:15px;margin:12px 0 4px;font-weight:600}
+  .scn-card .asm{font-size:13px;color:var(--faint)}
+
+  /* verdict + scorecard */
+  .verdict-box{margin-top:30px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(160deg,var(--panel),var(--ink-bg));padding:36px;text-align:center;position:relative;overflow:hidden}
+  .verdict-box::before{content:"";position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+    width:400px;height:400px;background:radial-gradient(circle,rgba(67,201,140,.12),transparent 70%)}
+  .verdict-label{position:relative;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;
+    text-transform:uppercase;font-size:12px;color:var(--faint);margin-bottom:14px}
+  .verdict-word{position:relative;font-family:'Fraunces',serif;font-size:clamp(44px,8vw,72px);color:var(--green);font-weight:500;letter-spacing:-.01em}
+  .verdict-score{position:relative;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--mute);margin-top:8px}
+  .verdict-reason{position:relative;max-width:66ch;margin:22px auto 0;color:var(--mute);font-size:15px}
+
+  .score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 28px;margin-top:30px}
+  .score-line{display:flex;align-items:center;gap:14px}
+  .score-line .nm{flex:none;width:130px;font-size:13px;color:var(--mute)}
+  .score-line .track{flex:1;height:6px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .score-line .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--crimson),var(--crimson-soft))}
+  .score-line .n{font-family:'IBM Plex Mono',monospace;font-size:13px;width:34px;text-align:right;font-weight:600}
+
+  .timeline{margin-top:30px;position:relative;padding-left:6px}
+  .tl-item{display:grid;grid-template-columns:130px 1fr;gap:20px;padding:14px 0;
+    border-left:1px solid var(--line);padding-left:26px;position:relative}
+  .tl-item::before{content:"";position:absolute;left:-5px;top:20px;width:9px;height:9px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 10px var(--gold)}
+  .tl-item.future::before{background:var(--crimson);box-shadow:0 0 10px var(--crimson)}
+  .tl-date{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gold-soft)}
+  .tl-ev{font-size:15px}
+  .tl-note{font-size:13px;color:var(--faint);margin-top:2px}
+
+  .disc{padding:48px 0 70px;text-align:center}
+  .disc p{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);letter-spacing:.04em;max-width:64ch;margin:0 auto}
+  .disc .big{color:var(--mute);font-size:13px;margin-bottom:10px}
+  .src-note{font-size:12px;color:var(--faint);margin-top:24px;line-height:1.7}
+
+  @media(max-width:860px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    .g3,.g2,.scn,.score-grid{grid-template-columns:1fr}
+    .bb{grid-template-columns:1fr}
+    .tl-item{grid-template-columns:104px 1fr;gap:12px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="ledger" aria-hidden="true"></div>
+<div class="tape" aria-hidden="true"></div>
+
+<main>
+<!-- ====================== HERO ====================== -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-tag">
+      <span class="pill live">Trading live · NYSE Arca</span>
+      <span class="pill">Inception 7 Sep 2010</span>
+      <span class="pill">Educational · not advice</span>
+    </div>
+    <div class="eyebrow crimson">Institutional Fund Teardown · Index ETF</div>
+    <h1 class="title">Vanguard S&amp;P 500 ETF<span class="ticker">VOO</span></h1>
+    <p class="sub">The world's largest fund — a 3-basis-point wrapper that hands you 500 American companies in one line. The wrapper is boring on purpose; what's inside it is the most concentrated the index has been in 50 years.</p>
+
+    <div class="strip">
+      <div class="cell"><div class="v crimson">$686.19</div><div class="k">Price · 18 Jun 2026</div></div>
+      <div class="cell"><div class="v">0.03%</div><div class="k">Expense ratio</div></div>
+      <div class="cell"><div class="v gold">~$1.65T</div><div class="k">Net assets [EST]</div></div>
+      <div class="cell"><div class="v">~1.05%</div><div class="k">SEC yield</div></div>
+      <div class="cell"><div class="v">$545–699</div><div class="k">52-week range</div></div>
+    </div>
+    <p class="note">Complexity to value: <strong style="color:var(--crimson-soft)">2 / 10</strong> — the wrapper is trivial; the only hard question is whether the underlying index is cheap. It is not.</p>
+  </div>
+</header>
+
+<!-- ====================== 1 · EXEC SUMMARY ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>The one-paragraph version</h2></div>
+  <p class="lede">VOO is an exchange-traded fund that mechanically holds every company in the S&amp;P 500 in proportion to its market value, for an annual fee of 0.03% (~$3 per $10,000). It is not a business with a strategy — it is a tax-efficient, ultra-cheap delivery vehicle for "large-cap America." In June 2026 it became the first ETF to cross $1 trillion in assets; it has since grown larger still. The analysis here is therefore really an analysis of <em>the S&amp;P 500 itself</em>: its returns, its valuation, and its risks.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Why investors are buying</div>
+      <h3 style="color:var(--green)">The bull pull</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Lowest-cost, most liquid access to the U.S. mega-cap engine. Decades of evidence that few active managers beat it after fees; +15.2%/yr over 10 years; Vanguard's at-cost mutual structure keeps fees grinding toward zero. Buy once, own the leaders of the economy, forget it.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Why investors should pause</div>
+      <h3 style="color:var(--red)">The bear weight</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">You are buying at a Shiller CAPE of ~40 — near the dot-com record. The top 10 names are ~38% of the fund and a single stock (NVIDIA) drove most of 2025's gain. "Diversified" is now partly an illusion: VOO is a leveraged bet on a handful of AI mega-caps wearing a 500-stock costume.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ====================== 2 · WHAT IT IS ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2>How the wrapper actually works</h2></div>
+  <p class="lede">There is no "business model" in the corporate sense — there is fund mechanics. Three things define VOO: what it tracks, what it costs, and how it stays cheap. Vanguard's structure is the quiet edge.</p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">The mandate</div>
+      <h3><span class="dot crimson"></span>Full replication</h3>
+      <div class="seg-tag">Tracks the S&amp;P 500 index</div>
+      <div class="row"><span class="lbl">Holdings</span><span class="val">~503 stocks</span></div>
+      <div class="row"><span class="lbl">Weighting</span><span class="val">Float-cap</span></div>
+      <div class="row"><span class="lbl">Index provider</span><span class="val">S&amp;P DJI</span></div>
+      <div class="row"><span class="lbl">Rebalance</span><span class="val">Quarterly</span></div>
+      <div class="row"><span class="lbl">Tracking diff</span><span class="val">≈ fee drag</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">The price</div>
+      <h3><span class="dot gold"></span>Cost economics</h3>
+      <div class="seg-tag">Where the 3 bps go</div>
+      <div class="row"><span class="lbl">Expense ratio</span><span class="val">0.03%</span></div>
+      <div class="row"><span class="lbl">Cost / $10k</span><span class="val">$3/yr</span></div>
+      <div class="row"><span class="lbl">Bid-ask spread</span><span class="val">~1 bp [EST]</span></div>
+      <div class="row"><span class="lbl">Sec. lending</span><span class="val">Offsets fee</span></div>
+      <div class="row"><span class="lbl">Premium/disc</span><span class="val">~0.0%</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">The structure</div>
+      <h3><span class="dot blue"></span>Vanguard model</h3>
+      <div class="seg-tag">Owned by its funds</div>
+      <div class="row"><span class="lbl">Sponsor</span><span class="val">Vanguard</span></div>
+      <div class="row"><span class="lbl">Ownership</span><span class="val">Mutual / at-cost</span></div>
+      <div class="row"><span class="lbl">ETF share class</span><span class="val">of VFIAX</span></div>
+      <div class="row"><span class="lbl">Distributions</span><span class="val">Quarterly</span></div>
+      <div class="row"><span class="lbl">Tax (in-kind)</span><span class="val">Efficient</span></div>
+    </div>
+  </div>
+  <div class="callout gold">
+    <div class="q">// The one thing to understand</div>
+    <p>VOO is not actively managed and has no view. Its return is the index's return <em>minus</em> ~0.03% — almost the entire game is the fee, and Vanguard's owner-is-the-investor structure means that fee only ever falls. The risk you are taking is therefore 100% the index's risk, not the manager's. That is the feature and, in a top-heavy market, also the trap.</p>
+  </div>
+
+  <!-- TOP HOLDINGS CHART -->
+  <div class="chartbox">
+    <div class="ct">Top holdings — % of fund (concentration in the "diversified" fund)</div>
+    <div class="cs">Approx. weights, early 2026 · per fund disclosures & aggregators · figures move daily [EST]</div>
+    <div class="bars" id="holdbars">
+      <div class="bar-col"><div class="bar" data-h="92"><span class="top">~7.3%</span></div><div class="bar-x">NVDA</div></div>
+      <div class="bar-col"><div class="bar" data-h="83"><span class="top">~6.6%</span></div><div class="bar-x">AAPL</div></div>
+      <div class="bar-col"><div class="bar" data-h="62"><span class="top">~5.0%</span></div><div class="bar-x">MSFT</div></div>
+      <div class="bar-col"><div class="bar gold" data-h="48"><span class="top">~3.8%</span></div><div class="bar-x">AMZN</div></div>
+      <div class="bar-col"><div class="bar gold" data-h="44"><span class="top">~3.5%</span></div><div class="bar-x">GOOG/L</div></div>
+      <div class="bar-col"><div class="bar gold" data-h="36"><span class="top">~2.9%</span></div><div class="bar-x">META</div></div>
+      <div class="bar-col"><div class="bar gold" data-h="30"><span class="top">~2.4%</span></div><div class="bar-x">AVGO</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--crimson)"></span>Top 3 ≈ 19%</span>
+      <span><span class="swatch" style="background:var(--gold)"></span>Names 4–10</span>
+      <span style="color:var(--mute)">Top 10 ≈ 38% of the whole fund [EST]</span>
+    </div>
+  </div>
+  <p class="note">Sector tilt: Information Technology is ~33–34% of the fund — larger than entire sectors like energy or utilities. A buyer of VOO is, in effect, overweight AI infrastructure whether they intend to be or not.</p>
+</div></section>
+
+<!-- ====================== 3 · RETURN TRAJECTORY ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>The track record</h2></div>
+  <p class="lede">For an index fund the "financial trajectory" is its total-return history versus the index it copies. VOO has tracked the S&amp;P 500 to within its fee for 15 years. The numbers below are strong — but note how much of the recent figure is one extraordinary year.</p>
+
+  <div class="tbl tbl-scroll">
+    <table>
+      <thead><tr>
+        <th>Period (annualized total return)</th><th class="num">VOO</th><th class="num">What drove it</th>
+      </tr></thead>
+      <tbody>
+        <tr class="me-row"><td><strong>1-year</strong></td><td class="num" style="color:var(--green)">≈ +31%</td><td class="num">AI mega-cap surge</td></tr>
+        <tr><td>3-year</td><td class="num pos">≈ +21.5%</td><td class="num">Post-2022 recovery + AI</td></tr>
+        <tr><td>5-year</td><td class="num pos">≈ +13.5%</td><td class="num">Includes 2022 drawdown</td></tr>
+        <tr><td>10-year</td><td class="num pos">≈ +15.2%</td><td class="num">Long bull market</td></tr>
+        <tr><td>Since inception (2010)</td><td class="num pos">≈ +14–15% [EST]</td><td class="num">One of the great decades</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">As of ~31 May 2026 per Vanguard / aggregators. Confidence: <strong style="color:var(--green)">High</strong> on direction, <strong style="color:var(--amber)">Medium</strong> on exact decimals — they move with each close. Past performance does not predict future returns; the 10-year figure reflects an unusually long, valuation-expanding bull run.</p>
+
+  <div class="chartbox">
+    <div class="ct">S&amp;P 500 calendar-year total return (%) — the ride is not smooth</div>
+    <div class="cs">Index total return; VOO ≈ index − 0.03% · 2025 figure ≈ +17.9% · 2026 partial [EST]</div>
+    <div class="bars" id="yearbars">
+      <div class="bar-col"><div class="bar" data-h="62"><span class="top">+28.7</span></div><div class="bar-x">2021</div></div>
+      <div class="bar-col"><div class="bar neg" data-h="40"><span class="top">−18.1</span></div><div class="bar-x">2022</div></div>
+      <div class="bar-col"><div class="bar" data-h="56"><span class="top">+26.3</span></div><div class="bar-x">2023</div></div>
+      <div class="bar-col"><div class="bar" data-h="54"><span class="top">+25.0</span></div><div class="bar-x">2024</div></div>
+      <div class="bar-col"><div class="bar" data-h="40"><span class="top">+17.9</span></div><div class="bar-x">2025</div></div>
+      <div class="bar-col"><div class="bar gold" data-h="22"><span class="top">+8 [E]</span></div><div class="bar-x">2026*</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--crimson)"></span>Up year</span>
+      <span><span class="swatch" style="background:var(--red)"></span>Down year</span>
+      <span><span class="swatch" style="background:var(--gold)"></span>* 2026 YTD illustrative [EST]</span>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">// The hidden fact in the 2025 number</div>
+    <p>The index returned ~17.9% in 2025 — but a single stock, NVIDIA, accounted for roughly 15.5 of those percentage points, a level of single-name dependence not seen in over four decades. A VOO holder's 2025 was, statistically, mostly a bet on one chipmaker dressed up as "the market."</p>
+  </div>
+</div></section>
+
+<!-- ====================== 4 · STRUCTURE / LIQUIDITY / DISTRIBUTIONS ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Liquidity, income &amp; tax</h2></div>
+  <p class="lede">An ETF has no balance sheet of its own — instead the relevant "financial strength" is scale, tradability, tracking fidelity, and the income it distributes. On all four, VOO is best-in-class.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Scale &amp; tradability</div>
+      <h3 style="color:var(--gold-soft)">Liquidity</h3>
+      <div class="row"><span class="lbl">Net assets</span><span class="val">~$1.65T [EST]</span></div>
+      <div class="row"><span class="lbl">Milestone</span><span class="val">1st ETF &gt; $1T</span></div>
+      <div class="row"><span class="lbl">Bid-ask spread</span><span class="val">~1 bp [EST]</span></div>
+      <div class="row"><span class="lbl">Premium/discount</span><span class="val">≈ 0%</span></div>
+      <div class="row"><span class="lbl">Creation/redemption</span><span class="val">In-kind</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Income &amp; tax</div>
+      <h3 style="color:var(--gold-soft)">Distributions</h3>
+      <div class="row"><span class="lbl">SEC yield</span><span class="val">~1.05%</span></div>
+      <div class="row"><span class="lbl">TTM payout</span><span class="val">~$7.13/sh</span></div>
+      <div class="row"><span class="lbl">Frequency</span><span class="val">Quarterly</span></div>
+      <div class="row"><span class="lbl">Cap-gains distrib.</span><span class="val">Rare (in-kind)</span></div>
+      <div class="row"><span class="lbl">Dividend growth</span><span class="val">Rising w/ index</span></div>
+    </div>
+  </div>
+  <p class="note">Note the trade-off most investors miss: at a ~1.05% yield, VOO is a <em>capital-appreciation</em> instrument, not an income one. If the index's price gains slow, the dividend alone will not carry the total return. Income-focused buyers typically pair or substitute higher-yield vehicles. Confidence: <strong style="color:var(--green)">High</strong>.</p>
+</div></section>
+
+<!-- ====================== 5 · VALUATION ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Is the index cheap? No.</h2></div>
+  <p class="lede">VOO's own valuation is irrelevant — it trades at NAV by construction. The real question is what you pay for the <em>earnings inside it</em>. By long-horizon measures, U.S. large-caps are priced near historic extremes. This is the single most important slide for a buyer today.</p>
+
+  <div class="tbl tbl-scroll">
+    <table>
+      <thead><tr>
+        <th>Valuation gauge (S&amp;P 500)</th><th class="num">Now (Jun 2026)</th><th class="num">Long-run norm</th><th>Read</th>
+      </tr></thead>
+      <tbody>
+        <tr class="me-row"><td><strong>Shiller CAPE</strong></td><td class="num" style="color:var(--red)">~40</td><td class="num">~16 median</td><td>Near dot-com peak</td></tr>
+        <tr><td>Trailing P/E <span class="tag-est">est</span></td><td class="num">~28–30</td><td class="num">~16–18</td><td>Rich</td></tr>
+        <tr><td>Forward P/E <span class="tag-est">est</span></td><td class="num">~22–24</td><td class="num">~15–16</td><td>Rich, AI-EPS dependent</td></tr>
+        <tr><td>Excess CAPE yield</td><td class="num">~1.35</td><td class="num">~2.57 avg</td><td>Thin risk premium</td></tr>
+        <tr><td>Top-10 weight</td><td class="num" style="color:var(--red)">~38%</td><td class="num">~20% (2015)</td><td>Record concentration</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">CAPE ~40 sits ~24% above its modern average and is the highest reading since the 2000 bubble. The excess CAPE yield (a rough "is the equity premium worth it?" gauge) is ~47% below its long-run average — meaning you are paid unusually little to take equity risk here. Confidence: <strong style="color:var(--green)">High</strong> on the gauges; <strong style="color:var(--amber)">Medium</strong> on what they imply for forward returns (high CAPE compresses 10-yr returns historically, but timing is unreliable).</p>
+
+  <div class="callout">
+    <div class="q">// What has to be true for today's price to make sense</div>
+    <p>Either (a) the mega-cap AI leaders keep growing earnings fast enough to "grow into" the multiple, so high P/E today becomes reasonable P/E tomorrow; or (b) interest rates fall and lift all multiples; or (c) you simply don't care about the next 10 years' starting point because your horizon is 30+. For long-dated, dollar-cost-averaging buyers, the starting valuation matters less. For anyone deploying a lump sum with a 5–10 year horizon, this is a poor entry point by history's standards — not a forecast of a crash, but a forecast of <em>lower-than-average</em> returns from here.</p>
+  </div>
+
+  <!-- PEER ETF TABLE -->
+  <div class="sec-head" style="margin-top:48px"><h2 style="font-size:clamp(20px,3vw,26px)">The peer set: it's a fee race, not a returns race</h2></div>
+  <p class="lede">VOO's "comps" are the other S&amp;P 500 vehicles. They hold near-identical stocks, so the differentiators are fee, liquidity and tax wrapper — not performance. Equal-weight RSP is included as a deliberately different way to own the same 500 names.</p>
+  <div class="tbl tbl-scroll">
+    <table>
+      <thead><tr>
+        <th>Vehicle</th><th class="num">Expense</th><th class="num">Assets [EST]</th><th class="num">Yield [EST]</th><th>Note</th>
+      </tr></thead>
+      <tbody>
+        <tr class="me-row"><td><strong>VOO — Vanguard</strong></td><td class="num">0.03%</td><td class="num">~$1.65T</td><td class="num">~1.05%</td><td>The subject · largest fund</td></tr>
+        <tr><td>IVV — iShares</td><td class="num">0.03%</td><td class="num">~$700B</td><td class="num">~1.1%</td><td>Identical fee, BlackRock</td></tr>
+        <tr><td>SPY — SPDR</td><td class="num">0.0945%</td><td class="num">~$700B</td><td class="num">~1.1%</td><td>Most liquid; costliest</td></tr>
+        <tr><td>SPLG / SPYM — SPDR</td><td class="num">0.02%</td><td class="num">Smaller</td><td class="num">~1.1%</td><td>Cheapest fee, low share price</td></tr>
+        <tr><td>VFIAX — Vanguard fund</td><td class="num">0.04%</td><td class="num">Huge</td><td class="num">~1.05%</td><td>Mutual-fund twin of VOO</td></tr>
+        <tr><td>RSP — Invesco (equal-wt)</td><td class="num">0.20%</td><td class="num">~$80B</td><td class="num">~1.4%</td><td>Same 500, no mega-cap tilt</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Premium/discount vs peers: essentially nil — VOO, IVV and SPY have delivered near-identical gross returns for a decade. VOO's edge over SPY is purely the ~6 bp fee gap, which compounds over decades. SPLG is marginally cheaper still. The honest takeaway: among VOO/IVV/SPLG the choice is a rounding error; the real fork is cap-weight (VOO) vs equal-weight (RSP) given today's concentration.</p>
+</div></section>
+
+<!-- ====================== 6 · GOVERNANCE ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Who runs it, and who decides what's in it</h2></div>
+  <p class="lede">For an index fund, "governance" splits in two: the sponsor that manages the wrapper (Vanguard) and the index committee that decides the holdings (S&amp;P Dow Jones Indices). Both matter, and the second is an underappreciated source of discretion.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">The sponsor</div>
+      <h3>Vanguard</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:8px">Owned by its own funds (and thus by investors), not by outside shareholders — a structure that aligns incentives toward lower fees over time. Founded by Jack Bogle; ~50 years of indexing credibility. No dual-class drama, no profit-maximizing parent extracting fees. The main governance critique of Vanguard is the <em>opposite</em> of most firms: that the Big Three index managers (Vanguard, BlackRock, State Street) now hold such large voting stakes across corporate America that their proxy votes carry outsized, concentrated influence.</p>
+    </div>
+    <div class="card">
+      <div class="corner">The index committee</div>
+      <h3>S&amp;P DJI</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:8px">The S&amp;P 500 is <em>not</em> purely rules-based — a committee selects members using eligibility criteria plus judgment (profitability, liquidity, float). That discretion has consequences: additions (e.g. when a Tesla joins) create forced buying; the cap-weighting means the committee's index automatically concentrates into whatever has already won. You are trusting both Vanguard's stewardship <em>and</em> S&amp;P's committee. Both have strong, long track records.</p>
+    </div>
+  </div>
+  <p class="note">Governance verdict: <strong style="color:var(--green)">excellent on the sponsor</strong> (at-cost, investor-aligned), with a structural, market-wide caveat about index-manager voting power. There is no key-person, related-party, or capital-misallocation risk of the kind a single operating company carries. Confidence: <strong style="color:var(--green)">High</strong>.</p>
+</div></section>
+
+<!-- ====================== 7 · RISK REGISTER ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">07</span><h2>Risk register</h2></div>
+  <p class="lede">Sorted highest-severity first. Crucially, almost every risk here is a risk of the <em>underlying index</em>, not of the wrapper — the wrapper itself is about as safe as financial products get.</p>
+
+  <div style="margin-top:30px">
+    <div class="risk-row"><div class="risk-name">Valuation / starting point</div>
+      <div class="meter"><div class="track"><div class="fill" style="width:85%;background:var(--red)"></div></div><div class="sc">8.5</div></div>
+      <div class="risk-why">CAPE ~40 historically implies below-average forward 10-yr returns and bigger drawdown potential. Not a timing signal, but a low-margin-of-safety entry.</div></div>
+
+    <div class="risk-row"><div class="risk-name">Concentration / single-name dependence</div>
+      <div class="meter"><div class="track"><div class="fill" style="width:82%;background:var(--red)"></div></div><div class="sc">8.2</div></div>
+      <div class="risk-why">Top 10 ≈ 38%, tech ≈ 34%, and NVIDIA alone drove most of 2025's gain. "Diversified" is increasingly nominal — an AI mega-cap derating would hit VOO hard.</div></div>
+
+    <div class="risk-row"><div class="risk-name">Macro / cyclicality &amp; rates</div>
+      <div class="meter"><div class="track"><div class="fill" style="width:65%;background:var(--amber)"></div></div><div class="sc">6.5</div></div>
+      <div class="risk-why">High multiples are sensitive to rising rates and recession; equity risk premium is thin, so shocks compress prices more than usual.</div></div>
+
+    <div class="risk-row"><div class="risk-name">AI capex / earnings disappointment</div>
+      <div class="meter"><div class="track"><div class="fill" style="width:62%;background:var(--amber)"></div></div><div class="sc">6.2</div></div>
+      <div class="risk-why">A large share of index EPS growth now hinges on AI monetization meeting expectations. If the super-cycle stalls, the multiple <em>and</em> the earnings fall together.</div></div>
+
+    <div class="risk-row"><div class="risk-name">Sequence-of-returns (for near-retirees)</div>
+      <div class="meter"><div class="track"><div class="fill" style="width:55%;background:var(--amber)"></div></div><div class="sc">5.5</div></div>
+      <div class="risk-why">100% equity exposure with no bonds; a big early drawdown is far more damaging to someone withdrawing than to someone accumulating.</div></div>
+
+    <div class="risk-row"><div class="risk-name">Home-country / US-only bias</div>
+      <div class="meter"><div class="track"><div class="fill" style="width:45%;background:var(--amber)"></div></div><div class="sc">4.5</div></div>
+      <div class="risk-why">No ex-US diversification. Decades of US outperformance are not guaranteed to persist; a regime shift toward international would leave VOO-only investors behind.</div></div>
+
+    <div class="risk-row"><div class="risk-name">Index-methodology / committee risk</div>
+      <div class="meter"><div class="track"><div class="fill" style="width:30%;background:var(--green)"></div></div><div class="sc">3.0</div></div>
+      <div class="risk-why">Cap-weighting mechanically buys high and sells low at the margin; committee discretion adds minor unpredictability. Low, but non-zero.</div></div>
+
+    <div class="risk-row"><div class="risk-name">Structural / wrapper / sponsor</div>
+      <div class="meter"><div class="track"><div class="fill" style="width:15%;background:var(--green)"></div></div><div class="sc">1.5</div></div>
+      <div class="risk-why">Tracking error tiny, liquidity vast, Vanguard rock-solid. Realistically the lowest-risk part of the entire product.</div></div>
+  </div>
+</div></section>
+
+<!-- ====================== 8 · CATALYSTS ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">08</span><h2>What to watch</h2></div>
+  <p class="lede">For an index fund the "catalysts" are macro and earnings events that move the whole market, plus the metrics that would confirm or break the concentration thesis.</p>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-date">Quarterly</div><div><div class="tl-ev">Mega-cap AI earnings (NVDA, MSFT, AAPL, GOOGL, AMZN, META)</div><div class="tl-note">These ~7 names now set the index's direction. Watch AI revenue/capex guidance above all.</div></div></div>
+    <div class="tl-item"><div class="tl-date">Ongoing</div><div><div class="tl-ev">Top-10 weight &amp; NVIDIA weight</div><div class="tl-note">If concentration keeps climbing past ~40%, fragility rises. A peak-and-rollover here would broaden the market.</div></div></div>
+    <div class="tl-item"><div class="tl-date">Each meeting</div><div><div class="tl-ev">Fed policy &amp; the 10-year yield</div><div class="tl-note">High multiples are rate-sensitive; falling rates support VOO, rising rates pressure it.</div></div></div>
+    <div class="tl-item future"><div class="tl-date">Watch</div><div><div class="tl-ev">Forward EPS revisions for the index</div><div class="tl-note">The bull case needs earnings to "grow into" the multiple. Rising estimates = thesis intact; cuts = the air comes out.</div></div></div>
+    <div class="tl-item future"><div class="tl-date">Watch</div><div><div class="tl-ev">Equal-weight (RSP) vs cap-weight (VOO) spread</div><div class="tl-note">If RSP starts beating VOO, market breadth is improving — historically healthier and less fragile.</div></div></div>
+  </div>
+</div></section>
+
+<!-- ====================== 9 · SCENARIOS ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Three ways the next ~12–24 months go</h2></div>
+  <p class="lede">Illustrative scenarios for the price level — <strong>estimates, not forecasts</strong>. Probabilities are subjective and sum to 100%. Anchored off the ~$686 price (18 Jun 2026).</p>
+  <div class="scn">
+    <div class="scn-card bear">
+      <div class="name">Bear</div><div class="prob">25%</div>
+      <div class="tgt">~$480–560 · −20% to −30%</div>
+      <div class="asm">AI capex/earnings disappoint, mega-caps derate, multiple compresses from CAPE ~40. Concentration amplifies the fall. A garden-variety bear market from a rich starting point.</div>
+    </div>
+    <div class="scn-card base">
+      <div class="name">Base</div><div class="prob">50%</div>
+      <div class="tgt">~$700–780 · +2% to +14%</div>
+      <div class="asm">Earnings grow, multiples drift modestly lower, total return lands mid-to-high single digits — below the dazzling 10-yr average, consistent with a high starting CAPE. The "muddle-up."</div>
+    </div>
+    <div class="scn-card bull">
+      <div class="name">Bull</div><div class="prob">25%</div>
+      <div class="tgt">~$800–870 · +17% to +27%</div>
+      <div class="asm">AI super-cycle delivers real productivity/earnings, rates ease, mega-caps grow into their multiples. The melt-up continues; concentration keeps paying.</div>
+    </div>
+  </div>
+  <p class="note">Confidence: <strong style="color:var(--amber)">Low</strong> on 12–24-month price paths (short-run equity moves are not predictable); <strong style="color:var(--green)">Higher</strong> on the structural point that a CAPE of ~40 has historically preceded below-average long-run returns.</p>
+</div></section>
+
+<!-- ====================== 10 · BULL / BEAR ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">10</span><h2>Bull vs bear — six each</h2></div>
+  <div class="bb">
+    <div class="bb-col bull">
+      <div class="bb-head"><span>The Bull Case</span><span>▲</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">Lowest cost in class — 0.03%</div><div class="bb-why">~$3 per $10k means the fee is almost a non-event; over decades that 6-bp edge over SPY compounds into real money.</div></div>
+        <div class="bb-item"><div class="bb-fact">+15.2%/yr over 10 years</div><div class="bb-why">It has delivered one of the great decades for buy-and-hold investors, beating most active funds after fees.</div></div>
+        <div class="bb-item"><div class="bb-fact">Unmatched liquidity & tax efficiency</div><div class="bb-why">First ETF over $1T; in-kind creation/redemption rarely triggers cap-gains distributions — a quiet, durable edge.</div></div>
+        <div class="bb-item"><div class="bb-fact">Owns the AI winners automatically</div><div class="bb-why">No need to stock-pick the next NVIDIA — cap-weighting puts you in it, sized to its success, with zero effort.</div></div>
+        <div class="bb-item"><div class="bb-fact">Vanguard's at-cost structure</div><div class="bb-why">Investor-owned sponsor means fees only ratchet down; no outside owner extracting a margin from you.</div></div>
+        <div class="bb-item"><div class="bb-fact">Simplicity & discipline</div><div class="bb-why">One ticker, no manager risk, dollar-cost-averageable for life. For most savers, "boring" is the winning strategy.</div></div>
+      </div>
+    </div>
+    <div class="bb-col bear">
+      <div class="bb-head"><span>The Bear Case</span><span>▼</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">CAPE ~40 — near a record</div><div class="bb-why">High starting valuations have historically preceded below-average 10-yr returns. You're paying a premium price.</div></div>
+        <div class="bb-item"><div class="bb-fact">Top 10 ≈ 38% of the fund</div><div class="bb-why">The most concentrated the index has been in ~50 years; "diversification" is partly an illusion now.</div></div>
+        <div class="bb-item"><div class="bb-fact">One stock drove 2025</div><div class="bb-why">NVIDIA supplied ~15.5 of the index's ~17.9 points — single-name fragility unseen in four decades.</div></div>
+        <div class="bb-item"><div class="bb-fact">Thin equity risk premium</div><div class="bb-why">Excess CAPE yield ~47% below average — you're paid unusually little to take stock-market risk here.</div></div>
+        <div class="bb-item"><div class="bb-fact">US-only, 100% equity</div><div class="bb-why">No bonds, no ex-US; a US-regime change or a near-retiree's bad sequence of returns has nowhere to hide.</div></div>
+        <div class="bb-item"><div class="bb-fact">AI-earnings dependency</div><div class="bb-why">Much of the index's EPS growth now rides on AI monetization meeting lofty expectations. Miss = multiple and earnings fall together.</div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ====================== 11 · SCORECARD ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">11</span><h2>Final scorecard</h2></div>
+  <p class="lede">Opinion, not fact. Each category /10; categories are adapted for a passive index ETF (e.g. "Management" = sponsor quality; "Moat" = structural cost/liquidity advantage). Overall is a simple average × 10.</p>
+  <div class="score-grid">
+    <div class="score-line"><div class="nm">Product quality</div><div class="track"><div class="fill" style="width:96%"></div></div><div class="n">9.6</div></div>
+    <div class="score-line"><div class="nm">Cost / structural moat</div><div class="track"><div class="fill" style="width:98%"></div></div><div class="n">9.8</div></div>
+    <div class="score-line"><div class="nm">Sponsor (Vanguard)</div><div class="track"><div class="fill" style="width:95%"></div></div><div class="n">9.5</div></div>
+    <div class="score-line"><div class="nm">Governance</div><div class="track"><div class="fill" style="width:85%"></div></div><div class="n">8.5</div></div>
+    <div class="score-line"><div class="nm">Liquidity / strength</div><div class="track"><div class="fill" style="width:99%"></div></div><div class="n">9.9</div></div>
+    <div class="score-line"><div class="nm">Diversification (now)</div><div class="track"><div class="fill" style="width:58%"></div></div><div class="n">5.8</div></div>
+    <div class="score-line"><div class="nm">Income / yield</div><div class="track"><div class="fill" style="width:40%"></div></div><div class="n">4.0</div></div>
+    <div class="score-line"><div class="nm">Valuation (entry)</div><div class="track"><div class="fill" style="width:38%"></div></div><div class="n">3.8</div></div>
+    <div class="score-line"><div class="nm">Long-term track record</div><div class="track"><div class="fill" style="width:92%"></div></div><div class="n">9.2</div></div>
+    <div class="score-line"><div class="nm">Risk profile (today)</div><div class="track"><div class="fill" style="width:60%"></div></div><div class="n">6.0</div></div>
+  </div>
+  <p class="note">Overall ≈ <strong style="color:var(--crimson-soft)">76 / 100</strong>. Methodology: equal-weighted average of the ten /10 scores, ×10. The wrapper scores near-perfect; the score is pulled down almost entirely by the underlying index's <em>valuation</em> and <em>concentration</em> today — not by anything wrong with VOO itself.</p>
+</div></section>
+
+<!-- ====================== 12 · VERDICT ====================== -->
+<section style="border-bottom:none"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">12</span><h2>Verdict</h2></div>
+  <div class="verdict-box">
+    <div class="verdict-label">Education-only opinion · not a recommendation</div>
+    <div class="verdict-word">Buy</div>
+    <div class="verdict-score">Core long-term holding · Overall 76 / 100 · as of 19 Jun 2026</div>
+    <p class="verdict-reason">As a <strong>vehicle</strong>, VOO is close to a 10/10: the cheapest, most liquid, most tax-efficient way to own large-cap America, run by an investor-aligned sponsor. For a long-horizon investor adding regularly over many years, it is hard to do better, and the "Buy" reflects that. The caveat is entirely about <strong>timing and breadth</strong>: a buyer in June 2026 is paying a near-record valuation for a fund that is unusually dependent on a handful of AI mega-caps. That argues for dollar-cost-averaging rather than a lump sum, for pairing it with ex-US and bonds, and for tempering return expectations below the dazzling 10-year average — not for avoiding it.</p>
+    <p class="verdict-reason"><strong style="color:var(--green)">Biggest reason the bulls are right:</strong> over any long horizon, low-cost broad ownership of US large-caps has beaten almost everything else, and trying to time the entry has cost investors more than high valuations ever did. <br><br><strong style="color:var(--red)">Biggest reason the bears are right:</strong> CAPE ~40 with top-10 weight ~38% is a genuinely poor and fragile starting point — the math of mean reversion and concentration says forward returns are likely below average, with deeper-than-normal drawdown risk if the AI trade cracks.</p>
+  </div>
+</div></section>
+
+<!-- ====================== DISCLAIMER ====================== -->
+<div class="disc"><div class="wrap">
+  <p class="big">Educational only — not financial advice. Prices shown are as of the generation date and will have changed. Do your own research.</p>
+  <p>The author is not a licensed investment adviser and holds no position disclosed here. ETF and index data move continuously; verify against Vanguard, S&amp;P Dow Jones Indices and your broker before acting. Estimates are marked [EST]; valuation gauges, scores, scenarios and the verdict are opinion, not fact. Sources conflict on exact net assets ($1.5T–$1.7T range across providers) and on precise top-holding weights, which change daily — figures here are best available as of the generation date.</p>
+  <p class="src-note">
+    Primary sources: Vanguard fund profile (VOO); S&amp;P Dow Jones Indices; stockanalysis.com; Morningstar; financecharts.com; GuruFocus (Shiller CAPE &amp; excess CAPE yield); Yahoo Finance; reporting on 2025 index return &amp; NVIDIA concentration. Live price $686.19 as of 18 Jun 2026; analysis as of 19 Jun 2026.<br>
+    Generated 2026-06-19 · prompt version 4c7e260 · type=stock · slug=vanguard-sp-500-etf
+  </p>
+</div></div>
+</main>
+
+<script>
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function grow(el){ el.style.height = (el.getAttribute('data-h')) + '%'; }
+    var bars = document.querySelectorAll('.bar[data-h]');
+    if(reduce){ bars.forEach(grow); return; }
+    bars.forEach(function(b){ b.style.height='0%'; });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          var cols = e.target.querySelectorAll('.bar[data-h]');
+          cols.forEach(function(b,i){ setTimeout(function(){ grow(b); }, i*90); });
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.3});
+    document.querySelectorAll('.bars').forEach(function(g){ io.observe(g); });
+  })();
+</script>
+</body>
+</html>
