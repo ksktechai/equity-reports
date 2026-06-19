@@ -132,6 +132,27 @@ Notes:
 - **Stock data is a snapshot.** The stock prompt must search for live price/quarter/consensus
   and state the as-of date prominently — never rely on model memory for these.
 
+### Recovering from a mid-run failure (e.g. rate limit / 429)
+
+A run can die *after* the report is written but *before* the script's index + commit steps —
+most commonly when you hit the Claude session limit (`429 · You've hit your session limit`).
+In that case the report is usually already on disk; you can finish the pipeline by hand with
+**no further Claude call** (so a rate limit doesn't block you):
+
+```bash
+f=reports/<type>/<slug>/index.html
+# 1. Confirm it's complete — must be non-empty and end with </html>:
+[ -s "$f" ] && tail -n3 "$f" | grep -qi '</html>' && echo OK || echo "INCOMPLETE — re-run after reset"
+# 2. If OK, run the remaining steps the script would have run:
+node scripts/build-index.js
+git add "$f" index.html
+git commit -m "Add <type> report: <Company> ($(date -u +%Y-%m-%d))" && git push
+```
+
+If the file is missing or doesn't end with `</html>` (died *before* the write completed), it's
+genuinely incomplete — wait for the session limit to reset, then re-run `new-report.sh`, which
+overwrites the path cleanly.
+
 ---
 
 ## Publishing (GitHub Pages)
