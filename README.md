@@ -136,18 +136,58 @@ Notes:
 
 ## Publishing (GitHub Pages)
 
-Enable Pages on this repo (Settings -> Pages -> deploy from branch, root). Reports then serve
-at:
+The reports are plain HTML files in the repo. GitHub Pages serves them as a real website so
+they *render* in the browser instead of showing raw source. You enable it once.
+
+### Enable Pages (one time)
+
+1. Open your repo: **`equity-reports`**
+2. Go to **Settings**
+3. Left menu → **Pages**
+4. Under **Build and deployment**:
+   - **Source:** Deploy from a branch
+   - **Branch:** `main`
+   - **Folder:** `/` (root)
+5. Click **Save**
+
+Wait 1–3 minutes, then refresh the Pages settings page. You should see:
 
 ```
-https://<user>.github.io/equity-reports/reports/ipo/spacex/
-https://<user>.github.io/equity-reports/reports/stock/alphabet/
+Your site is live at https://<user>.github.io/equity-reports/
 ```
 
-The root `index.html` is the directory of all reports. Pages on a **private** repo requires a
-paid GitHub plan; otherwise the repo and site are public. These are education-only analyses
-of public companies, so public is usually fine — but it's a conscious choice, especially if
-run under a consulting entity.
+That root URL is the auto-generated landing page (`index.html`) listing every report.
+
+### Where each report lives
+
+A report's live URL is its folder path under the site root — note the **trailing slash**, which
+makes the browser serve that folder's `index.html`:
+
+```
+Landing page:  https://<user>.github.io/equity-reports/
+SpaceX (IPO):  https://<user>.github.io/equity-reports/reports/ipo/spacex/
+Alphabet:      https://<user>.github.io/equity-reports/reports/stock/alphabet/
+```
+
+Pattern: `https://<user>.github.io/equity-reports/reports/<type>/<slug>/`
+
+### ⚠️ Don't confuse the live URL with the source-code URL
+
+This URL will **never render** — it is GitHub's source-code viewer, which shows the HTML as
+text, not as a web page:
+
+```
+https://github.com/<user>/equity-reports/blob/main/reports/ipo/spacex/index.html
+```
+
+If you see raw `<html>` markup instead of the styled report, you're on a `github.com/.../blob/…`
+link. Use the `<user>.github.io/…` URL instead.
+
+### Public vs private
+
+Pages on a **private** repo requires a paid GitHub plan; otherwise the repo and site are
+public. These are education-only analyses of public companies, so public is usually fine — but
+it's a conscious choice, especially if run under a consulting entity.
 
 ---
 
