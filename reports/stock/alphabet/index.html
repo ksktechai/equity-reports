@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- report-meta: type=stock; slug=alphabet; name=Alphabet; generated=2026-06-19; prompt=9d648b1 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphabet Stock Analysis · GOOGL</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#ffffff;
+    --bg-2:#f8f9fb;
+    --bg-3:#f1f3f6;
+    --panel:#ffffff;
+    --line:#e3e6ec;
+    --line-2:#eceef3;
+    --ink:#1f2329;
+    --ink-2:#3c4149;
+    --mute:#5f6571;
+    --faint:#8a909c;
+    --blue:#4285F4;
+    --red:#EA4335;
+    --yellow:#FBBC04;
+    --green:#34A853;
+    --blue-soft:#e8f0fe;
+    --red-soft:#fce8e6;
+    --yellow-soft:#fef7e0;
+    --green-soft:#e6f4ea;
+    --shadow:0 1px 2px rgba(60,64,67,.10), 0 2px 10px rgba(60,64,67,.06);
+    --shadow-lg:0 4px 18px rgba(60,64,67,.12);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Roboto',system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4,.gs{font-family:'Google Sans','Roboto',sans-serif}
+  .mono{font-family:'Roboto Mono',monospace}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- eyebrow ---------- */
+  .eyebrow{
+    font-family:'Roboto Mono',monospace;
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--blue);font-weight:600;
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    position:relative;
+    padding:64px 0 0;
+    background:
+      radial-gradient(900px 380px at 88% -8%, rgba(66,133,244,.10), transparent 60%),
+      radial-gradient(700px 340px at 4% 0%, rgba(234,67,53,.06), transparent 55%),
+      var(--bg);
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .dotgrid{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background-image:radial-gradient(rgba(95,101,113,.10) 1px, transparent 1px);
+    background-size:26px 26px;mask-image:linear-gradient(180deg,#000,transparent 70%);}
+  .hero-inner{position:relative;z-index:2}
+  .brandrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+  .logo{
+    font-family:'Google Sans';font-weight:700;font-size:26px;letter-spacing:-.5px;
+    display:flex;align-items:center;gap:1px;
+  }
+  .logo .b{color:var(--blue)} .logo .r{color:var(--red)} .logo .y{color:var(--yellow)} .logo .g{color:var(--green)}
+  .chip{
+    font-family:'Roboto Mono',monospace;font-size:11px;font-weight:500;
+    padding:5px 11px;border-radius:999px;border:1px solid var(--line);
+    background:var(--bg-2);color:var(--mute);letter-spacing:.04em;
+  }
+  .chip.live{color:var(--green);border-color:var(--green-soft);background:var(--green-soft)}
+  h1.title{font-size:clamp(34px,5.4vw,54px);line-height:1.05;font-weight:700;letter-spacing:-1.2px;margin:6px 0 14px}
+  h1.title .sub{display:block;font-size:clamp(15px,2vw,19px);font-weight:400;color:var(--mute);letter-spacing:0;margin-top:12px;font-family:'Roboto'}
+  .asof{font-family:'Roboto Mono',monospace;font-size:12.5px;color:var(--faint);margin-bottom:6px}
+
+  /* ---- stat strip ---- */
+  .stats{
+    display:grid;grid-template-columns:repeat(6,1fr);gap:0;
+    margin:40px 0 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:var(--panel);box-shadow:var(--shadow);
+  }
+  .stat{padding:18px 18px 16px;border-right:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+  .stat:nth-child(6n){border-right:none}
+  .stat:nth-child(n+7){border-bottom:none}
+  .stat .k{font-family:'Roboto Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .stat .v{font-family:'Google Sans';font-size:20px;font-weight:600;color:var(--ink);line-height:1.1}
+  .stat .v small{font-size:12.5px;color:var(--mute);font-weight:400}
+  .stat .delta{font-size:11.5px;font-family:'Roboto Mono';margin-top:3px}
+  .up{color:var(--green)} .down{color:var(--red)}
+
+  .heroband{margin:30px 0 0;padding:14px 0 0}
+  .disc-top{
+    background:var(--yellow-soft);border:1px solid #f6e8b8;border-radius:12px;
+    padding:12px 16px;font-size:12.5px;color:#7a5b00;margin:34px 0 0;display:flex;gap:10px;align-items:flex-start
+  }
+  .disc-top b{color:#6b4f00}
+
+  /* ---------- SECTION ---------- */
+  section{padding:62px 0;border-bottom:1px solid var(--line-2)}
+  section:nth-child(even){background:var(--bg-2)}
+  .sec-head{margin-bottom:30px}
+  .sec-head h2{font-size:clamp(24px,3.4vw,32px);font-weight:700;letter-spacing:-.6px;margin:8px 0 8px}
+  .sec-head p{color:var(--mute);max-width:760px;font-size:15px}
+  .sec-num{font-family:'Roboto Mono';font-size:12px;color:var(--blue);font-weight:600}
+
+  /* ---------- badges ---------- */
+  .est{display:inline-block;font-family:'Roboto Mono';font-size:9.5px;font-weight:600;letter-spacing:.06em;
+    color:#9a6a00;background:var(--yellow-soft);border:1px solid #f4e3a8;border-radius:5px;padding:1px 5px;vertical-align:middle}
+  .conf{display:inline-block;font-family:'Roboto Mono';font-size:10px;font-weight:600;border-radius:6px;padding:2px 8px;letter-spacing:.03em}
+  .conf.h{color:var(--green);background:var(--green-soft)}
+  .conf.m{color:#b06f00;background:var(--yellow-soft)}
+  .conf.l{color:var(--red);background:var(--red-soft)}
+  .op{display:inline-block;font-family:'Roboto Mono';font-size:9.5px;font-weight:600;color:#5b46c9;background:#ece9fb;border:1px solid #ddd6f7;border-radius:5px;padding:1px 5px;letter-spacing:.05em}
+
+  /* ---------- cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .card .bar{position:absolute;top:0;left:0;height:3px;width:100%}
+  .card h4{font-size:16px;font-weight:600;margin:6px 0 4px}
+  .card .big{font-family:'Google Sans';font-size:30px;font-weight:700;letter-spacing:-1px;margin:8px 0 2px}
+  .card .lbl{font-family:'Roboto Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+  .card .meta{font-size:13px;color:var(--mute);margin-top:8px}
+  .card .pct{font-size:13px;color:var(--ink-2);font-weight:500}
+
+  /* ---------- tables ---------- */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);background:var(--panel)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+  thead th{
+    background:var(--bg-3);text-align:right;padding:13px 14px;font-family:'Google Sans';font-weight:600;
+    font-size:12px;color:var(--ink-2);border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0
+  }
+  thead th:first-child{text-align:left}
+  tbody td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line-2);font-family:'Roboto Mono';font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+  tbody td:first-child{text-align:left;font-family:'Roboto';color:var(--ink);font-weight:500}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--bg-2)}
+  tr.hl td{background:var(--blue-soft)!important;font-weight:600;color:var(--ink)}
+  tr.hl td:first-child{color:var(--ink)}
+  .pos{color:var(--green)} .neg{color:var(--red)}
+  .tnote{font-size:12px;color:var(--faint);margin-top:10px;line-height:1.5}
+
+  /* ---------- charts ---------- */
+  .chart{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 22px 16px;box-shadow:var(--shadow)}
+  .chart h4{font-size:14px;font-weight:600;margin-bottom:2px}
+  .chart .csub{font-size:12px;color:var(--faint);margin-bottom:18px;font-family:'Roboto Mono'}
+  .bars{display:flex;align-items:flex-end;gap:14px;height:200px;padding-top:10px}
+  .barcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
+  .barcol .bval{font-family:'Roboto Mono';font-size:11px;font-weight:600;color:var(--ink-2)}
+  .barcol .bar2{width:100%;max-width:46px;border-radius:7px 7px 3px 3px;height:0;transition:height 1.1s cubic-bezier(.2,.7,.2,1)}
+  .barcol .byr{font-family:'Roboto Mono';font-size:10.5px;color:var(--faint)}
+  .chgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.chgrid{grid-template-columns:1fr}}
+
+  /* ---------- meters ---------- */
+  .meter{margin-bottom:15px}
+  .meter .mrow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:12px}
+  .meter .mname{font-weight:500;font-size:14px}
+  .meter .mname small{display:block;color:var(--mute);font-size:12px;font-weight:400;font-family:'Roboto'}
+  .meter .mscore{font-family:'Roboto Mono';font-size:13px;font-weight:600;color:var(--ink)}
+  .track{height:9px;background:var(--bg-3);border-radius:999px;overflow:hidden}
+  .fill{height:100%;width:0;border-radius:999px;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+
+  /* ---------- two-col bull/bear ---------- */
+  .bb{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.bb{grid-template-columns:1fr}}
+  .bbcol{border:1px solid var(--line);border-radius:14px;padding:6px 22px 22px;box-shadow:var(--shadow);background:var(--panel)}
+  .bbcol h3{font-size:18px;font-weight:700;padding:18px 0 6px;display:flex;align-items:center;gap:9px}
+  .bbcol.bull{border-top:4px solid var(--green)}
+  .bbcol.bear{border-top:4px solid var(--red)}
+  .bbcol ul{list-style:none}
+  .bbcol li{padding:13px 0;border-top:1px solid var(--line-2);font-size:13.5px;color:var(--ink-2)}
+  .bbcol li b{color:var(--ink);font-weight:600}
+
+  /* ---------- scenarios ---------- */
+  .scen{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:760px){.scen{grid-template-columns:1fr}}
+  .scard{border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow);background:var(--panel);position:relative}
+  .scard .stag{font-family:'Roboto Mono';font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+  .scard.bear .stag{color:var(--red)} .scard.base .stag{color:var(--blue)} .scard.bull .stag{color:var(--green)}
+  .scard .prob{font-family:'Google Sans';font-size:13px;color:var(--mute);float:right}
+  .scard .tgt{font-family:'Google Sans';font-size:30px;font-weight:700;letter-spacing:-1px;margin:14px 0 2px}
+  .scard .tsub{font-size:12px;color:var(--faint);font-family:'Roboto Mono';margin-bottom:14px}
+  .scard ul{list-style:none;margin-top:8px}
+  .scard li{font-size:12.5px;color:var(--mute);padding:5px 0;padding-left:16px;position:relative}
+  .scard li::before{content:"›";position:absolute;left:0;color:var(--blue);font-weight:700}
+
+  /* ---------- fair value ---------- */
+  .fv{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--shadow-lg)}
+  .fvscale{position:relative;height:64px;margin:30px 0 8px}
+  .fvtrack{position:absolute;top:28px;left:0;right:0;height:8px;border-radius:999px;
+    background:linear-gradient(90deg,var(--red) 0%,var(--yellow) 50%,var(--green) 100%);opacity:.85}
+  .fvband{position:absolute;top:22px;height:20px;border-radius:6px;background:rgba(66,133,244,.18);border:1.5px solid var(--blue)}
+  .fvmark{position:absolute;top:8px;width:2px;height:48px;background:var(--ink)}
+  .fvmark .lab{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-family:'Roboto Mono';font-size:11px;font-weight:600;white-space:nowrap;color:var(--ink)}
+  .fvmark .lab.below{top:auto;bottom:-20px}
+  .fvends{display:flex;justify-content:space-between;font-family:'Roboto Mono';font-size:11px;color:var(--faint)}
+
+  /* ---------- scorecard ---------- */
+  .scoregrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 40px}
+  @media(max-width:760px){.scoregrid{grid-template-columns:1fr}}
+  .overall{
+    margin-top:34px;background:linear-gradient(120deg,#1f2329,#2b3340);color:#fff;border-radius:18px;
+    padding:30px 32px;display:flex;align-items:center;gap:30px;flex-wrap:wrap;box-shadow:var(--shadow-lg)
+  }
+  .overall .num{font-family:'Google Sans';font-size:64px;font-weight:700;line-height:1;letter-spacing:-2px}
+  .overall .num small{font-size:22px;color:#aab2c0}
+  .overall .otxt{flex:1;min-width:240px}
+  .overall .otxt .ol{font-family:'Roboto Mono';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8fd6ad;margin-bottom:6px}
+  .overall .otxt p{color:#c9cfd9;font-size:13.5px}
+
+  /* ---------- verdict ---------- */
+  .verdict{
+    background:
+      radial-gradient(600px 240px at 100% 0%, rgba(52,168,83,.16), transparent 60%),
+      linear-gradient(135deg,#0f1b12,#13261a);
+    color:#fff;border-radius:20px;padding:38px 34px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden
+  }
+  .verdict .vtag{font-family:'Roboto Mono';font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8fd6ad}
+  .verdict .vrate{font-family:'Google Sans';font-size:clamp(38px,7vw,60px);font-weight:700;letter-spacing:-1.5px;margin:8px 0 6px;color:#fff}
+  .verdict .vline{font-size:17px;color:#dfe7e0;font-weight:500;margin-bottom:18px;max-width:760px}
+  .verdict p{color:#bcccc0;font-size:14px;margin-bottom:14px;max-width:780px}
+  .verdict .vsplit{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+  @media(max-width:680px){.verdict .vsplit{grid-template-columns:1fr}}
+  .verdict .vbox{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px}
+  .verdict .vbox .vh{font-family:'Roboto Mono';font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+  .verdict .vbox.bullh .vh{color:#7ee2a6} .verdict .vbox.bearh .vh{color:#ff9b8f}
+  .verdict .vbox p{font-size:13px;color:#d4ddd6;margin:0}
+
+  .complexity{display:inline-flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 16px;box-shadow:var(--shadow);margin-top:6px}
+  .complexity .cn{font-family:'Google Sans';font-size:24px;font-weight:700}
+  .complexity .ct{font-size:12.5px;color:var(--mute);max-width:420px}
+
+  .keyval{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-top:8px}
+  .kv{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)}
+  .kv .kk{font-family:'Roboto Mono';font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+  .kv .kvv{font-family:'Google Sans';font-size:18px;font-weight:600}
+
+  .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  .tag{font-size:12px;padding:5px 12px;border-radius:999px;background:var(--bg-3);color:var(--ink-2);border:1px solid var(--line-2)}
+
+  .lead{font-size:17px;color:var(--ink-2);max-width:780px;margin-bottom:8px}
+  .note{font-size:13px;color:var(--mute)}
+  .src{font-size:11.5px;color:var(--faint)}
+  .src a{color:var(--faint);text-decoration:underline}
+
+  /* ---------- footer ---------- */
+  footer{padding:48px 0 70px;background:var(--bg-3);color:var(--mute);font-size:13px}
+  footer .wrap{display:flex;flex-direction:column;gap:14px}
+  footer .meta{font-family:'Roboto Mono';font-size:11.5px;color:var(--faint)}
+  footer .dline{font-size:12.5px;color:var(--mute);line-height:1.6;max-width:860px}
+  footer .sources{font-size:11.5px;color:var(--faint);line-height:1.8}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:920px){.stats{grid-template-columns:repeat(3,1fr)}.stat:nth-child(6n){border-right:1px solid var(--line-2)}.stat:nth-child(3n){border-right:none}}
+  @media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}.stat{border-right:1px solid var(--line-2)!important}.stat:nth-child(2n){border-right:none!important}}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+    .bar2,.fill{transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="dotgrid"></div>
+  <div class="wrap hero-inner">
+    <div class="brandrow">
+      <span class="logo"><span class="b">G</span><span class="r">o</span><span class="y">o</span><span class="b">g</span><span class="g">l</span><span class="r">e</span></span>
+      <span class="chip">NASDAQ: GOOGL / GOOG</span>
+      <span class="chip">Communication Services</span>
+      <span class="chip live">● Live snapshot</span>
+    </div>
+    <div class="eyebrow">Equity Research · Education Only</div>
+    <h1 class="title">Alphabet Inc.
+      <span class="sub">The search-and-ads cash machine that turned its AI capex bet into a re-rating — now priced for the bet to keep paying off.</span>
+    </h1>
+    <div class="asof">Price as of June 18, 2026 · Analysis generated 2026-06-19 (UTC) · live price will have moved since</div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Price (GOOGL)</div><div class="v">$367.32</div><div class="delta up">▲ ~121% / 12 mo</div></div>
+      <div class="stat"><div class="k">Market cap</div><div class="v">~$4.5T <span class="est">EST</span></div><div class="delta">Class A+B+C</div></div>
+      <div class="stat"><div class="k">Enterprise value</div><div class="v">~$4.4T <span class="est">EST</span></div><div class="delta">net cash positive</div></div>
+      <div class="stat"><div class="k">FY25 revenue</div><div class="v">$402.8B</div><div class="delta up">▲ 15% YoY</div></div>
+      <div class="stat"><div class="k">Div. yield</div><div class="v">~0.23%</div><div class="delta">$0.84/yr</div></div>
+      <div class="stat"><div class="k">52-wk range</div><div class="v" style="font-size:15px">$162 – $409</div><div class="delta">near highs</div></div>
+    </div>
+
+    <div class="disc-top">
+      <span>⚠️</span>
+      <div><b>Educational analysis, not advice.</b> This report explains the business, financials, valuation and risks so you can decide for yourself. It is not a recommendation to buy or sell, and the author is not a licensed financial advisor. Prices are a snapshot and have already changed.</div>
+    </div>
+    <div style="height:54px"></div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= EXEC SUMMARY ================= -->
+<section id="summary">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">01 — Executive summary</span>
+      <h2>A regulated advertising monopoly, re-rated as an AI infrastructure story</h2>
+      <p>Alphabet is the holding company for Google. It makes the overwhelming majority of its money selling advertising against the world's most-used search engine and YouTube, while Google Cloud and a subscriptions business have become large, fast-growing second and third engines. After a 2025 of record results and a Q1 2026 cloud surge, the market has paid up.</p>
+    </div>
+
+    <div class="cards reveal">
+      <div class="card"><span class="bar" style="background:var(--green)"></span>
+        <div class="lbl">Bull thesis · one line</div>
+        <h4>AI is expanding, not eroding, the moat</h4>
+        <div class="meta">Gemini-powered Search, a $462B cloud backlog and 60%+ cloud growth suggest Alphabet monetizes the AI shift across search, YouTube and enterprise — while still printing $70B+ of free cash flow.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--red)"></span>
+        <div class="lbl">Bear thesis · one line</div>
+        <h4>~$185B of 2026 capex into a contested moat</h4>
+        <div class="meta">An adverse antitrust remedy, AI chat displacing high-margin search clicks, and a doubling of capex that hasn't yet shown up as higher free cash flow could compress both growth and the multiple at once.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--blue)"></span>
+        <div class="lbl">What changed most recently</div>
+        <h4>Q1 2026: cloud +63%, capex doubling</h4>
+        <div class="meta">Revenue $109.9B (+22%), Google Cloud $20.0B (+63%) at a 32.9% margin, GenAI-product revenue up ~800% YoY — paired with guidance toward ~$185B of 2026 capital spending.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:26px" class="reveal">
+      <div class="complexity">
+        <span class="cn" style="color:var(--blue)">6<small style="font-size:14px;color:var(--faint)">/10</small></span>
+        <span class="ct"><b>Analysis Complexity Score:</b> the business is simple to describe but hard to value — earnings are clean and disclosed, yet the antitrust overhang, the AI-vs-search debate, and a capex cycle that distorts free cash flow make the forward picture genuinely uncertain. <span class="op">OPINION</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BUSINESS MODEL ================= -->
+<section id="business" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">02 — Business model</span>
+      <h2>How Alphabet makes money</h2>
+      <p>Roughly 85% of revenue is Google Services — advertising plus subscriptions, devices and platforms. Google Cloud is ~15% and now profitable. Other Bets (Waymo, Verily, etc.) is a rounding error in revenue and a structural loss. Economics improve with scale: a global ad auction and a built-out data-center fleet carry very high incremental margins.</p>
+    </div>
+
+    <div class="cards reveal" style="margin-bottom:24px">
+      <div class="card"><span class="bar" style="background:var(--blue)"></span>
+        <div class="lbl">Google Search &amp; other</div>
+        <div class="big">$224.5B</div><div class="pct">55.7% of revenue · ~17% growth</div>
+        <div class="meta">The crown jewel: query intent monetized through the world's largest ad auction. Highest-margin revenue Alphabet has.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--red)"></span>
+        <div class="lbl">YouTube ads</div>
+        <div class="big">$40.4B</div><div class="pct">10.0% of revenue · ~9% growth</div>
+        <div class="meta">Second-largest video platform on earth; combined YouTube ads + subs exceeded $60B in 2025. Shorts and Connected-TV are the growth vectors.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--green)"></span>
+        <div class="lbl">Google Cloud</div>
+        <div class="big">$58.7B</div><div class="pct">14.6% of revenue · +48% FY / +63% Q1'26</div>
+        <div class="meta">From cash-burning challenger to profitable AI-infrastructure provider. $462B backlog at Q1'26. The clearest growth + margin story.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--yellow)"></span>
+        <div class="lbl">Subscriptions, platforms &amp; devices</div>
+        <div class="big">$48.0B</div><div class="pct">11.9% of revenue · ~17% growth</div>
+        <div class="meta">YouTube Premium/TV, Google One, Play store and Pixel. Recurring, AI-bundle-friendly, and diversifying away from pure advertising.</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead><tr><th>FY2025 revenue line</th><th>Revenue</th><th>% of total</th><th>YoY growth</th><th>Margin character</th></tr></thead>
+        <tbody>
+          <tr><td>Google Search &amp; other</td><td>$224.5B</td><td>55.7%</td><td class="pos">~17%</td><td>Highest</td></tr>
+          <tr><td>YouTube ads</td><td>$40.4B</td><td>10.0%</td><td class="pos">~9%</td><td>High</td></tr>
+          <tr><td>Google Network</td><td>~$29.8B <span class="est">EST</span></td><td>~7.4%</td><td class="neg">~flat / declining</td><td>Lower (TAC-heavy)</td></tr>
+          <tr><td>Subscriptions, platforms &amp; devices</td><td>$48.0B</td><td>11.9%</td><td class="pos">~17%</td><td>Mixed</td></tr>
+          <tr class="hl"><td>Google Services total</td><td>$342.7B</td><td>85.1%</td><td class="pos">~14%</td><td>~38% op margin</td></tr>
+          <tr><td>Google Cloud</td><td>$58.7B</td><td>14.6%</td><td class="pos">+48%</td><td>~22% op margin <span class="est">EST</span></td></tr>
+          <tr><td>Other Bets</td><td>~$1.4B</td><td>0.3%</td><td>n.m.</td><td>Large operating loss</td></tr>
+          <tr class="hl"><td>Alphabet consolidated</td><td>$402.8B</td><td>100%</td><td class="pos">+15%</td><td>32.0% op margin</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">Search, YouTube-ads and Cloud figures are reported FY2025 segment revenues. Google Network is reconstructed from the Services total <span class="est">EST</span>; Cloud segment margin is approximated from quarterly trends <span class="est">EST</span>. Unit economics such as cost-per-click and per-user ARPU are not disclosed by Alphabet — "Information not publicly available." Source: Alphabet FY2025 results (8-K / earnings release).</p>
+  </div>
+</section>
+
+<!-- ================= FINANCIAL TRAJECTORY ================= -->
+<section id="financials">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">03 — Financial trajectory</span>
+      <h2>Five years of compounding — with a capex twist</h2>
+      <p>Revenue has compounded at roughly 12% and EPS near 18% since 2021, with a dip in 2022 (post-pandemic ad reset). The catch: free cash flow has gone flat as capital expenditure exploded from ~$24B in 2021 toward ~$91B in 2025 and a guided ~$185B in 2026. The income statement looks better than the cash statement right now.</p>
+    </div>
+
+    <div class="chgrid reveal" style="margin-bottom:24px">
+      <div class="chart">
+        <h4>Revenue ($B)</h4><div class="csub">FY2021 → FY2025 · +56% cumulative</div>
+        <div class="bars" id="revchart">
+          <div class="barcol"><span class="bval">258</span><div class="bar2" data-h="56" style="background:linear-gradient(180deg,#7aa9f7,#4285F4)"></div><span class="byr">'21</span></div>
+          <div class="barcol"><span class="bval">283</span><div class="bar2" data-h="62" style="background:linear-gradient(180deg,#7aa9f7,#4285F4)"></div><span class="byr">'22</span></div>
+          <div class="barcol"><span class="bval">307</span><div class="bar2" data-h="67" style="background:linear-gradient(180deg,#7aa9f7,#4285F4)"></div><span class="byr">'23</span></div>
+          <div class="barcol"><span class="bval">350</span><div class="bar2" data-h="77" style="background:linear-gradient(180deg,#7aa9f7,#4285F4)"></div><span class="byr">'24</span></div>
+          <div class="barcol"><span class="bval">403</span><div class="bar2" data-h="100" style="background:linear-gradient(180deg,#5b94f5,#1a73e8)"></div><span class="byr">'25</span></div>
+        </div>
+      </div>
+      <div class="chart">
+        <h4>Diluted EPS ($)</h4><div class="csub">FY2021 → FY2025 · ~18% CAGR</div>
+        <div class="bars" id="epschart">
+          <div class="barcol"><span class="bval">5.61</span><div class="bar2" data-h="52" style="background:linear-gradient(180deg,#8ad3a6,#34A853)"></div><span class="byr">'21</span></div>
+          <div class="barcol"><span class="bval">4.56</span><div class="bar2" data-h="42" style="background:linear-gradient(180deg,#f6b9b2,#EA4335)"></div><span class="byr">'22</span></div>
+          <div class="barcol"><span class="bval">5.80</span><div class="bar2" data-h="54" style="background:linear-gradient(180deg,#8ad3a6,#34A853)"></div><span class="byr">'23</span></div>
+          <div class="barcol"><span class="bval">8.04</span><div class="bar2" data-h="74" style="background:linear-gradient(180deg,#8ad3a6,#34A853)"></div><span class="byr">'24</span></div>
+          <div class="barcol"><span class="bval">10.81</span><div class="bar2" data-h="100" style="background:linear-gradient(180deg,#5cc985,#1e8e3e)"></div><span class="byr">'25</span></div>
+        </div>
+      </div>
+      <div class="chart">
+        <h4>Free cash flow ($B)</h4><div class="csub">Flat — capex is eating it</div>
+        <div class="bars" id="fcfchart">
+          <div class="barcol"><span class="bval">67</span><div class="bar2" data-h="91" style="background:linear-gradient(180deg,#ffd766,#FBBC04)"></div><span class="byr">'21</span></div>
+          <div class="barcol"><span class="bval">60</span><div class="bar2" data-h="82" style="background:linear-gradient(180deg,#ffd766,#FBBC04)"></div><span class="byr">'22</span></div>
+          <div class="barcol"><span class="bval">69</span><div class="bar2" data-h="94" style="background:linear-gradient(180deg,#ffd766,#FBBC04)"></div><span class="byr">'23</span></div>
+          <div class="barcol"><span class="bval">73</span><div class="bar2" data-h="99" style="background:linear-gradient(180deg,#ffd766,#FBBC04)"></div><span class="byr">'24</span></div>
+          <div class="barcol"><span class="bval">73</span><div class="bar2" data-h="100" style="background:linear-gradient(180deg,#ffcf45,#f0a800)"></div><span class="byr">'25</span></div>
+        </div>
+      </div>
+      <div class="chart">
+        <h4>Capex ($B)</h4><div class="csub">The AI bet — ~$185B guided for 2026</div>
+        <div class="bars" id="capchart">
+          <div class="barcol"><span class="bval">~24</span><div class="bar2" data-h="13" style="background:linear-gradient(180deg,#9aa4b4,#5f6571)"></div><span class="byr">'21</span></div>
+          <div class="barcol"><span class="bval">~31</span><div class="bar2" data-h="17" style="background:linear-gradient(180deg,#9aa4b4,#5f6571)"></div><span class="byr">'22</span></div>
+          <div class="barcol"><span class="bval">~32</span><div class="bar2" data-h="17" style="background:linear-gradient(180deg,#9aa4b4,#5f6571)"></div><span class="byr">'23</span></div>
+          <div class="barcol"><span class="bval">~53</span><div class="bar2" data-h="29" style="background:linear-gradient(180deg,#9aa4b4,#5f6571)"></div><span class="byr">'24</span></div>
+          <div class="barcol"><span class="bval">~91</span><div class="bar2" data-h="49" style="background:linear-gradient(180deg,#f6b9b2,#EA4335)"></div><span class="byr">'25</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead><tr><th>Fiscal year ($B unless noted)</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue</td><td>257.6</td><td>282.8</td><td>307.4</td><td>350.0</td><td>402.8</td></tr>
+          <tr><td>Operating income</td><td>78.7</td><td>74.8</td><td>84.3</td><td>112.4</td><td>129.0</td></tr>
+          <tr><td>Net income</td><td>76.0</td><td>60.0</td><td>73.8</td><td>100.1</td><td>132.2</td></tr>
+          <tr><td>Diluted EPS ($)</td><td>5.61</td><td>4.56</td><td>5.80</td><td>8.04</td><td>10.81</td></tr>
+          <tr><td>Free cash flow</td><td>67.0</td><td>60.0</td><td>69.5</td><td>72.8</td><td>73.3</td></tr>
+          <tr><td>Operating margin</td><td>30.6%</td><td>26.5%</td><td>27.4%</td><td>32.1%</td><td>32.0%</td></tr>
+          <tr><td>Net margin</td><td>29.5%</td><td>21.2%</td><td>24.0%</td><td>28.6%</td><td>32.8%</td></tr>
+          <tr><td>Capex</td><td>~24.6</td><td>~31.5</td><td>~32.3</td><td>~52.5</td><td>~91.4</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">Source: Alphabet 10-K filings and FY2025 earnings release. 2025 net margin is flattered by gains on equity investments recognized in other income; operating margin is the cleaner read on the core. Capex 2021–2024 marked <span class="est">EST</span> as rounded from cash-flow statements.</p>
+
+    <div class="keyval reveal" style="margin-top:26px">
+      <div class="kv"><div class="kk">Revenue CAGR '21–'25</div><div class="kvv">~11.8%</div></div>
+      <div class="kv"><div class="kk">EPS CAGR '21–'25</div><div class="kvv">~17.8%</div></div>
+      <div class="kv"><div class="kk">FCF CAGR '21–'25</div><div class="kvv" style="color:var(--red)">~2.3%</div></div>
+      <div class="kv"><div class="kk">ROE FY25 <span class="est">EST</span></div><div class="kvv">~34%</div></div>
+      <div class="kv"><div class="kk">ROIC FY25 <span class="est">EST</span></div><div class="kvv">~30%</div></div>
+      <div class="kv"><div class="kk">Rev / employee <span class="est">EST</span></div><div class="kvv">~$2.2M</div></div>
+    </div>
+
+    <div style="margin-top:26px" class="card reveal">
+      <span class="bar" style="background:linear-gradient(90deg,var(--blue),var(--green))"></span>
+      <h4 style="margin-top:6px">Latest quarter — Q1 2026 (reported Apr 29, 2026) &nbsp;<span class="conf h">Confidence: High</span></h4>
+      <div class="meta" style="font-size:13.5px;color:var(--ink-2)">
+        <b>Beat.</b> Revenue $109.9B, <b>+22% YoY</b> — an acceleration from 2025's mid-teens pace. Operating income $39.7B (~36% margin). <b>Google Cloud $20.0B, +63%</b>, at a 32.9% operating margin (nearly double the prior-year 17.8%); cloud backlog ~$462B. Net income $62.6B / EPS $5.11 was up 81%, but that figure is <b>materially inflated by unrealized gains on equity investments</b> in other income — underlying operating growth is the ~22–36% range, not 81%. <b>Guidance changed:</b> management pointed to ~$185B of 2026 capex, roughly double 2025, the single most important — and most debated — number in the report.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BALANCE SHEET ================= -->
+<section id="balance" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">04 — Balance sheet &amp; capital returns</span>
+      <h2>Fortress balance sheet, now levering modestly to fund AI</h2>
+      <p>Alphabet holds ~$127B of cash and marketable securities and remains net-cash-positive, but 2025–2026 marked a shift: the company began issuing investment-grade bonds to part-fund its capex surge rather than draining the war chest. Capital returns are real but small relative to the cash engine — a growing dividend and a $70B buyback authorization.</p>
+    </div>
+
+    <div class="keyval reveal" style="margin-bottom:24px">
+      <div class="kv"><div class="kk">Cash &amp; securities</div><div class="kvv">~$127B</div></div>
+      <div class="kv"><div class="kk">Total debt <span class="est">EST</span></div><div class="kvv">~$40B</div></div>
+      <div class="kv"><div class="kk">Net cash <span class="est">EST</span></div><div class="kvv" style="color:var(--green)">~$85B</div></div>
+      <div class="kv"><div class="kk">Interest coverage</div><div class="kvv">Very high</div></div>
+      <div class="kv"><div class="kk">Buyback authzn (2025)</div><div class="kvv">$70B</div></div>
+      <div class="kv"><div class="kk">Dividend / qtr</div><div class="kvv">$0.21</div></div>
+    </div>
+
+    <div class="cards reveal">
+      <div class="card"><span class="bar" style="background:var(--green)"></span>
+        <h4>Shares outstanding — falling</h4>
+        <div class="meta">Buybacks have steadily shrunk the share count for years, adding a low-single-digit % tailwind to per-share value. The 2025 $70B authorization continues the pattern, comfortably funded by FCF even amid heavy capex.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--blue)"></span>
+        <h4>Dividend — young but growing</h4>
+        <div class="meta">Alphabet initiated its first dividend in 2024 and raised it 5% to $0.21/quarter in 2025 ($0.84/yr, ~0.23% yield). Payout ratio is tiny (&lt;10%), leaving enormous room to grow.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--yellow)"></span>
+        <h4>New: investment-grade debt</h4>
+        <div class="meta">For the first time at scale, Alphabet tapped the bond market in 2025–26 to help fund data centers — cheap leverage against an AAA-tier balance sheet, but a watch item if capex keeps climbing.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:26px" class="reveal">
+      <div class="complexity">
+        <span class="cn" style="color:var(--green)">10<small style="font-size:14px;color:var(--faint)">/10</small></span>
+        <span class="ct"><b>Financial Strength Score:</b> one of the strongest balance sheets in global equities — net cash, ~$70B+ annual FCF even at peak capex, trivial leverage and elite coverage. The only blemish is that FCF is being consumed by investment, not that the company can't fund itself. <span class="op">OPINION</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VALUATION ================= -->
+<section id="valuation">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">05 — Valuation</span>
+      <h2>No longer the cheap mega-cap — but not the priciest either</h2>
+      <p>After a ~120% one-year run, Alphabet trades around 26× forward earnings and ~34× trailing 2025 EPS — a clear premium to its own ~20–24× history of recent years, yet still a discount to several AI-leveraged mega-cap peers. The debate is whether the re-rating already prices the AI upside.</p>
+    </div>
+
+    <div class="tbl-wrap reveal" style="margin-bottom:18px">
+      <table>
+        <thead><tr><th>Peer (approx., Jun 2026)</th><th>Market cap</th><th>Rev growth</th><th>Gross margin</th><th>Fwd P/E</th><th>FCF yield</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td>Alphabet (GOOGL)</td><td>~$4.5T</td><td>~15%</td><td>~58%</td><td>~26×</td><td>~1.6%</td></tr>
+          <tr><td>Microsoft (MSFT)</td><td>~$3.1T</td><td>~15%</td><td>~69%</td><td>~30×</td><td>~2.0%</td></tr>
+          <tr><td>Apple (AAPL)</td><td>~$4.5T</td><td>~6%</td><td>~46%</td><td>~30×</td><td>~3.0%</td></tr>
+          <tr><td>Amazon (AMZN)</td><td>~$2.9T</td><td>~11%</td><td>~49%</td><td>~31×</td><td>~2.2%</td></tr>
+          <tr><td>Meta (META)</td><td>~$1.8T</td><td>~18%</td><td>~81%</td><td>~22×</td><td>~2.8%</td></tr>
+          <tr><td>Nvidia (NVDA)</td><td>~$4.6T</td><td>~40%</td><td>~75%</td><td>~21×</td><td>~2.4%</td></tr>
+          <tr><td><b>Peer median</b></td><td>—</td><td>~15%</td><td>~69%</td><td>~30×</td><td>~2.4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote" style="margin-bottom:24px">All peer figures are approximate <span class="est">EST</span> snapshots as of mid-June 2026 and move daily; they are illustrative, not precise. On forward P/E Alphabet trades at a <b>~13% discount</b> to the peer median (~26× vs ~30×) despite peer-leading scale and comparable growth — though Meta and Nvidia screen optically cheaper on forward earnings. Source: company filings and aggregated market data.</p>
+
+    <div class="fv reveal">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px">
+        <h4 style="font-size:17px;font-weight:700">Fair-value range <span class="op">OPINION · EST</span></h4>
+        <span class="conf m">Confidence: Medium</span>
+      </div>
+      <p class="note" style="margin:10px 0 4px">Anchored on consensus FY2026 EPS of ~$14.2 at a 24–30× multiple, cross-checked against a mid-teens FCF-growth DCF. This is an illustrative range, not a price target or forecast.</p>
+      <div class="fvscale">
+        <div class="fvtrack"></div>
+        <!-- range 330 to 430 on a 300-460 axis: left=(330-300)/160=18.75%, width=(430-330)/160=62.5% -->
+        <div class="fvband" style="left:18.75%;width:62.5%"></div>
+        <!-- current 367.32: (367.32-300)/160 = 42.1% -->
+        <div class="fvmark" style="left:42.1%"><span class="lab">Price $367</span></div>
+        <!-- fair mid 380: (380-300)/160=50% -->
+        <div class="fvmark" style="left:50%;background:var(--blue)"><span class="lab below" style="color:var(--blue)">Mid ~$380</span></div>
+      </div>
+      <div class="fvends"><span>$300</span><span>fair value band ≈ $330 – $430</span><span>$460</span></div>
+      <p class="note" style="margin-top:18px"><b>What has to be true for ~$367 to make sense?</b> Roughly: Search holds share and grows high-single/low-double digits despite AI chat; Cloud keeps compounding 30%+ at expanding margins; the ~$185B 2026 capex eventually converts into free-cash-flow growth rather than a permanent margin tax; and no antitrust remedy forces a structural break-up of the ad stack or default-search deals. If most of those hold, the stock is reasonable-to-cheap; if two or more break, today's multiple is too high.</p>
+    </div>
+    <p class="tnote" style="margin-top:16px">Independent reference points <span class="op">others' estimates — not the author's</span>: Wall Street consensus is "Strong Buy" with an average 12-month target near <b>$432</b> (range ~$334–$515) across ~60+ analysts. These are other people's estimates, presented for context, not endorsed.</p>
+  </div>
+</section>
+
+<!-- ================= GOVERNANCE ================= -->
+<section id="governance" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">06 — Governance &amp; management</span>
+      <h2>Brilliant capital allocation, shareholder-unfriendly control</h2>
+      <p>The operating track record is excellent; the governance structure is not. Founders Larry Page and Sergey Brin retain voting control through super-voting Class B shares, so public Class A (GOOGL) and non-voting Class C (GOOG) holders effectively cannot change the company's direction. You are buying a phenomenal business and accepting that you do not control it.</p>
+    </div>
+
+    <div class="cards reveal">
+      <div class="card"><span class="bar" style="background:var(--red)"></span>
+        <h4>Dual-class voting</h4>
+        <div class="meta">Class B (Page &amp; Brin) carries 10 votes/share and retains majority control. GOOGL = 1 vote; GOOG = 0 votes. Minority holders cannot force change. A structural governance negative.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--green)"></span>
+        <h4>Capital-allocation record</h4>
+        <div class="meta">Strong: organic R&amp;D and disciplined M&amp;A (YouTube, Android, DeepMind) created enormous value; few destructive megadeals. Buybacks have been steady and accretive.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--blue)"></span>
+        <h4>Management &amp; tenure</h4>
+        <div class="meta">CEO Sundar Pichai (Google 2015, Alphabet 2019) has navigated the AI transition credibly. Deep bench; founders remain involved as controlling shareholders and board members.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:26px" class="reveal">
+      <div class="complexity">
+        <span class="cn" style="color:var(--yellow)">5<small style="font-size:14px;color:var(--faint)">/10</small></span>
+        <span class="ct"><b>Governance Score:</b> excellent operating stewardship and capital allocation, dragged down hard by entrenched dual-class control, limited minority rights and a history of large regulatory run-ins. Great managers, weak shareholder protections. <span class="op">OPINION</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RISK REGISTER ================= -->
+<section id="risks">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">07 — Risk register</span>
+      <h2>What can go wrong, worst first</h2>
+      <p>Scored 1–10 by severity (10 = most severe). Alphabet's risks are unusual: the biggest threats are not financial fragility but regulation and the possibility that its own AI cannibalizes its best business.</p>
+    </div>
+
+    <div class="reveal" id="riskmeters">
+      <div class="meter"><div class="mrow"><span class="mname">Regulatory / antitrust <small>US &amp; EU remedies could force divestitures or end default-search deals — strikes the core ad engine</small></span><span class="mscore">9/10</span></div><div class="track"><div class="fill" data-w="90" style="background:var(--red)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Technology / AI disruption <small>Chat-style answers could reduce high-margin search clicks even if Alphabet "wins" AI</small></span><span class="mscore">8/10</span></div><div class="track"><div class="fill" data-w="80" style="background:var(--red)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Capex / margin <small>~$185B of 2026 spend depresses FCF now; returns are unproven if AI demand softens</small></span><span class="mscore">7/10</span></div><div class="track"><div class="fill" data-w="70" style="background:var(--yellow)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Valuation <small>~26× forward / ~34× trailing leaves little margin for error after a 120% run</small></span><span class="mscore">7/10</span></div><div class="track"><div class="fill" data-w="70" style="background:var(--yellow)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Competition <small>OpenAI/ChatGPT, Microsoft, Amazon and Meta contest search, cloud and AI talent</small></span><span class="mscore">6/10</span></div><div class="track"><div class="fill" data-w="60" style="background:var(--yellow)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Revenue concentration <small>Advertising is still ~75% of revenue and is cyclical with the ad market</small></span><span class="mscore">6/10</span></div><div class="track"><div class="fill" data-w="60" style="background:var(--yellow)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Macro / cyclicality <small>Ad spend tracks GDP and corporate budgets; a recession dents the core fast</small></span><span class="mscore">5/10</span></div><div class="track"><div class="fill" data-w="50" style="background:var(--green)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Execution <small>Scaling data centers, power and custom silicon (TPUs) at $100B+/yr is operationally hard</small></span><span class="mscore">5/10</span></div><div class="track"><div class="fill" data-w="50" style="background:var(--green)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Governance / key-person <small>Founder control limits minority recourse; AI leadership concentrated in few people</small></span><span class="mscore">4/10</span></div><div class="track"><div class="fill" data-w="40" style="background:var(--green)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Balance-sheet / leverage <small>Minimal — net cash, but newly rising debt is worth monitoring</small></span><span class="mscore">2/10</span></div><div class="track"><div class="fill" data-w="20" style="background:var(--green)"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CATALYSTS ================= -->
+<section id="catalysts" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">08 — Catalysts &amp; what to watch</span>
+      <h2>The signals that confirm or break the thesis</h2>
+    </div>
+    <div class="cards reveal">
+      <div class="card"><span class="bar" style="background:var(--blue)"></span>
+        <h4>Near-term catalysts</h4>
+        <div class="meta">Q2 2026 earnings (late July); antitrust remedy rulings/appeals in the US ad-tech and search cases; Gemini consumer + enterprise product cycles; any change to the ~$185B capex plan.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--green)"></span>
+        <h4>Confirms the bull case</h4>
+        <div class="meta">Search revenue still growing double digits with AI Overviews monetizing; Cloud sustaining 30%+ growth at rising margins; capex starting to convert into FCF growth; backlog continuing to build.</div>
+      </div>
+      <div class="card"><span class="bar" style="background:var(--red)"></span>
+        <h4>Breaks the thesis</h4>
+        <div class="meta">Search growth decelerating toward low single digits; a forced divestiture or loss of default-search distribution; Cloud margins stalling; capex rising again with FCF still flat into 2027.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SCENARIOS ================= -->
+<section id="scenarios">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">09 — Scenarios</span>
+      <h2>Bear · base · bull</h2>
+      <p>Illustrative 12–24 month outcomes — probabilities and targets are the author's estimates to frame the range, <b>not forecasts</b>. <span class="est">EST</span> <span class="op">OPINION</span></p>
+    </div>
+    <div class="scen reveal">
+      <div class="scard bear">
+        <span class="stag">Bear</span><span class="prob">~25% prob.</span>
+        <div class="tgt" style="color:var(--red)">~$260</div>
+        <div class="tsub">≈ 30% downside · ~18× depressed EPS</div>
+        <ul>
+          <li>Adverse antitrust remedy hits ad distribution</li>
+          <li>AI chat erodes high-margin search clicks</li>
+          <li>Capex stays elevated, FCF flat → de-rating</li>
+          <li>Multiple compresses to ~18–20×</li>
+        </ul>
+      </div>
+      <div class="scard base">
+        <span class="stag">Base</span><span class="prob">~50% prob.</span>
+        <div class="tgt" style="color:var(--blue)">~$400</div>
+        <div class="tsub">≈ 9% upside · ~26–28× EPS ~$15</div>
+        <ul>
+          <li>Search grows high-single/low-double digits</li>
+          <li>Cloud compounds 30%+ at improving margins</li>
+          <li>Capex peaks; FCF growth resumes 2027</li>
+          <li>Multiple roughly holds — earnings carry it</li>
+        </ul>
+      </div>
+      <div class="scard bull">
+        <span class="stag">Bull</span><span class="prob">~25% prob.</span>
+        <div class="tgt" style="color:var(--green)">~$520</div>
+        <div class="tsub">≈ 40% upside · ~30× EPS ~$17+</div>
+        <ul>
+          <li>AI Overviews + Gemini lift ad monetization</li>
+          <li>Cloud re-accelerates on AI-infra demand</li>
+          <li>Capex converts into visible FCF leverage</li>
+          <li>Re-rates as the clearest AI compounder</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BULL VS BEAR ================= -->
+<section id="bullbear" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">10 — Bull vs bear</span>
+      <h2>The two-sided case, fact by fact</h2>
+    </div>
+    <div class="bb reveal">
+      <div class="bbcol bull">
+        <h3>🟢 Bull case</h3>
+        <ul>
+          <li><b>Cloud is inflecting.</b> +63% in Q1'26 at a 32.9% margin with a ~$462B backlog — a second growth engine that is now also a profit engine.</li>
+          <li><b>Search isn't breaking.</b> Search &amp; other grew ~17% in 2025 with AI Overviews live — evidence AI is augmenting, not gutting, the core auction.</li>
+          <li><b>Cash generation is elite.</b> $70B+ FCF even at peak capex, net cash, and a tiny payout ratio leave huge optionality.</li>
+          <li><b>Relative value.</b> ~26× forward is a discount to the ~30× mega-cap median despite comparable growth and superior scale.</li>
+          <li><b>Distribution moat.</b> Chrome, Android, Search, YouTube and Maps each have 1B+ users — unmatched surfaces to deploy AI products.</li>
+          <li><b>Proprietary AI stack.</b> Gemini models plus in-house TPUs give cost and capability advantages few rivals can match end to end.</li>
+        </ul>
+      </div>
+      <div class="bbcol bear">
+        <h3>🔴 Bear case</h3>
+        <ul>
+          <li><b>Antitrust is existential.</b> US courts have found monopolies in search and ad-tech; remedies could unwind default-search deals or the ad stack itself.</li>
+          <li><b>Search cannibalization risk.</b> Even if Alphabet wins AI, chat answers may generate fewer high-margin clicks per query than the legacy ten-blue-links model.</li>
+          <li><b>FCF has gone flat.</b> ~2% FCF CAGR over four years as capex exploded — the income statement grows, the cash statement doesn't.</li>
+          <li><b>$185B capex is unproven.</b> Roughly doubling spend bets enormous capital on AI demand that could soften, leaving stranded assets and depreciation.</li>
+          <li><b>The discount has shrunk.</b> After +120% in a year, the stock no longer offers the deep-value cushion that defined its prior thesis.</li>
+          <li><b>You don't get a vote.</b> Dual-class control means minority holders have no lever if capital allocation or strategy goes wrong.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SCORECARD ================= -->
+<section id="scorecard">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">11 — Final scorecard</span>
+      <h2>Ten dimensions, one number</h2>
+      <p>Each category scored /10 (author's opinion). Overall = simple average × 10, equally weighted. <span class="op">OPINION</span></p>
+    </div>
+
+    <div class="scoregrid reveal" id="scorebars">
+      <div class="meter"><div class="mrow"><span class="mname">Business quality</span><span class="mscore">10/10</span></div><div class="track"><div class="fill" data-w="100" style="background:var(--blue)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Competitive moat</span><span class="mscore">9/10</span></div><div class="track"><div class="fill" data-w="90" style="background:var(--blue)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Management</span><span class="mscore">8/10</span></div><div class="track"><div class="fill" data-w="80" style="background:var(--green)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Governance</span><span class="mscore">5/10</span></div><div class="track"><div class="fill" data-w="50" style="background:var(--yellow)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Financial strength</span><span class="mscore">10/10</span></div><div class="track"><div class="fill" data-w="100" style="background:var(--green)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Growth</span><span class="mscore">8/10</span></div><div class="track"><div class="fill" data-w="80" style="background:var(--green)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Profitability</span><span class="mscore">9/10</span></div><div class="track"><div class="fill" data-w="90" style="background:var(--green)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Valuation</span><span class="mscore">6/10</span></div><div class="track"><div class="fill" data-w="60" style="background:var(--yellow)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Capital returns</span><span class="mscore">7/10</span></div><div class="track"><div class="fill" data-w="70" style="background:var(--green)"></div></div></div>
+      <div class="meter"><div class="mrow"><span class="mname">Risk profile</span><span class="mscore">6/10</span></div><div class="track"><div class="fill" data-w="60" style="background:var(--yellow)"></div></div></div>
+    </div>
+
+    <div class="overall reveal">
+      <div class="num">78<small>/100</small></div>
+      <div class="otxt">
+        <div class="ol">Overall score · equally-weighted average</div>
+        <p>A best-in-class business and balance sheet (business quality, financial strength, profitability all near the top) held back by weak governance, a now-full valuation, and elevated regulatory and AI-disruption risk. A high-quality compounder priced closer to fair than to a bargain.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VERDICT ================= -->
+<section id="verdict" style="border-bottom:none">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:22px">
+      <span class="sec-num">12 — Verdict</span>
+    </div>
+    <div class="verdict reveal">
+      <div class="vtag">Author's opinion · not financial advice</div>
+      <div class="vrate">Buy</div>
+      <div class="vline">A rare combination of dominant economics and a credible AI position — but bought after a big run, so size for valuation and regulatory risk, not for a bargain.</div>
+      <p>Alphabet is one of the highest-quality businesses in the world: a near-monopoly search-advertising engine, an inflecting and now-profitable cloud, elite margins and a net-cash balance sheet. The 2025–26 results show AI is so far expanding the moat rather than eroding it, and at ~26× forward earnings the stock still sits at a discount to mega-cap peers. The reasons to hesitate are real and specific — an unresolved antitrust overhang that could strike the core, a ~$185B capex bet that hasn't yet converted into free-cash-flow growth, and a valuation that, post-120% rally, no longer offers a wide margin of safety. On balance the quality and relative value tip it to a Buy, but a measured one.</p>
+      <div class="vsplit">
+        <div class="vbox bullh"><div class="vh">Biggest reason bulls may be right</div><p>If AI Overviews and Gemini keep monetizing search while Cloud compounds 30%+ at rising margins, Alphabet is the best-positioned AI compounder in mega-cap — and is the cheapest of them on forward earnings.</p></div>
+        <div class="vbox bearh"><div class="vh">Biggest reason bears may be right</div><p>A forced antitrust remedy or AI-driven decline in high-margin search clicks could hit the core profit engine and the multiple at the same time — exactly when $185B of capex is depressing free cash flow.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="meta">Report type: STOCK · Slug: alphabet · Generated: 2026-06-19 (UTC) · Prompt version: 9d648b1</div>
+    <div class="dline">
+      <b>Sources:</b> Alphabet FY2025 &amp; Q1 2026 earnings releases / 8-K filings and 10-K (abc.xyz/investor, SEC EDGAR); MacroTrends &amp; StockAnalysis for historical financials and price; aggregated analyst consensus (S&amp;P Global, TipRanks, public.com). Every factual figure is sourced to filings or market data; items marked <span class="est">EST</span> are author estimates and items marked <span class="op">OPINION</span> are judgments, not facts. Where GAAP net income is flattered by equity-investment gains, operating income is used as the cleaner measure.
+    </div>
+    <div class="dline" style="color:var(--ink-2);font-weight:500;border-top:1px solid var(--line);padding-top:14px">
+      Educational only — not financial advice. Prices shown are as of the generation date and will have changed. Do your own research.
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function animateIn(el){
+    el.classList.add('in');
+    // bars
+    el.querySelectorAll('.bar2').forEach(function(b){ b.style.height = (b.getAttribute('data-h')||0)+'%'; });
+    el.querySelectorAll('.fill').forEach(function(f){ f.style.width = (f.getAttribute('data-w')||0)+'%'; });
+  }
+
+  var targets = document.querySelectorAll('.reveal, #revchart, #epschart, #fcfchart, #capchart, #riskmeters, #scorebars');
+
+  if(reduce || !('IntersectionObserver' in window)){
+    targets.forEach(animateIn);
+    document.querySelectorAll('.bar2').forEach(function(b){ b.style.height=(b.getAttribute('data-h')||0)+'%'; });
+    document.querySelectorAll('.fill').forEach(function(f){ f.style.width=(f.getAttribute('data-w')||0)+'%'; });
+    return;
+  }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ animateIn(e.target); io.unobserve(e.target); }
+    });
+  }, {threshold:0.18, rootMargin:'0px 0px -40px 0px'});
+
+  targets.forEach(function(t){ io.observe(t); });
+})();
+</script>
+</body>
+</html>
