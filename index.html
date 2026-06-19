@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- report-meta: type=index; generated=2026-06-19; reports=1 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equity Reports · Educational equity research</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap');
+
+  :root{
+    --void:#070a12; --deep:#0d121f; --panel:#121a2b; --panel-2:#16203399;
+    --line:#243049; --ink:#e8ecf6; --mute:#8a96b2; --faint:#5d6885;
+    --plasma:#ff5c3a; --plasma-soft:#ff8a3a; --ion:#4ea8ff; --ion-soft:#7fc4ff;
+    --green:#46d39a; --amber:#f2b441; --red:#ff5470;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(78,168,255,.10), transparent 60%),
+      radial-gradient(900px 500px at 10% 5%, rgba(255,92,58,.08), transparent 55%),
+      var(--void);
+    color:var(--ink);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* starfield (matches the reports) */
+  .stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+  .stars::before,.stars::after{
+    content:"";position:absolute;inset:0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 60%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 80%, #cdd, transparent),
+      radial-gradient(1px 1px at 90% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 55% 15%, #bcd, transparent),
+      radial-gradient(1px 1px at 12% 65%, #fff, transparent),
+      radial-gradient(1px 1px at 82% 85%, #fff, transparent);
+    background-repeat:repeat;background-size:600px 600px;
+  }
+  .stars::after{background-size:400px 400px;opacity:.5;animation:drift 120s linear infinite}
+  @keyframes drift{from{transform:translateY(0)}to{transform:translateY(-400px)}}
+
+  main{position:relative;z-index:1}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--ion-soft)}
+
+  /* hero */
+  header.hero{position:relative;padding:84px 0 56px;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero-tag{display:flex;gap:14px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .pill{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+    padding:5px 11px;border:1px solid var(--line);border-radius:100px;color:var(--mute);background:var(--panel-2)}
+  .pill.live{color:var(--green);border-color:rgba(70,211,154,.4)}
+  .pill.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--green);margin-right:7px;vertical-align:middle;box-shadow:0 0 8px var(--green);
+    animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  h1.title{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(40px,7vw,76px);
+    line-height:1.02;letter-spacing:-.02em;margin:8px 0 6px}
+  .sub{color:var(--mute);max-width:60ch;font-size:17px;margin-top:14px}
+
+  .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:44px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+  .strip .cell{background:var(--deep);padding:20px 18px}
+  .strip .v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(20px,2.6vw,27px);letter-spacing:-.01em}
+  .strip .v.plasma{color:var(--plasma-soft)} .strip .v.ion{color:var(--ion-soft)}
+  .strip .k{font-size:11px;color:var(--faint);margin-top:6px;font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.04em;text-transform:uppercase}
+
+  /* sections */
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--plasma);
+    border:1px solid rgba(255,92,58,.3);border-radius:6px;padding:2px 8px}
+  h2{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em;line-height:1.1}
+  .lede{color:var(--mute);max-width:68ch;margin-top:14px;font-size:16px}
+  .empty{color:var(--faint);margin-top:30px;font-family:'IBM Plex Mono',monospace;font-size:13px}
+
+  /* report cards */
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  a.card{
+    display:block;text-decoration:none;color:inherit;
+    background:linear-gradient(180deg,var(--panel),var(--deep));
+    border:1px solid var(--line);border-radius:16px;padding:24px;
+    position:relative;overflow:hidden;transition:border-color .25s ease,transform .25s ease}
+  a.card:hover{border-color:var(--ion);transform:translateY(-3px)}
+  a.card:focus-visible{outline:2px solid var(--ion-soft);outline-offset:3px}
+  .card .corner{position:absolute;top:0;right:0;font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:.1em;color:var(--faint);padding:9px 12px;text-transform:uppercase}
+  .card h3{font-size:21px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .card h3 .ticker{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;
+    letter-spacing:.05em;color:var(--plasma);border:1px solid rgba(255,92,58,.4);border-radius:6px;
+    padding:3px 8px;background:rgba(255,92,58,.07)}
+  .card .meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);
+    display:flex;align-items:center;gap:8px}
+  .card .meta .dot{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:none}
+  .card .meta .dot.done{background:var(--green);box-shadow:0 0 8px var(--green)}
+  .card .go{display:inline-block;margin-top:18px;font-family:'IBM Plex Mono',monospace;
+    font-size:13px;color:var(--ion-soft);letter-spacing:.02em}
+
+  /* disclaimer */
+  .disc{padding:48px 0 70px;text-align:center}
+  .disc p{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);
+    letter-spacing:.04em;max-width:62ch;margin:0 auto}
+  .disc .big{color:var(--mute);font-size:13px;margin-bottom:10px}
+  .src-note{font-size:12px;color:var(--faint);margin-top:18px;line-height:1.7}
+
+  @media(max-width:860px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    .g2{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1!important;transform:none!important}
+  }
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+
+<main>
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-tag">
+        <span class="pill live">Auto-generated index</span>
+        <span class="pill">Updated 19 Jun 2026</span>
+        <span class="pill">Educational · not advice</span>
+      </div>
+      <div class="eyebrow">Education-only equity research</div>
+      <h1 class="title">Equity Reports</h1>
+      <p class="sub">Self-contained, interactive teardowns of IPOs and listed stocks — generated with Claude, published as static HTML. Pick a report below.</p>
+
+      <div class="strip">
+        <div class="cell"><div class="v">1</div><div class="k">Reports</div></div>
+        <div class="cell"><div class="v ion">1</div><div class="k">IPOs</div></div>
+        <div class="cell"><div class="v plasma">0</div><div class="k">Stocks</div></div>
+        <div class="cell"><div class="v">19 Jun 2026</div><div class="k">Last built</div></div>
+      </div>
+    </div>
+  </header>
+
+    <section class="reveal"><div class="wrap">
+      <div class="sec-head"><span class="sec-num">01</span><h2>IPOs</h2></div>
+      <p class="lede">First-time listings — S-1 financials, float, lock-up and whether the offer price is sane.</p>
+      <div class="grid g2">
+        <a class="card" href="reports/ipo/spacex/">
+          <div class="corner">ipo</div>
+          <h3>SpaceX<span class="ticker">SPCX</span></h3>
+          <div class="meta"><span class="dot done" aria-hidden="true"></span>19 Jun 2026</div>
+          <span class="go">View report &rarr;</span>
+        </a>
+      </div>
+    </div></section>
+
+    <section class="reveal"><div class="wrap">
+      <div class="sec-head"><span class="sec-num">02</span><h2>Stocks</h2></div>
+      <p class="lede">Listed companies — multi-year history, latest quarter, consensus and a price-vs-fair-value read.</p>
+      <p class="empty">No Stocks yet.</p>
+    </div></section>
+
+  <div class="disc"><div class="wrap">
+    <p class="big">Educational only — not financial advice. Do your own research.</p>
+    <p>Each report is an educational analysis of public information. Prices and figures are as of each report's own generation date and will have changed. Scores, probabilities and verdicts are analytical opinion, not fact.</p>
+    <p class="src-note">This index is auto-generated from the reports/ directory by scripts/build-index.js.</p>
+  </div></div>
+</main>
+
+<script>
+  // Subtle reveal on scroll; disabled under prefers-reduced-motion via CSS.
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var els = document.querySelectorAll('.reveal');
+    if (reduce || !('IntersectionObserver' in window)) {
+      els.forEach(function(el){ el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: .15 });
+    els.forEach(function(el){ io.observe(el); });
+  })();
+</script>
+</body>
+</html>

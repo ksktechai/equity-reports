@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- report-meta: type=ipo; slug=spacex; name=SpaceX; generated=2026-06-19; prompt=c4e40f1 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpaceX IPO Analysis · SPCX</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap');
+
+  :root{
+    --void:#070a12;
+    --deep:#0d121f;
+    --panel:#121a2b;
+    --panel-2:#16203399;
+    --line:#243049;
+    --ink:#e8ecf6;
+    --mute:#8a96b2;
+    --faint:#5d6885;
+    --plasma:#ff5c3a;     /* engine plume */
+    --plasma-soft:#ff8a3a;
+    --ion:#4ea8ff;        /* starlink blue */
+    --ion-soft:#7fc4ff;
+    --green:#46d39a;
+    --amber:#f2b441;
+    --red:#ff5470;
+    --grid: rgba(78,168,255,.06);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(78,168,255,.10), transparent 60%),
+      radial-gradient(900px 500px at 10% 5%, rgba(255,92,58,.08), transparent 55%),
+      var(--void);
+    color:var(--ink);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---- starfield ---- */
+  .stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+  .stars::before,.stars::after{
+    content:"";position:absolute;inset:0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 60%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 80%, #cdd, transparent),
+      radial-gradient(1px 1px at 90% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 55% 15%, #bcd, transparent),
+      radial-gradient(1px 1px at 12% 65%, #fff, transparent),
+      radial-gradient(1px 1px at 82% 85%, #fff, transparent);
+    background-repeat:repeat;background-size:600px 600px;
+  }
+  .stars::after{background-size:400px 400px;opacity:.5;animation:drift 120s linear infinite}
+  @keyframes drift{from{transform:translateY(0)}to{transform:translateY(-400px)}}
+
+  main{position:relative;z-index:1}
+
+  /* ---- eyebrow / labels ---- */
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ion-soft);
+  }
+  .eyebrow.plasma{color:var(--plasma-soft)}
+
+  /* ---- HERO ---- */
+  header.hero{
+    position:relative;padding:84px 0 56px;border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .trajectory{position:absolute;inset:0;z-index:0;pointer-events:none}
+  .hero-inner{position:relative;z-index:2}
+  .hero-tag{display:flex;gap:14px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .pill{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+    padding:5px 11px;border:1px solid var(--line);border-radius:100px;color:var(--mute);
+    background:var(--panel-2);
+  }
+  .pill.live{color:var(--green);border-color:rgba(70,211,154,.4)}
+  .pill.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--green);margin-right:7px;vertical-align:middle;box-shadow:0 0 8px var(--green);
+    animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  h1.title{
+    font-family:'Newsreader',serif;font-weight:500;
+    font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.02em;
+    margin:8px 0 6px;
+  }
+  h1.title .ticker{
+    font-family:'IBM Plex Mono',monospace;font-weight:600;
+    font-size:.34em;letter-spacing:.05em;color:var(--plasma);vertical-align:middle;
+    border:1px solid rgba(255,92,58,.4);border-radius:8px;padding:6px 12px;margin-left:14px;
+    position:relative;top:-.18em;background:rgba(255,92,58,.07)
+  }
+  .sub{color:var(--mute);max-width:60ch;font-size:17px;margin-top:14px}
+
+  /* hero stat strip */
+  .strip{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:1px;
+    margin-top:44px;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    background:var(--line);
+  }
+  .strip .cell{background:var(--deep);padding:20px 18px}
+  .strip .v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(20px,2.6vw,27px);
+    letter-spacing:-.01em}
+  .strip .v.plasma{color:var(--plasma-soft)}
+  .strip .v.ion{color:var(--ion-soft)}
+  .strip .k{font-size:11px;color:var(--faint);margin-top:6px;font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.04em;text-transform:uppercase}
+
+  /* ---- section frame ---- */
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--plasma);
+    border:1px solid rgba(255,92,58,.3);border-radius:6px;padding:2px 8px}
+  h2{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(26px,4vw,38px);
+    letter-spacing:-.01em;line-height:1.1}
+  .lede{color:var(--mute);max-width:68ch;margin-top:14px;font-size:16px}
+
+  /* ---- cards ---- */
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{
+    background:linear-gradient(180deg,var(--panel),var(--deep));
+    border:1px solid var(--line);border-radius:16px;padding:24px;
+    position:relative;overflow:hidden;
+  }
+  .card .corner{position:absolute;top:0;right:0;font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:.1em;color:var(--faint);padding:9px 12px;text-transform:uppercase}
+  .card h3{font-size:20px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .seg-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute);margin-bottom:18px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;
+    padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+  .row:first-of-type{border-top:none}
+  .row .lbl{color:var(--faint)}
+  .row .val{font-family:'IBM Plex Mono',monospace;font-weight:500}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot.ion{background:var(--ion);box-shadow:0 0 10px var(--ion)}
+  .dot.plasma{background:var(--plasma);box-shadow:0 0 10px var(--plasma)}
+  .dot.purple{background:#b07bff;box-shadow:0 0 10px #b07bff}
+
+  /* callout */
+  .callout{
+    margin-top:28px;border-left:2px solid var(--plasma);
+    background:linear-gradient(90deg,rgba(255,92,58,.07),transparent);
+    padding:18px 22px;border-radius:0 12px 12px 0;
+  }
+  .callout .q{font-weight:600;color:var(--plasma-soft);font-size:14px;margin-bottom:6px;
+    font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+  .callout p{color:var(--mute);font-size:15px}
+  .callout.ion{border-color:var(--ion)}
+  .callout.ion .q{color:var(--ion-soft)}
+  .callout.ion{background:linear-gradient(90deg,rgba(78,168,255,.07),transparent)}
+
+  /* ---- charts ---- */
+  .chartbox{margin-top:34px;background:var(--deep);border:1px solid var(--line);
+    border-radius:16px;padding:26px 24px 18px}
+  .chartbox .ct{font-size:13px;color:var(--mute);margin-bottom:2px}
+  .chartbox .cs{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-bottom:22px}
+  .bars{display:flex;align-items:flex-end;gap:clamp(8px,3vw,34px);height:230px;padding-left:8px}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:100%;max-width:64px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--ion),rgba(78,168,255,.25));
+    transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+  .bar.est{background:linear-gradient(180deg,var(--plasma-soft),rgba(255,138,58,.2))}
+  .bar .top{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+  .bar-x{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-top:10px}
+  .legend{display:flex;gap:18px;margin-top:18px;font-size:11px;color:var(--faint);
+    font-family:'IBM Plex Mono',monospace;flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .swatch{width:11px;height:11px;border-radius:3px}
+
+  /* line chart (subs) */
+  svg.line{width:100%;height:auto;display:block;margin-top:6px}
+
+  /* ---- tables ---- */
+  .tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    background:var(--deep)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
+  th{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--faint);background:var(--panel)}
+  td{color:var(--ink)}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right}
+  .tag-est{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--amber);
+    border:1px solid rgba(242,180,65,.35);border-radius:4px;padding:1px 5px;margin-left:6px}
+  .pos{color:var(--green)}.neg{color:var(--red)}
+
+  /* risk meter */
+  .risk-row{display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center;
+    padding:14px 0;border-top:1px solid var(--line)}
+  .risk-row:first-child{border-top:none}
+  .risk-name{font-weight:500;font-size:15px}
+  .risk-why{color:var(--faint);font-size:13px;margin-top:3px;grid-column:1/-1}
+  .meter{display:flex;align-items:center;gap:11px}
+  .meter .track{width:130px;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .meter .fill{height:100%;border-radius:4px}
+  .meter .sc{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;width:30px;text-align:right}
+
+  /* bull/bear */
+  .bb{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+  .bb-col{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .bb-head{padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-size:13px;
+    letter-spacing:.1em;text-transform:uppercase;font-weight:600;display:flex;
+    justify-content:space-between;align-items:center}
+  .bb.bull .bb-head{background:rgba(70,211,154,.1);color:var(--green);border-bottom:1px solid rgba(70,211,154,.25)}
+  .bb.bear .bb-head{background:rgba(255,84,112,.1);color:var(--red);border-bottom:1px solid rgba(255,84,112,.25)}
+  .bb-body{padding:8px 22px 18px}
+  .bb-item{padding:15px 0;border-top:1px solid var(--line)}
+  .bb-item:first-child{border-top:none}
+  .bb-fact{font-size:14px;font-weight:500;margin-bottom:4px}
+  .bb-why{font-size:13px;color:var(--faint)}
+
+  /* scenarios */
+  .scn{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .scn-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--deep);position:relative}
+  .scn-card .prob{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:-.02em}
+  .scn-card .name{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;margin-bottom:14px}
+  .scn-card.bear .prob{color:var(--red)} .scn-card.bear .name{color:var(--red)}
+  .scn-card.base .prob{color:var(--ion-soft)} .scn-card.base .name{color:var(--ion-soft)}
+  .scn-card.bull .prob{color:var(--green)} .scn-card.bull .name{color:var(--green)}
+  .scn-card .tgt{font-size:15px;margin:12px 0 4px;font-weight:600}
+  .scn-card .asm{font-size:13px;color:var(--faint)}
+
+  /* scorecard final */
+  .verdict-box{margin-top:30px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(160deg,var(--panel),var(--void));padding:36px;text-align:center;position:relative;overflow:hidden}
+  .verdict-box::before{content:"";position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+    width:400px;height:400px;background:radial-gradient(circle,rgba(242,180,65,.12),transparent 70%)}
+  .verdict-label{position:relative;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;
+    text-transform:uppercase;font-size:12px;color:var(--faint);margin-bottom:14px}
+  .verdict-word{position:relative;font-family:'Newsreader',serif;font-size:clamp(44px,8vw,72px);
+    color:var(--amber);font-weight:500;letter-spacing:-.01em}
+  .verdict-score{position:relative;font-family:'IBM Plex Mono',monospace;font-size:15px;
+    color:var(--mute);margin-top:8px}
+  .verdict-reason{position:relative;max-width:64ch;margin:22px auto 0;color:var(--mute);font-size:15px}
+
+  /* mini scorecard grid */
+  .score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 28px;margin-top:30px}
+  .score-line{display:flex;align-items:center;gap:14px}
+  .score-line .nm{flex:none;width:130px;font-size:13px;color:var(--mute)}
+  .score-line .track{flex:1;height:6px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .score-line .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--ion),var(--ion-soft))}
+  .score-line .n{font-family:'IBM Plex Mono',monospace;font-size:13px;width:34px;text-align:right;font-weight:600}
+
+  /* timeline */
+  .timeline{margin-top:30px;position:relative;padding-left:6px}
+  .tl-item{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:14px 0;
+    border-left:1px solid var(--line);padding-left:26px;position:relative}
+  .tl-item::before{content:"";position:absolute;left:-5px;top:20px;width:9px;height:9px;
+    border-radius:50%;background:var(--ion);box-shadow:0 0 10px var(--ion)}
+  .tl-item.done::before{background:var(--green);box-shadow:0 0 10px var(--green)}
+  .tl-item.future::before{background:var(--plasma);box-shadow:0 0 10px var(--plasma)}
+  .tl-date{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ion-soft)}
+  .tl-ev{font-size:15px}
+  .tl-note{font-size:13px;color:var(--faint);margin-top:2px}
+
+  /* disclaimer */
+  .disc{padding:48px 0 70px;text-align:center}
+  .disc p{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);
+    letter-spacing:.04em;max-width:60ch;margin:0 auto}
+  .disc .big{color:var(--mute);font-size:13px;margin-bottom:10px}
+  .src-note{font-size:12px;color:var(--faint);margin-top:24px;line-height:1.7}
+
+  .note{font-size:13px;color:var(--faint);margin-top:18px;font-style:italic}
+
+  @media(max-width:860px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    .g3,.g2,.scn,.score-grid{grid-template-columns:1fr}
+    .bb{grid-template-columns:1fr}
+    .tl-item{grid-template-columns:96px 1fr;gap:12px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+
+<main>
+<!-- ====================== HERO ====================== -->
+<header class="hero">
+  <svg class="trajectory" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="traj" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0" stop-color="#ff5c3a" stop-opacity="0"/>
+        <stop offset="1" stop-color="#ff5c3a" stop-opacity=".5"/>
+      </linearGradient>
+    </defs>
+    <path d="M-50,520 Q500,480 760,200 T1300,-40" fill="none" stroke="url(#traj)" stroke-width="2" stroke-dasharray="3 7"/>
+    <circle cx="760" cy="200" r="3" fill="#ff8a3a"/>
+  </svg>
+  <div class="wrap hero-inner">
+    <div class="hero-tag">
+      <span class="pill live">Trading live · Nasdaq</span>
+      <span class="pill">Listed 12 Jun 2026</span>
+      <span class="pill">Educational · not advice</span>
+    </div>
+    <div class="eyebrow plasma">Institutional IPO Teardown</div>
+    <h1 class="title">SpaceX<span class="ticker">SPCX</span></h1>
+    <p class="sub">The largest IPO in history — a profitable satellite business and a cash-burning AI lab, fused under one ticker and priced for perfection.</p>
+
+    <div class="strip">
+      <div class="cell"><div class="v plasma">$135</div><div class="k">IPO price</div></div>
+      <div class="cell"><div class="v">$160.95</div><div class="k">Day-1 close · +19%</div></div>
+      <div class="cell"><div class="v ion">$1.77T</div><div class="k">Cap at IPO</div></div>
+      <div class="cell"><div class="v ion">~$2.1T</div><div class="k">Cap at close</div></div>
+      <div class="cell"><div class="v">~$75B</div><div class="k">Capital raised</div></div>
+    </div>
+    <p class="note">Complexity to value: <strong style="color:var(--plasma-soft)">9 / 10</strong> — three frontier businesses (launch, telecom, AI) with no clean comparable peer.</p>
+  </div>
+</header>
+
+<!-- ====================== 1 · EXEC SUMMARY ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>The one-paragraph version</h2></div>
+  <p class="lede">SpaceX designs reusable rockets, runs the Starlink satellite-internet network, and — since the February 2026 xAI merger — operates an AI division (Grok, X, data-centre compute). Starlink is the profit engine; xAI is the cash drain; the valuation assumes both win.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Why investors are excited</div>
+      <h3 style="color:var(--green)">The bull pull</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Starlink scaled past 10M subscribers and threw off $4.4B operating profit in 2025. Reusable launch is a near-monopoly. Add Starship optionality and an AI-infrastructure story, and you get the most hyped listing in market history.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Why investors are worried</div>
+      <h3 style="color:var(--red)">The bear weight</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">~95× sales on $18.7B revenue, a $4.9B GAAP net loss driven by xAI, ~85% Musk voting control, related-party deals with Tesla, and a thin 4.3% float with a December lock-up cliff ahead.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ====================== 2 · BUSINESS ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2>What SpaceX actually sells</h2></div>
+  <p class="lede">Three reported segments with wildly different economics. One prints cash, one is developmental, one bleeds.</p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">~61% of revenue</div>
+      <h3><span class="dot ion"></span>Starlink</h3>
+      <div class="seg-tag">Connectivity · the cash engine</div>
+      <div class="row"><span class="lbl">2025 revenue</span><span class="val">$11.4B</span></div>
+      <div class="row"><span class="lbl">Operating profit</span><span class="val pos">+$4.4B</span></div>
+      <div class="row"><span class="lbl">Subscribers</span><span class="val">10M+</span></div>
+      <div class="row"><span class="lbl">ARPU</span><span class="val">$81/mo</span></div>
+      <div class="row"><span class="lbl">YoY growth</span><span class="val">~48%</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">~22% of revenue</div>
+      <h3><span class="dot plasma"></span>Space</h3>
+      <div class="seg-tag">Launch &amp; crew · the moat</div>
+      <div class="row"><span class="lbl">2025 revenue</span><span class="val">$4.1B</span></div>
+      <div class="row"><span class="lbl">Operating result</span><span class="val neg">Loss-making</span></div>
+      <div class="row"><span class="lbl">YoY growth</span><span class="val">~8%</span></div>
+      <div class="row"><span class="lbl">Cost edge</span><span class="val">Reusability</span></div>
+      <div class="row"><span class="lbl">Catalyst</span><span class="val">Starship</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">~17% of revenue</div>
+      <h3><span class="dot purple"></span>xAI / Grok</h3>
+      <div class="seg-tag">AI · acquired Feb 2026 · high burn</div>
+      <div class="row"><span class="lbl">2025 op. loss</span><span class="val neg">−$6.36B</span></div>
+      <div class="row"><span class="lbl">Q1-26 op. loss</span><span class="val neg">−$2.47B</span></div>
+      <div class="row"><span class="lbl">Includes</span><span class="val">X (Twitter)</span></div>
+      <div class="row"><span class="lbl">Core product</span><span class="val">Grok LLM</span></div>
+      <div class="row"><span class="lbl">Play</span><span class="val">Orbital compute</span></div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">// Interrogate the story</div>
+    <p>The "space + AI" pitch — orbital data centres powered by Starlink — is the line item to stress-test, not accept. xAI lost $6.36B in 2025 and the merger also parked X on the balance sheet. Starlink's profit is effectively subsidising Grok's compute bill.</p>
+  </div>
+
+  <!-- REVENUE CHART -->
+  <div class="chartbox">
+    <div class="ct">Total revenue trajectory ($B, consolidated)</div>
+    <div class="cs">2022–2025 · S-1 (FY24–25) · pre-2024 third-party estimate</div>
+    <div class="bars" id="revbars">
+      <div class="bar-col"><div class="bar est" data-h="13"><span class="top">$4.6</span></div><div class="bar-x">2022*</div></div>
+      <div class="bar-col"><div class="bar est" data-h="25"><span class="top">$8.7</span></div><div class="bar-x">2023*</div></div>
+      <div class="bar-col"><div class="bar" data-h="40"><span class="top">$14.1</span></div><div class="bar-x">2024</div></div>
+      <div class="bar-col"><div class="bar" data-h="53"><span class="top">$18.7</span></div><div class="bar-x">2025</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--ion)"></span>S-1 disclosed</span>
+      <span><span class="swatch" style="background:var(--plasma-soft)"></span>* third-party estimate</span>
+      <span style="color:var(--mute)">CAGR ’23→’25 ≈ +47%</span>
+    </div>
+  </div>
+
+  <!-- SUBS LINE CHART -->
+  <div class="chartbox">
+    <div class="ct">Starlink subscriber growth (millions, cumulative)</div>
+    <div class="cs">2021–Feb 2026 · per S-1 &amp; company announcements</div>
+    <svg class="line" viewBox="0 0 720 240" id="subline" role="img" aria-label="Starlink subscriber growth line chart">
+      <defs>
+        <linearGradient id="fillg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#4ea8ff" stop-opacity=".35"/>
+          <stop offset="1" stop-color="#4ea8ff" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- gridlines -->
+      <g stroke="#243049" stroke-width="1">
+        <line x1="40" y1="40" x2="700" y2="40"/>
+        <line x1="40" y1="100" x2="700" y2="100"/>
+        <line x1="40" y1="160" x2="700" y2="160"/>
+        <line x1="40" y1="200" x2="700" y2="200"/>
+      </g>
+      <g font-family="IBM Plex Mono" font-size="10" fill="#5d6885">
+        <text x="8" y="44">10M</text><text x="12" y="104">6M</text>
+        <text x="12" y="164">3M</text><text x="20" y="204">0</text>
+      </g>
+      <!-- data: 2021~0, 2022 1M, 2023 2.3M, 2024 4.6M, 2025 9M, Feb26 10.3M -->
+      <path id="area" d="M40,200 L172,198 L304,194 L436,178 L568,120 L700,38 L700,200 L40,200 Z" fill="url(#fillg)" opacity="0"/>
+      <path id="curve" d="M40,200 L172,198 L304,194 L436,178 L568,120 L700,38" fill="none"
+        stroke="#7fc4ff" stroke-width="2.5" stroke-linecap="round"/>
+      <g fill="#4ea8ff">
+        <circle cx="40" cy="200" r="3.5"/><circle cx="172" cy="198" r="3.5"/>
+        <circle cx="304" cy="194" r="3.5"/><circle cx="436" cy="178" r="3.5"/>
+        <circle cx="568" cy="120" r="3.5"/><circle cx="700" cy="38" r="4.5" fill="#7fc4ff"/>
+      </g>
+      <g font-family="IBM Plex Mono" font-size="10" fill="#5d6885" text-anchor="middle">
+        <text x="40" y="224">’21</text><text x="172" y="224">’22</text><text x="304" y="224">’23</text>
+        <text x="436" y="224">’24</text><text x="568" y="224">’25</text><text x="690" y="224">Feb’26</text>
+      </g>
+    </svg>
+  </div>
+</div></section>
+
+<!-- ====================== 3 · VALUATION ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>Is ~95× sales sane?</h2></div>
+  <p class="lede">SpaceX has no true peer, so every comparison is imperfect. On every satcom and launch metric it trades at an enormous premium; even against high-multiple AI names it's stretched. Peer multiples below are approximate reference points, not precise live figures.</p>
+  <div class="tbl">
+    <table>
+      <thead><tr>
+        <th>Company</th><th class="num">Market cap</th><th class="num">Rev growth</th>
+        <th class="num">EV / Revenue</th><th>Read</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><strong>SpaceX (SPCX)</strong></td><td class="num">~$2.1T</td><td class="num">+33%</td><td class="num" style="color:var(--plasma-soft)">~95×</td><td>The subject</td></tr>
+        <tr><td>Nvidia <span class="tag-est">est</span></td><td class="num">~$3T+</td><td class="num">High</td><td class="num">~25×</td><td>AI proxy</td></tr>
+        <tr><td>Tesla <span class="tag-est">est</span></td><td class="num">~$1.5T</td><td class="num">Low</td><td class="num">~9×</td><td>Musk / auto-AI</td></tr>
+        <tr><td>T-Mobile <span class="tag-est">est</span></td><td class="num">~$250B</td><td class="num">Low</td><td class="num">~3×</td><td>Telecom</td></tr>
+        <tr><td>Rocket Lab <span class="tag-est">est</span></td><td class="num">~$30B</td><td class="num">~30%</td><td class="num">High</td><td>Pure-play launch</td></tr>
+        <tr><td>Viasat / satcom <span class="tag-est">est</span></td><td class="num">&lt;$10B</td><td class="num">Low</td><td class="num">~2×</td><td>Satellite internet</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout ion">
+    <div class="q">// The independent counter-mark</div>
+    <p>Morningstar's independent fair value sits at <strong style="color:var(--ion-soft)">$63/share (~$780B)</strong> — roughly 2.5× below the ~$161 close. Two rigorous views, one paying ~$2.1T, one saying ~$780B. That gap <em>is</em> the investment debate.</p>
+  </div>
+  <p class="note">What must be true for ~$2.1T? Starlink compounding ~40%+ for years, xAI flipping from a ~$6B loss to a profit engine, and Starship unlocking new markets — near-flawless execution across all three at once.</p>
+</div></section>
+
+<!-- ====================== 4 · FINANCIALS ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>The numbers, GAAP and adjusted</h2></div>
+  <p class="lede">The whole story lives in one gap: $6.6B adjusted EBITDA versus a $4.9B GAAP net loss. The bridge between them is, overwhelmingly, xAI.</p>
+  <div class="grid g3" style="margin-top:30px">
+    <div class="card"><div class="eyebrow">FY2025 revenue</div><div class="strip-v" style="font-family:'IBM Plex Mono';font-size:32px;font-weight:600;margin-top:10px">$18.7B</div><div style="color:var(--green);font-size:13px;font-family:'IBM Plex Mono'">+33% YoY</div></div>
+    <div class="card"><div class="eyebrow plasma">Adj. EBITDA</div><div style="font-family:'IBM Plex Mono';font-size:32px;font-weight:600;margin-top:10px;color:var(--plasma-soft)">$6.6B</div><div style="color:var(--faint);font-size:13px;font-family:'IBM Plex Mono'">35.3% margin</div></div>
+    <div class="card"><div class="eyebrow" style="color:var(--red)">GAAP net loss</div><div style="font-family:'IBM Plex Mono';font-size:32px;font-weight:600;margin-top:10px;color:var(--red)">−$4.9B</div><div style="color:var(--faint);font-size:13px;font-family:'IBM Plex Mono'">−26% margin</div></div>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Metric</th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td class="num">$8.7B <span class="tag-est">est</span></td><td class="num">$14.1B</td><td class="num">$18.7B</td><td>High (’24–’25)</td></tr>
+        <tr><td>Adj. EBITDA</td><td class="num">—</td><td class="num">~$3.5B <span class="tag-est">est</span></td><td class="num">$6.6B</td><td>High (’25)</td></tr>
+        <tr><td>Net income</td><td class="num">~+$2B <span class="tag-est">est</span></td><td class="num">~+$2B <span class="tag-est">est</span></td><td class="num neg">−$4.9B</td><td>High (’25)</td></tr>
+        <tr><td>Accumulated deficit</td><td class="num">—</td><td class="num">—</td><td class="num neg">−$41.3B</td><td>High</td></tr>
+        <tr><td>Gross margin / FCF</td><td class="num">n/d</td><td class="num">n/d</td><td class="num">n/d</td><td>Not disclosed</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <div class="q">// Rule of 40</div>
+    <p>On EBITDA: 33% growth + 35% margin = <strong style="color:var(--green)">68 — passes strongly.</strong> On net margin: 33% − 26% = <strong style="color:var(--amber)">7 — fails.</strong> The entire difference is the xAI loss. Same company, two verdicts.</p>
+  </div>
+</div></section>
+
+<!-- ====================== 5 · GOVERNANCE ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Governance: the weak link</h2></div>
+  <p class="lede">A profitable core can't offset a control structure that leaves public shareholders with essentially no say. This is among the weakest governance profiles of any mega-cap.</p>
+  <div class="grid g3">
+    <div class="card"><div class="corner">Voting</div><h3 style="color:var(--red)">~85%</h3><p style="color:var(--mute);font-size:14px;margin-top:6px">Musk's share of votes via Class B stock (10 votes/share). Public Class A gets 1 vote each.</p></div>
+    <div class="card"><div class="corner">Related party</div><h3 style="color:var(--amber)">$506M</h3><p style="color:var(--mute);font-size:14px;margin-top:6px">Transactions with Tesla in 2025, incl. ~$131M Cybertruck purchases. Plus Valor leasing &amp; a potential Cursor deal.</p></div>
+    <div class="card"><div class="corner">Score</div><h3 style="color:var(--red)">2 / 10</h3><p style="color:var(--mute);font-size:14px;margin-top:6px">Concentrated voting, interlocked board, material related-party flows. Quality business, governance you can't influence.</p></div>
+  </div>
+</div></section>
+
+<!-- ====================== 6 · RISK ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Risk register, scored 1–10</h2></div>
+  <p class="lede">Sorted highest-severity first. The top cluster — valuation, governance, key-person — is what a $100M institutional desk would lose sleep over.</p>
+  <div style="margin-top:30px" id="risks">
+    <div class="risk-row"><div class="risk-name">Valuation risk</div><div class="meter"><div class="track"><div class="fill" data-w="100" style="background:var(--red)"></div></div><div class="sc">10</div></div><div class="risk-why">~95× sales vs a $63 fair-value mark implies the price could halve to reach "fair."</div></div>
+    <div class="risk-row"><div class="risk-name">Governance risk</div><div class="meter"><div class="track"><div class="fill" data-w="90" style="background:var(--red)"></div></div><div class="sc">9</div></div><div class="risk-why">85% Musk control + interlocked board; public holders can't influence outcomes.</div></div>
+    <div class="risk-row"><div class="risk-name">Founder / key-person risk</div><div class="meter"><div class="track"><div class="fill" data-w="90" style="background:var(--red)"></div></div><div class="sc">9</div></div><div class="risk-why">Musk runs multiple companies; his conduct and attention move the stock directly.</div></div>
+    <div class="risk-row"><div class="risk-name">Cash burn risk</div><div class="meter"><div class="track"><div class="fill" data-w="80" style="background:var(--plasma)"></div></div><div class="sc">8</div></div><div class="risk-why">xAI lost $6.36B in 2025 and more in Q1-26; Starlink is subsidising it.</div></div>
+    <div class="risk-row"><div class="risk-name">Related-party risk</div><div class="meter"><div class="track"><div class="fill" data-w="80" style="background:var(--plasma)"></div></div><div class="sc">8</div></div><div class="risk-why">Tesla, Valor and potential Cursor deals route value through Musk's network.</div></div>
+    <div class="risk-row"><div class="risk-name">Lock-up / supply risk</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amber)"></div></div><div class="sc">7</div></div><div class="risk-why">Dec 8 unlock of billions of insider shares could swamp the thin float.</div></div>
+    <div class="risk-row"><div class="risk-name">Customer concentration</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amber)"></div></div><div class="sc">7</div></div><div class="risk-why">Space segment leans heavily on NASA / Pentagon contracts.</div></div>
+    <div class="risk-row"><div class="risk-name">Technology / execution</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amber)"></div></div><div class="sc">7</div></div><div class="risk-why">Starship still developmental; AI is behind frontier labs.</div></div>
+    <div class="risk-row"><div class="risk-name">Competition risk</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amber)"></div></div><div class="sc">6</div></div><div class="risk-why">Amazon Kuiper in satcom; far-ahead rivals in AI.</div></div>
+  </div>
+</div></section>
+
+<!-- ====================== 7 · MECHANICS / TIMELINE ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">07</span><h2>How the deal actually worked</h2></div>
+  <div class="grid g3" style="margin-top:30px">
+    <div class="card"><div class="corner">Float</div><h3>~4.3%</h3><p style="color:var(--mute);font-size:14px;margin-top:6px">555.6M shares sold — a thin slice of post-money equity. Scarcity meets hype.</p></div>
+    <div class="card"><div class="corner">Retail</div><h3>~30%</h3><p style="color:var(--mute);font-size:14px;margin-top:6px">Roughly $22.5B reserved for retail vs the usual 5–10%. Many still got partial fills.</p></div>
+    <div class="card"><div class="corner">Syndicate</div><h3>23 banks</h3><p style="color:var(--mute);font-size:14px;margin-top:6px">Goldman Sachs lead-left; Morgan Stanley ran stabilisation. ~$75B raised.</p></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item done"><div class="tl-date">20 May 2026</div><div><div class="tl-ev">S-1 filed</div><div class="tl-note">First official financials in 24 years</div></div></div>
+    <div class="tl-item done"><div class="tl-date">3 Jun 2026</div><div><div class="tl-ev">Roadshow · $135 fixed price set</div><div class="tl-note">Take-it-or-leave-it pricing</div></div></div>
+    <div class="tl-item done"><div class="tl-date">11 Jun 2026</div><div><div class="tl-ev">Priced</div><div class="tl-note">$1.77T implied valuation</div></div></div>
+    <div class="tl-item done"><div class="tl-date">12 Jun 2026</div><div><div class="tl-ev">First trade · closed $160.95 (+19%)</div><div class="tl-note">Cap ~$2.1T at close</div></div></div>
+    <div class="tl-item future"><div class="tl-date">8 Dec 2026</div><div><div class="tl-ev">180-day lock-up expires</div><div class="tl-note">Key supply-shock date — billions of insider shares free in stages</div></div></div>
+  </div>
+</div></section>
+
+<!-- ====================== 8 · SCENARIOS ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">08</span><h2>Three ways this plays out</h2></div>
+  <p class="lede">Probabilities and targets are illustrative estimates, not forecasts — a way to frame the range, not a prediction.</p>
+  <div class="scn">
+    <div class="scn-card bear">
+      <div class="prob">35%</div><div class="name">Bear</div>
+      <div class="tgt">~$700–800B · $55–63/sh</div>
+      <div class="asm">Multiple compresses toward Morningstar's mark. xAI losses persist, Starlink decelerates, lock-up supply hits.</div>
+    </div>
+    <div class="scn-card base">
+      <div class="prob">45%</div><div class="name">Base</div>
+      <div class="tgt">~$1.4–1.8T · $110–140/sh</div>
+      <div class="asm">Starlink compounds 30–40%, price hikes lift ARPU, AI losses narrow but don't yet profit, Starship progresses.</div>
+    </div>
+    <div class="scn-card bull">
+      <div class="prob">20%</div><div class="name">Bull</div>
+      <div class="tgt">$3T+ · $230+/sh</div>
+      <div class="asm">Starlink becomes a global utility, orbital-compute thesis lands, Starship opens new TAM. Near-flawless execution.</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ====================== 9 · BULL VS BEAR ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Strongest case, both sides</h2></div>
+  <div class="bb">
+    <div class="bb-col bull"><div class="bb-head">Bull case <span>▲</span></div><div class="bb-body">
+      <div class="bb-item"><div class="bb-fact">Starlink: $4.4B op. profit on $11.4B revenue</div><div class="bb-why">A real, scaling, high-margin engine underpins the whole valuation.</div></div>
+      <div class="bb-item"><div class="bb-fact">10M+ subscribers across 160+ countries</div><div class="bb-why">Global demand and a network too costly for rivals to replicate fast.</div></div>
+      <div class="bb-item"><div class="bb-fact">Reusable-launch cost advantage</div><div class="bb-why">A durable moat competitors haven't matched at scale.</div></div>
+      <div class="bb-item"><div class="bb-fact">$6.6B adj. EBITDA (35% margin)</div><div class="bb-why">The core is operationally profitable; losses are a strategic AI choice.</div></div>
+      <div class="bb-item"><div class="bb-fact">Thin float + 30% retail demand</div><div class="bb-why">Scarcity and brand can sustain a premium and drive index inclusion.</div></div>
+      <div class="bb-item"><div class="bb-fact">$28.5T stated TAM</div><div class="bb-why">Even modest penetration of an enormous market supports the math.</div></div>
+    </div></div>
+    <div class="bb-col bear"><div class="bb-head">Bear case <span>▼</span></div><div class="bb-body">
+      <div class="bb-item"><div class="bb-fact">~$2.1T cap on $18.7B revenue ≈ 95× sales</div><div class="bb-why">Prices in years of perfect execution; any stumble has huge downside.</div></div>
+      <div class="bb-item"><div class="bb-fact">Morningstar fair value $63 vs ~$161 close</div><div class="bb-why">A credible third party sees ~60% downside to fair value.</div></div>
+      <div class="bb-item"><div class="bb-fact">xAI lost $6.36B in 2025</div><div class="bb-why">The AI bet is bleeding cash and may never pay off.</div></div>
+      <div class="bb-item"><div class="bb-fact">Musk controls ~85% of votes</div><div class="bb-why">No governance recourse if capital is misallocated.</div></div>
+      <div class="bb-item"><div class="bb-fact">$506M related-party flow to Tesla</div><div class="bb-why">Value can leak to other Musk entities at minority holders' expense.</div></div>
+      <div class="bb-item"><div class="bb-fact">Billions of shares unlock 8 Dec 2026</div><div class="bb-why">A supply shock into a thin float could pressure the price sharply.</div></div>
+    </div></div>
+  </div>
+</div></section>
+
+<!-- ====================== 10 · SCORECARD + VERDICT ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">10</span><h2>Scorecard &amp; verdict</h2></div>
+  <div class="score-grid" id="scores">
+    <div class="score-line"><div class="nm">Business quality</div><div class="track"><div class="fill" data-w="70"></div></div><div class="n">7</div></div>
+    <div class="score-line"><div class="nm">Competitive moat</div><div class="track"><div class="fill" data-w="70"></div></div><div class="n">7</div></div>
+    <div class="score-line"><div class="nm">Management</div><div class="track"><div class="fill" data-w="70"></div></div><div class="n">7</div></div>
+    <div class="score-line"><div class="nm">Governance</div><div class="track"><div class="fill" data-w="20" style="background:linear-gradient(90deg,var(--red),#ff8aa0)"></div></div><div class="n">2</div></div>
+    <div class="score-line"><div class="nm">Financial strength</div><div class="track"><div class="fill" data-w="60"></div></div><div class="n">6</div></div>
+    <div class="score-line"><div class="nm">Growth</div><div class="track"><div class="fill" data-w="90" style="background:linear-gradient(90deg,var(--green),#7fffc4)"></div></div><div class="n">9</div></div>
+    <div class="score-line"><div class="nm">Profitability</div><div class="track"><div class="fill" data-w="40" style="background:linear-gradient(90deg,var(--amber),#ffd98a)"></div></div><div class="n">4</div></div>
+    <div class="score-line"><div class="nm">Valuation</div><div class="track"><div class="fill" data-w="20" style="background:linear-gradient(90deg,var(--red),#ff8aa0)"></div></div><div class="n">2</div></div>
+    <div class="score-line"><div class="nm">IPO structure</div><div class="track"><div class="fill" data-w="40" style="background:linear-gradient(90deg,var(--amber),#ffd98a)"></div></div><div class="n">4</div></div>
+    <div class="score-line"><div class="nm">Risk profile</div><div class="track"><div class="fill" data-w="30" style="background:linear-gradient(90deg,var(--red),#ff8aa0)"></div></div><div class="n">3</div></div>
+  </div>
+
+  <div class="verdict-box">
+    <div class="verdict-label">Educational verdict · scale: Strong Sell → Strong Buy</div>
+    <div class="verdict-word">Neutral</div>
+    <div class="verdict-score">Overall IPO score · 51 / 100 · equal-weighted average of ten categories</div>
+    <p class="verdict-reason">One of the best businesses on the planet (Starlink) inside one of the most expensive and worst-governed equity structures on the planet. At ~95× sales and ~2.5× an independent fair-value mark, the price already embeds near-perfect execution across launch, telecom and AI — while the consolidated entity loses money on GAAP because of xAI. The quality is real; the entry point is the problem.</p>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><div class="corner" style="color:var(--green)">Biggest reason bulls may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">Starlink generated $4.4B of operating profit and is the core profit centre even as the group reports a loss — a scaling, high-margin engine that could compound into the valuation over time.</p></div>
+    <div class="card"><div class="corner" style="color:var(--red)">Biggest reason bears may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">Morningstar's independent fair value is $63/share versus a ~$161 close — implying the market is paying roughly 2.5× what at least one rigorous model considers fair.</p></div>
+  </div>
+</div></section>
+
+<!-- ====================== DISCLAIMER ====================== -->
+<div class="disc"><div class="wrap">
+  <p class="big">Educational only — not financial advice. Do your own research.</p>
+  <p>Figures from SpaceX's S-1 / 424B4 (filed May–Jun 2026) and reporting by CNBC, Reuters, Morningstar, Sacra, FT &amp; Yahoo Finance. Pre-2024 figures and all peer multiples are estimates and marked accordingly. Scores and probabilities are analytical opinion, not fact.</p>
+  <p class="src-note">Live market price changes constantly — look up SPCX for where shares trade now.</p>
+</div></div>
+</main>
+
+<script>
+  // animate on scroll into view
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target;
+      if(el.id==='revbars'){
+        el.querySelectorAll('.bar').forEach(b=>{ b.style.height=b.dataset.h+'%'; });
+      }
+      if(el.id==='risks' || el.id==='scores'){
+        el.querySelectorAll('.fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; });
+      }
+      if(el.id==='subline'){
+        const c=document.getElementById('curve'), a=document.getElementById('area');
+        const len=c.getTotalLength();
+        c.style.strokeDasharray=len; c.style.strokeDashoffset=len;
+        c.getBoundingClientRect();
+        c.style.transition='stroke-dashoffset 1.6s ease'; c.style.strokeDashoffset='0';
+        setTimeout(()=>{a.style.transition='opacity 1s ease';a.style.opacity='1';},700);
+      }
+      io.unobserve(el);
+    });
+  },{threshold:.3});
+  ['revbars','risks','scores','subline'].forEach(id=>{
+    const el=document.getElementById(id); if(el) io.observe(el);
+  });
+  // init bar heights to 0
+  document.querySelectorAll('#revbars .bar').forEach(b=>b.style.height='0%');
+  document.querySelectorAll('#risks .fill,#scores .fill').forEach(f=>f.style.width='0%');
+</script>
+</body>
+</html>
