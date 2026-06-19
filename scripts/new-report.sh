@@ -89,6 +89,9 @@ echo "    date   : $GEN_DATE   prompt commit: $PROMPT_HASH"
 # ---------------------------------------------------------------------------
 # -p      : print mode (one batch turn, then exit). Plain `claude -p` (no --bare)
 #           inherits your logged-in subscription session — no API billing.
+# stream  : --output-format stream-json --verbose emits one event per step; we
+#           pipe it through stream-progress.js so the terminal shows live
+#           activity (searches, file write) instead of sitting silent.
 # tools   : research + file read/write only
 RUN_INSTRUCTIONS="
 COMPANY TO ANALYSE: $COMPANY
@@ -103,12 +106,22 @@ comment that the landing-page builder parses (keys separated by ';'):
 <!-- report-meta: type=$TYPE; slug=$SLUG; name=$COMPANY; generated=$GEN_DATE; prompt=$PROMPT_HASH -->
 Output ONLY the HTML file via the Write tool. Do not print the HTML to stdout."
 
+echo ""
+echo "==> Researching and writing the report. This usually takes 2–5 minutes"
+echo "    (live web research, then generating the HTML). Progress below:"
+echo ""
+
+# Stream events through the progress filter for live feedback. pipefail (set
+# at the top) ensures a Claude failure still fails the pipeline.
 claude -p "$(cat "$PROMPT_FILE")
 $RUN_INSTRUCTIONS" \
-  --allowedTools "WebSearch,WebFetch,Read,Write" || {
+  --allowedTools "WebSearch,WebFetch,Read,Write" \
+  --output-format stream-json --verbose \
+  | node scripts/stream-progress.js || {
     echo "Error: Claude Code run failed." >&2
     exit 1
   }
+echo ""
 
 # ---------------------------------------------------------------------------
 # 4. Guardrails: file exists, strip stray markdown code fences
