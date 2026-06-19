@@ -10,7 +10,7 @@ This reproduces `scripts/new-report.sh stock "$ARGUMENTS"` inside this session. 
 step; do not skip the guardrails.
 
 Pre-computed, deterministic values (do not re-derive these by hand — they come from the same
-canonical helpers the script and the GitHub Action use):
+canonical helper the script uses):
 
 - Slug: !`bash scripts/slugify.sh "$ARGUMENTS"`
 - Generation date (UTC): !`date -u +%Y-%m-%d`

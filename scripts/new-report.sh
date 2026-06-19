@@ -8,9 +8,15 @@
 #
 # Requires:
 #   - Claude Code CLI on PATH  (npm install -g @anthropic-ai/claude-code)
-#   - ANTHROPIC_API_KEY in the environment (used by --bare mode)
+#   - logged in via `claude` -> /login with your Pro/Max plan (run `claude` then
+#     /status to confirm). No API key needed.
 #   - node (for build-index.js)
 #   - git, with a configured remote if you want auto-push
+#
+# BILLING: this script uses plain `claude -p`, which inherits your logged-in
+# Claude Code session — so runs draw on your subscription quota, NOT per-token
+# API billing. If ANTHROPIC_API_KEY is set, Claude Code ignores the subscription
+# and bills the API account; `unset ANTHROPIC_API_KEY` to stay on the plan.
 #
 # Educational only — not financial advice.
 
@@ -39,9 +45,14 @@ case "$TYPE" in
   *)     echo "Error: type must be 'ipo' or 'stock', got '$TYPE'" >&2; exit 1 ;;
 esac
 
-if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
-  echo "Error: ANTHROPIC_API_KEY is not set." >&2
-  exit 1
+# Guard against accidental API billing: a stray ANTHROPIC_API_KEY makes Claude
+# Code bill the API account per token instead of using your subscription.
+if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
+  echo "WARNING: ANTHROPIC_API_KEY is set — Claude Code will bill the API account" >&2
+  echo "         per token instead of your Pro/Max subscription." >&2
+  echo "         Run 'unset ANTHROPIC_API_KEY' first to stay on the subscription." >&2
+  read -r -p "Continue anyway and incur API charges? [y/N] " reply
+  [[ "$reply" =~ ^[Yy]$ ]] || { echo "Aborted." >&2; exit 1; }
 fi
 
 if [[ ! -f "$PROMPT_FILE" ]]; then
@@ -76,8 +87,8 @@ echo "    date   : $GEN_DATE   prompt commit: $PROMPT_HASH"
 # ---------------------------------------------------------------------------
 # 3. Run Claude Code headlessly
 # ---------------------------------------------------------------------------
-# --bare  : recommended for scripted runs; skips OAuth/keychain, uses ANTHROPIC_API_KEY
-# -p      : print mode (one batch turn, then exit)
+# -p      : print mode (one batch turn, then exit). Plain `claude -p` (no --bare)
+#           inherits your logged-in subscription session — no API billing.
 # tools   : research + file read/write only
 RUN_INSTRUCTIONS="
 COMPANY TO ANALYSE: $COMPANY
@@ -92,20 +103,12 @@ comment that the landing-page builder parses (keys separated by ';'):
 <!-- report-meta: type=$TYPE; slug=$SLUG; name=$COMPANY; generated=$GEN_DATE; prompt=$PROMPT_HASH -->
 Output ONLY the HTML file via the Write tool. Do not print the HTML to stdout."
 
-claude --bare -p "$(cat "$PROMPT_FILE")
+claude -p "$(cat "$PROMPT_FILE")
 $RUN_INSTRUCTIONS" \
-  --allowedTools "WebSearch,WebFetch,Read,Write" \
-  --output-format json \
-  > ".last-run.json" || {
-    echo "Error: Claude Code run failed. See .last-run.json" >&2
+  --allowedTools "WebSearch,WebFetch,Read,Write" || {
+    echo "Error: Claude Code run failed." >&2
     exit 1
   }
-
-# Log cost/session if jq is available (non-fatal if not)
-if command -v jq >/dev/null 2>&1; then
-  COST="$(jq -r '.total_cost_usd // "n/a"' .last-run.json 2>/dev/null || echo n/a)"
-  echo "    run cost (USD): $COST"
-fi
 
 # ---------------------------------------------------------------------------
 # 4. Guardrails: file exists, strip stray markdown code fences

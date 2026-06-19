@@ -2,10 +2,9 @@
 #
 # slugify.sh — the single canonical "company name -> slug" transform.
 #
-# This is the ONE place the transform lives. new-report.sh, the GitHub Action,
-# and the /ipo-report & /stock-report slash commands all call this script so a
-# given company name always maps to exactly one report path and the three
-# entry points can never diverge.
+# This is the ONE place the transform lives. new-report.sh and the /ipo-report
+# & /stock-report slash commands all call this script so a given company name
+# always maps to exactly one report path and the entry points can never diverge.
 #
 #   "Alphabet Inc."  -> alphabet-inc
 #   "SpaceX"         -> spacex

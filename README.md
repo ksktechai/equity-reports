@@ -44,8 +44,8 @@ equity-reports/
 ```
 
 `slug` = lowercased, hyphenated company name (e.g. "Alphabet" -> `alphabet`). The transform
-lives in exactly one place, `scripts/slugify.sh`, which `new-report.sh`, the slash commands,
-and the GitHub Action all call — so a given company always maps to one path.
+lives in exactly one place, `scripts/slugify.sh`, which both `new-report.sh` and the slash
+commands call — so a given company always maps to one path.
 
 ---
 
@@ -84,35 +84,33 @@ In a Claude Code session in this repo:
 /stock-report Alphabet
 ```
 
-### Option C — issue-driven via GitHub Actions (hands-off, works from phone)
-
-Open an issue titled `IPO: SpaceX` or `STOCK: Alphabet`. A workflow reads the title, runs
-the prompt with `ANTHROPIC_API_KEY` from repo secrets, writes the report, regenerates the
-index, commits, and closes the issue with a link.
+Both options run on your logged-in Claude Code **subscription** (Pro/Max) — no per-token API
+billing. There is deliberately no CI/automation path: an unattended runner can't use your
+subscription login and would have to fall back to a paid `ANTHROPIC_API_KEY`, so report
+generation is kept to these two interactive, on-your-plan routes.
 
 ---
 
 ## Claude Code headless invocation (reference)
 
-The runner calls Claude Code in print mode. Confirmed current syntax:
+`new-report.sh` calls Claude Code in print mode. Confirmed current syntax:
 
 ```bash
-# --bare is recommended for scripted/SDK calls and skips OAuth/keychain;
-# auth comes from ANTHROPIC_API_KEY in that mode.
-ANTHROPIC_API_KEY="$KEY" claude --bare -p "$(cat prompts/ipo-analysis.md)
+# Plain `claude -p` (no --bare) inherits your logged-in subscription session,
+# so runs draw on your Pro/Max plan rather than a paid API key.
+# Be logged in first: run `claude`, then /login, and /status to confirm.
+claude -p "$(cat prompts/ipo-analysis.md)
 
 COMPANY TO ANALYSE: SpaceX
 Write the final HTML report to reports/ipo/spacex/index.html" \
-  --allowedTools "WebSearch,WebFetch,Read,Write" \
-  --output-format json
+  --allowedTools "WebSearch,WebFetch,Read,Write"
 ```
 
 Notes:
 - `-p` / `--print` runs one batch turn and exits — the foundation of every headless use.
-- `--bare` will become the default for `-p` in a future release; until then, set it
-  explicitly for clean scripted runs and provide `ANTHROPIC_API_KEY`.
+- Do **not** set `ANTHROPIC_API_KEY`: if it's set, Claude Code ignores the subscription and
+  bills the API account per token. `unset ANTHROPIC_API_KEY` to stay on the plan.
 - `--allowedTools` is scoped to what each report needs: web research + file read/write.
-- `--output-format json` gives a parseable result (cost, session id) for the script to log.
 
 (These flags evolve between versions; if a run behaves unexpectedly, check
 `code.claude.com/docs/en/headless` or ask Claude Code directly.)
@@ -173,10 +171,9 @@ Paste this to bootstrap the repo:
 > `reports/<type>/<slug>/index.html`, then running build-index and committing;
 > (2) `scripts/build-index.js` that globs `reports/**/index.html` and regenerates a linked
 > root `index.html` matching the reports' visual style;
-> (3) optional `.claude/commands/ipo-report.md` and `stock-report.md` slash commands;
-> (4) a GitHub Actions workflow for the issue-driven flow (Option C);
-> (5) the guardrails in the README (verify file exists, strip code fences, stamp date +
-> prompt hash). Keep everything static — no backend.
+> (3) `.claude/commands/ipo-report.md` and `stock-report.md` slash commands;
+> (4) the guardrails in the README (verify file exists, strip code fences, stamp date +
+> prompt hash). Keep everything static — no backend, and no CI that would need a paid API key.
 
 ---
 
