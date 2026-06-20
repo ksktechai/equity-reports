@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- report-meta: type=stock; slug=d-wave-quantum-inc; name=D-Wave Quantum Inc; generated=2026-06-20; prompt=2c9bac7 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D-Wave Quantum Stock Analysis · QBTS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap');
+
+  :root{
+    --void:#04070f;
+    --deep:#0a0e1c;
+    --panel:#10162e;
+    --panel-2:#141a3899;
+    --line:#243056;
+    --ink:#eaf0ff;
+    --mute:#a4b0dc;
+    --faint:#6a76a8;
+    --cyan:#3fe0ff;       /* superconducting blue */
+    --indigo:#8a7bff;     /* qubit violet */
+    --violet:#b58cff;
+    --magenta:#ff5cc8;    /* anneal flux */
+    --green:#54e0a6;
+    --amberw:#ffc24d;
+    --red:#ff5e7a;
+    --grid:rgba(63,224,255,.05);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1100px 560px at 82% -10%, rgba(138,123,255,.18), transparent 60%),
+      radial-gradient(820px 460px at 2% 2%, rgba(63,224,255,.10), transparent 55%),
+      radial-gradient(900px 520px at 50% 114%, rgba(255,92,200,.07), transparent 60%),
+      var(--void);
+    color:var(--ink);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* qubit-lattice backdrop */
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6;
+    background-image:
+      radial-gradient(closest-side at 20% 24%, rgba(138,123,255,.12), transparent),
+      radial-gradient(closest-side at 78% 30%, rgba(63,224,255,.08), transparent),
+      radial-gradient(closest-side at 46% 84%, rgba(255,92,200,.06), transparent),
+      radial-gradient(2px 2px at 16% 20%, rgba(63,224,255,.5), transparent),
+      radial-gradient(2px 2px at 48% 12%, rgba(138,123,255,.5), transparent),
+      radial-gradient(2px 2px at 80% 26%, rgba(63,224,255,.45), transparent),
+      radial-gradient(2px 2px at 32% 64%, rgba(255,255,255,.35), transparent),
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:auto,auto,auto,auto,auto,auto,auto,40px 40px,40px 40px;
+    mask-image:radial-gradient(circle at 50% 0%,#000,transparent 82%);
+    -webkit-mask-image:radial-gradient(circle at 50% 0%,#000,transparent 82%)}
+
+  main{position:relative;z-index:1}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--cyan)}
+
+  .qmark{display:inline-block;width:46px;height:46px;vertical-align:middle;margin-right:10px}
+
+  /* HERO */
+  header.hero{position:relative;padding:84px 0 56px;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero-inner{position:relative;z-index:2}
+  .hero-tag{display:flex;gap:14px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .pill{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+    padding:5px 11px;border:1px solid var(--line);border-radius:100px;color:var(--mute);background:var(--panel-2)}
+  .pill.live{color:var(--green);border-color:rgba(84,224,166,.4)}
+  .pill.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--green);margin-right:7px;vertical-align:middle;box-shadow:0 0 8px var(--green);
+    animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .pill.down{color:var(--red);border-color:rgba(255,94,122,.4)}
+  .pill.hot{color:var(--cyan);border-color:rgba(63,224,255,.45)}
+
+  h1.title{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(38px,6.6vw,72px);
+    line-height:1.02;letter-spacing:-.02em;margin:8px 0 6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  h1.title .ticker{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.30em;
+    letter-spacing:.05em;color:var(--cyan);vertical-align:middle;border:1px solid rgba(63,224,255,.45);
+    border-radius:8px;padding:6px 12px;margin-left:6px;background:rgba(63,224,255,.08)}
+  .sub{color:var(--mute);max-width:66ch;font-size:17px;margin-top:14px}
+
+  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:44px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+  .strip .cell{background:var(--deep);padding:20px 18px}
+  .strip .v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(18px,2.5vw,25px);letter-spacing:-.01em}
+  .strip .v.cy{color:var(--cyan)} .strip .v.down{color:var(--red)} .strip .v.up{color:var(--green)}
+  .strip .k{font-size:11px;color:var(--faint);margin-top:6px;font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.04em;text-transform:uppercase}
+  .asof{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);margin-top:18px}
+  .note{font-size:13px;color:var(--faint);margin-top:14px;font-style:italic}
+
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--cyan);
+    border:1px solid rgba(63,224,255,.3);border-radius:6px;padding:2px 8px}
+  h2{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em;line-height:1.1}
+  .lede{color:var(--mute);max-width:70ch;margin-top:14px;font-size:16px}
+
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:linear-gradient(180deg,var(--panel),var(--deep));border:1px solid var(--line);
+    border-radius:16px;padding:24px;position:relative;overflow:hidden}
+  .card .corner{position:absolute;top:0;right:0;font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:.1em;color:var(--faint);padding:9px 12px;text-transform:uppercase}
+  .card h3{font-size:20px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .seg-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute);margin-bottom:14px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;
+    border-top:1px solid var(--line);font-size:14px}
+  .row:first-of-type{border-top:none}
+  .row .lbl{color:var(--faint)} .row .val{font-family:'IBM Plex Mono',monospace;font-weight:500}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot.cy{background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+  .dot.ind{background:var(--indigo);box-shadow:0 0 10px var(--indigo)}
+  .dot.mag{background:var(--magenta);box-shadow:0 0 10px var(--magenta)}
+
+  .callout{margin-top:28px;border-left:2px solid var(--cyan);
+    background:linear-gradient(90deg,rgba(63,224,255,.09),transparent);padding:18px 22px;border-radius:0 12px 12px 0}
+  .callout .q{font-weight:600;color:var(--cyan);font-size:14px;margin-bottom:6px;
+    font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+  .callout p{color:var(--mute);font-size:15px}
+  .callout.amber{border-color:var(--amberw);background:linear-gradient(90deg,rgba(255,194,77,.08),transparent)}
+  .callout.amber .q{color:var(--amberw)}
+  .callout.red{border-color:var(--red);background:linear-gradient(90deg,rgba(255,94,122,.08),transparent)}
+  .callout.red .q{color:var(--red)}
+
+  .chartbox{margin-top:34px;background:var(--deep);border:1px solid var(--line);border-radius:16px;padding:26px 24px 18px}
+  .chartbox .ct{font-size:13px;color:var(--mute);margin-bottom:2px}
+  .chartbox .cs{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-bottom:22px}
+  .bars{display:flex;align-items:flex-end;gap:clamp(8px,3vw,26px);height:230px;padding-left:8px}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:100%;max-width:60px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--cyan),rgba(63,224,255,.20));
+    transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+  .bar.est{background:linear-gradient(180deg,var(--indigo),rgba(138,123,255,.2))}
+  .bar.qtr{background:linear-gradient(180deg,var(--magenta),rgba(255,92,200,.2))}
+  .bar .top{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+  .bar-x{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-top:10px;text-align:center}
+  .legend{display:flex;gap:18px;margin-top:18px;font-size:11px;color:var(--faint);
+    font-family:'IBM Plex Mono',monospace;flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .swatch{width:11px;height:11px;border-radius:3px}
+
+  /* bookings ramp */
+  .arr{display:flex;align-items:flex-end;gap:clamp(10px,4vw,40px);height:180px;margin-top:8px;padding:0 6px}
+  .arr-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .arr-bar{width:100%;max-width:80px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--indigo),rgba(138,123,255,.18));transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+  .arr-bar.tgt{background:linear-gradient(180deg,var(--magenta),rgba(255,92,200,.18))}
+  .arr-bar .top{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+
+  .tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--deep);overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
+  th{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--faint);background:var(--panel)}
+  td{color:var(--ink)}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right}
+  tr.self td{background:rgba(63,224,255,.10)}
+  .tag-est{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--amberw);
+    border:1px solid rgba(255,194,77,.35);border-radius:4px;padding:1px 5px;margin-left:6px}
+  .conf{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--faint);
+    border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:6px;text-transform:uppercase;letter-spacing:.06em}
+  .pos{color:var(--green)}.neg{color:var(--red)}
+
+  .risk-row{display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center;
+    padding:14px 0;border-top:1px solid var(--line)}
+  .risk-row:first-child{border-top:none}
+  .risk-name{font-weight:500;font-size:15px}
+  .risk-why{color:var(--faint);font-size:13px;margin-top:3px;grid-column:1/-1}
+  .meter{display:flex;align-items:center;gap:11px}
+  .meter .track{width:130px;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .meter .fill{height:100%;border-radius:4px;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .meter .sc{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;width:30px;text-align:right}
+
+  .bb{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+  .bb-col{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .bb-head{padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .bb.bull .bb-head{background:rgba(84,224,166,.1);color:var(--green);border-bottom:1px solid rgba(84,224,166,.25)}
+  .bb.bear .bb-head{background:rgba(255,94,122,.1);color:var(--red);border-bottom:1px solid rgba(255,94,122,.25)}
+  .bb-body{padding:8px 22px 18px}
+  .bb-item{padding:15px 0;border-top:1px solid var(--line)}
+  .bb-item:first-child{border-top:none}
+  .bb-fact{font-size:14px;font-weight:500;margin-bottom:4px}
+  .bb-why{font-size:13px;color:var(--faint)}
+
+  .scn{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .scn-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--deep);position:relative}
+  .scn-card .prob{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:-.02em}
+  .scn-card .name{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+  .scn-card.bear .prob{color:var(--red)} .scn-card.bear .name{color:var(--red)}
+  .scn-card.base .prob{color:var(--cyan)} .scn-card.base .name{color:var(--cyan)}
+  .scn-card.bull .prob{color:var(--green)} .scn-card.bull .name{color:var(--green)}
+  .scn-card .tgt{font-size:15px;margin:12px 0 4px;font-weight:600}
+  .scn-card .asm{font-size:13px;color:var(--faint)}
+
+  .verdict-box{margin-top:30px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(160deg,var(--panel),var(--void));padding:36px;text-align:center;position:relative;overflow:hidden}
+  .verdict-box::before{content:"";position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+    width:420px;height:420px;background:radial-gradient(circle,rgba(255,94,122,.14),transparent 70%)}
+  .verdict-label{position:relative;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;
+    text-transform:uppercase;font-size:12px;color:var(--faint);margin-bottom:14px}
+  .verdict-word{position:relative;font-family:'Newsreader',serif;font-size:clamp(44px,8vw,72px);
+    color:var(--amberw);font-weight:500;letter-spacing:-.01em}
+  .verdict-score{position:relative;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--mute);margin-top:8px}
+  .verdict-reason{position:relative;max-width:66ch;margin:22px auto 0;color:var(--mute);font-size:15px}
+
+  .score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 28px;margin-top:30px}
+  .score-line{display:flex;align-items:center;gap:14px}
+  .score-line .nm{flex:none;width:140px;font-size:13px;color:var(--mute)}
+  .score-line .track{flex:1;height:6px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .score-line .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cyan),var(--indigo));
+    width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .score-line .n{font-family:'IBM Plex Mono',monospace;font-size:13px;width:34px;text-align:right;font-weight:600}
+
+  .disc{padding:48px 0 70px;text-align:center}
+  .disc p{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);
+    letter-spacing:.04em;max-width:66ch;margin:0 auto}
+  .disc .big{color:var(--mute);font-size:13px;margin-bottom:10px}
+  .src-note{font-size:12px;color:var(--faint);margin-top:24px;line-height:1.7}
+
+  @media(max-width:860px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    .g3,.g2,.scn,.score-grid{grid-template-columns:1fr}
+    .bb{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<main>
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-tag">
+      <span class="pill live">Trading live · NYSE</span>
+      <span class="pill hot">First Investor Day · 1 Jun 2026</span>
+      <span class="pill down">Q1 revenue −81% YoY</span>
+      <span class="pill">Educational · not advice</span>
+    </div>
+    <div class="eyebrow">Institutional Stock Teardown</div>
+    <h1 class="title">
+      <svg class="qmark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <radialGradient id="qb" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3fe0ff"/>
+            <stop offset="55%" stop-color="#8a7bff"/>
+            <stop offset="100%" stop-color="#ff5cc8" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- qubit lattice -->
+        <g stroke="#3fe0ff" stroke-width="1" opacity=".55">
+          <line x1="14" y1="14" x2="50" y2="14"/><line x1="14" y1="32" x2="50" y2="32"/><line x1="14" y1="50" x2="50" y2="50"/>
+          <line x1="14" y1="14" x2="14" y2="50"/><line x1="32" y1="14" x2="32" y2="50"/><line x1="50" y1="14" x2="50" y2="50"/>
+        </g>
+        <circle cx="32" cy="32" r="20" fill="url(#qb)" opacity=".5"/>
+        <g fill="#cdf3ff">
+          <circle cx="14" cy="14" r="2.6"/><circle cx="32" cy="14" r="2.6"/><circle cx="50" cy="14" r="2.6"/>
+          <circle cx="14" cy="32" r="2.6"/><circle cx="32" cy="32" r="3.4" fill="#fff"/><circle cx="50" cy="32" r="2.6"/>
+          <circle cx="14" cy="50" r="2.6"/><circle cx="32" cy="50" r="2.6"/><circle cx="50" cy="50" r="2.6"/>
+        </g>
+      </svg>
+      D-Wave Quantum<span class="ticker">QBTS</span></h1>
+    <p class="sub">The only commercial <strong>quantum-annealing</strong> company with paying customers — now bolting on a fault-tolerant <strong>gate-model</strong> moonshot via a $550M acquisition. Q1'26 revenue collapsed <strong>81%</strong> to $2.9M on lumpy system timing, even as bookings exploded <strong>1,994%</strong> to $33.4M and the balance sheet swelled to <strong>$588M</strong> cash. A ~$8–9B market cap on ~$12M of trailing revenue.</p>
+
+    <div class="strip">
+      <div class="cell"><div class="v cy">~$24</div><div class="k">Price · 17 Jun 2026</div></div>
+      <div class="cell"><div class="v">~$8.9B</div><div class="k">Market cap [EST]</div></div>
+      <div class="cell"><div class="v down">−81%</div><div class="k">Q1'26 rev growth YoY</div></div>
+      <div class="cell"><div class="v up">$33.4M</div><div class="k">Q1'26 bookings</div></div>
+      <div class="cell"><div class="v">$12.75–$46.75</div><div class="k">52-week range</div></div>
+    </div>
+    <p class="asof">Price ~$23.94 at 17 Jun 2026 close (~$23–24 area; stock ran to ~$26 around the 1 Jun Investor Day) [MarketBeat/StockAnalysis]. ~369.9M shares out → ~$8.9B cap [EST]. Net cash ~$542M ($1.46/sh) → enterprise value ~$8.3B [EST]. The stock is a volatile, theme-driven name — look up QBTS for where it trades now.</p>
+    <p class="note">Analysis complexity: <strong style="color:var(--cyan)">9 / 10</strong> — revenue is tiny and lumpy (one system sale can swing a quarter ±80%), GAAP losses are distorted by non-cash warrant remeasurement, the company is mid-pivot from annealing to gate-model, dilution has been relentless, and the valuation is on theme rather than fundamentals.</p>
+  </div>
+</header>
+
+<!-- ===================== 1 · EXEC SUMMARY ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>The one-paragraph version</h2></div>
+  <p class="lede">D-Wave (NYSE: QBTS) builds and sells access to quantum computers. For two decades it has been the leader in <strong>quantum annealing</strong> — a specialised approach suited to optimisation problems — sold both as on-prem systems and as cloud "Quantum-Computing-as-a-Service" (QCaaS) via its Leap platform. In 2025 revenue jumped 179% to $24.6M, lifted by an eight-figure first system sale. But that lumpiness cut the other way in Q1'26: revenue fell 81% to just $2.9M, while <em>bookings</em> — future contracted demand — surged 1,994% to $33.4M (a $20M Florida Atlantic University system plus a $10M Fortune 100 QCaaS deal). In January 2026 D-Wave agreed to acquire Quantum Circuits Inc. for $550M to accelerate an error-corrected <strong>gate-model</strong> roadmap, and at its first-ever Investor Day (1 Jun 2026) it laid out milestones reaching a 100-logical-qubit fault-tolerant system by 2032. The company is richly funded (~$588M cash) but deeply unprofitable (~$100M annual free-cash burn) and valued at roughly <strong>670× trailing sales</strong>.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Bull thesis · one line</div>
+      <h3 style="color:var(--green)">The bull pull</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">The only quantum company shipping commercial systems with real, accelerating bookings, a fortress balance sheet to outlast rivals, and now a credible dual-platform path (annealing today + gate-model for fault-tolerance tomorrow). <span class="conf">Confidence: Med</span></p>
+    </div>
+    <div class="card">
+      <div class="corner">Bear thesis · one line</div>
+      <h3 style="color:var(--red)">The bear weight</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">An ~$8–9B market cap on ~$12M of trailing revenue that just shrank 81%, burning ~$100M a year, diluting holders relentlessly, and betting on a 2030–2032 fault-tolerance roadmap that may never generate a profit. <span class="conf">Confidence: Med</span></p>
+    </div>
+  </div>
+  <div class="callout amber">
+    <div class="q">WHAT CHANGED MOST RECENTLY</div>
+    <p>Three things in 2026. (1) <strong>Q1'26 results</strong> (reported May): revenue −81% to $2.9M on system-sale timing, but bookings +1,994% to $33.4M and a net loss of $18.4M; cash rose to $588.4M. (2) The <strong>$550M Quantum Circuits acquisition</strong> (announced Jan, closed Feb) — $300M stock + $250M cash — pivots D-Wave into superconducting, error-corrected gate-model hardware alongside its annealing core. (3) The <strong>first Investor Day</strong> (1 Jun, NYSE) unveiled a gate-model roadmap (17 qubits in 2026 → 100 logical qubits by 2032); shares jumped ~14% and Mizuho lifted its target to $35. Sell-side stays "Strong Buy," average ~$37.</p>
+  </div>
+</div></section>
+
+<!-- ===================== 2 · BUSINESS MODEL ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2>How D-Wave makes money</h2></div>
+  <p class="lede">Two revenue streams, one core technology. <strong>QCaaS</strong> — recurring cloud access to D-Wave's annealing systems via the Leap platform — is the steadier, higher-margin base. <strong>System sales & professional services</strong> — selling an entire Advantage2 machine (e.g. to Florida Atlantic University, Davidson Technologies/Forschungszentrum Jülich) — are large but lumpy, landing in one quarter and distorting growth optics. Gross margins are high (~83% in FY2025) because revenue is largely software/cloud, but absolute revenue is tiny. The split below is directional. <span class="tag-est">EST</span></p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">Recurring base</div>
+      <h3><span class="dot cy"></span>QCaaS (Leap cloud)</h3>
+      <div class="seg-tag">Subscription · optimisation · hybrid solvers</div>
+      <div class="row"><span class="lbl">Model</span><span class="val">Recurring</span></div>
+      <div class="row"><span class="lbl">Example deal</span><span class="val">$10M / 2yr</span></div>
+      <div class="row"><span class="lbl">Customer</span><span class="val">Fortune 100</span></div>
+      <div class="row"><span class="lbl">Margin profile</span><span class="val">High</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Lumpy / large</div>
+      <h3><span class="dot ind"></span>System sales</h3>
+      <div class="seg-tag">On-prem Advantage2 hardware</div>
+      <div class="row"><span class="lbl">Q1'26 booking</span><span class="val">$20M (FAU)</span></div>
+      <div class="row"><span class="lbl">Recognition</span><span class="val">Over qtrs</span></div>
+      <div class="row"><span class="lbl">Buyers</span><span class="val">Gov / academia</span></div>
+      <div class="row"><span class="lbl">Effect</span><span class="val neg">Quarter swings</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">New platform</div>
+      <h3><span class="dot mag"></span>Gate-model (QCI)</h3>
+      <div class="seg-tag">Acquired Jan 2026 · pre-revenue</div>
+      <div class="row"><span class="lbl">Deal size</span><span class="val">$550M</span></div>
+      <div class="row"><span class="lbl">Tech</span><span class="val">Dual-rail SC</span></div>
+      <div class="row"><span class="lbl">Goal</span><span class="val">Fault-tolerant</span></div>
+      <div class="row"><span class="lbl">Revenue today</span><span class="val">~None</span></div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">DOES THE MODEL IMPROVE WITH SCALE?</div>
+    <p>The unit economics <em>could</em> be excellent — cloud access to a quantum machine is near-pure software margin once the hardware exists, and FY2025 gross margin of ~83% hints at that. The problem is the numerator: total revenue is ~$12–25M, far below the ~$120M+ of annual operating spend. There is no scale yet — D-Wave is spending multiples of revenue to fund R&D and a go-to-market build, so operating losses widen even as gross margin looks pristine. Whether quantum optimisation finds a "killer app" with broad, repeatable demand is still unproven. <span class="conf">Confidence: Med</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 3 · FINANCIAL TRAJECTORY ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>The financial trajectory</h2></div>
+  <p class="lede">Read the revenue line carefully: it is small enough that a single contract dominates a quarter. FY2025 revenue of $24.6M (+179%) was flattered by a large system sale; strip that and Q1'26 fell to $2.9M (−81% YoY) on timing. The metric the bulls actually watch is <strong>bookings</strong> — contracted future revenue — which hit a record $33.4M in Q1'26 alone (more than the entire prior year). Below that, the loss picture is muddied by non-cash <strong>warrant remeasurement</strong>: FY2025's ~$355M GAAP net loss is mostly a paper item; the cleaner "adjusted" net loss was ~$84.5M, and adjusted EBITDA loss was ~$71.8M.</p>
+
+  <div class="chartbox">
+    <div class="ct">Revenue ($M) — annual actuals + trailing-twelve-months</div>
+    <div class="cs">FY2021–FY2025 reported; TTM blends a weak Q1'26 ($2.9M). FY2025's spike reflects a large one-off system sale — note the lumpiness</div>
+    <div class="bars" id="revbars">
+      <div class="bar-col"><div class="bar" data-h="22"><span class="top">$6.3M</span></div><div class="bar-x">FY2021</div></div>
+      <div class="bar-col"><div class="bar" data-h="26"><span class="top">$7.2M</span></div><div class="bar-x">FY2022</div></div>
+      <div class="bar-col"><div class="bar" data-h="31"><span class="top">$8.8M</span></div><div class="bar-x">FY2023</div></div>
+      <div class="bar-col"><div class="bar" data-h="31"><span class="top">$8.8M</span></div><div class="bar-x">FY2024</div></div>
+      <div class="bar-col"><div class="bar" data-h="88"><span class="top">$24.6M</span></div><div class="bar-x">FY2025</div></div>
+      <div class="bar-col"><div class="bar qtr" data-h="45"><span class="top">$12.4M</span></div><div class="bar-x">TTM</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--cyan)"></span>Reported (annual)</span>
+      <span><span class="swatch" style="background:var(--magenta)"></span>Trailing 12 months</span>
+    </div>
+  </div>
+
+  <div class="chartbox">
+    <div class="ct">Bookings ($M) — the forward-demand metric the bulls watch</div>
+    <div class="cs">FY2024 & FY2025 are full years; Q1'26 is a single quarter and set a record, driven by a $20M system + $10M QCaaS deal</div>
+    <div class="arr" id="arrbars">
+      <div class="arr-col"><div class="arr-bar" data-h="66"><span class="top">$23.9M</span></div><div class="bar-x">FY2024</div></div>
+      <div class="arr-col"><div class="arr-bar" data-h="52"><span class="top">$18.7M</span></div><div class="bar-x">FY2025</div></div>
+      <div class="arr-col"><div class="arr-bar tgt" data-h="92"><span class="top">$33.4M</span></div><div class="bar-x">Q1'26<br>(1 qtr)</div></div>
+    </div>
+  </div>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Metric</th><th class="num">FY2023</th><th class="num">FY2024</th><th class="num">FY2025</th><th class="num">Q1'26</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td class="num">$8.8M</td><td class="num">$8.8M</td><td class="num">$24.6M</td><td class="num">$2.9M</td></tr>
+        <tr><td>Revenue growth (YoY)</td><td class="num">—</td><td class="num">+1%</td><td class="num pos">+179%</td><td class="num neg">−81%</td></tr>
+        <tr><td>Bookings</td><td class="num">n/d</td><td class="num">$23.9M</td><td class="num">$18.7M</td><td class="num pos">$33.4M</td></tr>
+        <tr><td>Gross margin</td><td class="num">~53%</td><td class="num">~63%</td><td class="num">~83%</td><td class="num">~mixed</td></tr>
+        <tr><td>Adj. EBITDA loss</td><td class="num neg">loss</td><td class="num neg">−$56.0M</td><td class="num neg">−$71.8M</td><td class="num neg">loss</td></tr>
+        <tr><td>Adj. net loss</td><td class="num neg">loss</td><td class="num neg">−$75.6M</td><td class="num neg">−$84.5M</td><td class="num neg">loss</td></tr>
+        <tr><td>GAAP net loss*</td><td class="num neg">loss</td><td class="num neg">loss</td><td class="num neg">−$355M*</td><td class="num neg">−$18.4M</td></tr>
+        <tr><td>Free cash flow</td><td class="num neg">neg</td><td class="num neg">neg</td><td class="num neg">−$75.8M</td><td class="num neg">neg</td></tr>
+        <tr><td>Cash &amp; investments</td><td class="num">~low</td><td class="num">~$178M</td><td class="num">~$600M</td><td class="num">$588.4M</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">*FY2025 GAAP net loss (~$355M) is dominated by non-cash mark-to-market on warrant liabilities and is <em>not</em> a clean read on operations; D-Wave's own "adjusted" loss (~$84.5M) and adjusted EBITDA loss (~$71.8M) better reflect cash economics. Diluted EPS (FY2025 ≈ −$1.11) is therefore not meaningful as a "P/E" input. Revenue per employee and ROIC/ROE are not meaningful for a pre-scale, loss-making company and are omitted. Confidence: High on reported revenue/bookings/cash; Medium on adjusted-figure interpretation.</p>
+
+  <div class="callout red">
+    <div class="q">THE NUMBER THAT MATTERS MOST — REVENUE vs MARKET CAP</div>
+    <p>D-Wave carries an ~$8–9B market cap on ~$12M of trailing revenue — roughly <strong>670× sales</strong> — for a business whose revenue just <em>fell</em> 81% in the latest quarter and which burns ~$100M of cash a year. Even on the record $33.4M quarterly bookings annualised (~$134M), the multiple is ~60×+. The bull's counter is that quantum is a winner-take-most frontier and bookings, not GAAP revenue, signal the inflection. The bear's point is simpler: the price embeds a future that is years away and far from certain.</p>
+  </div>
+</div></section>
+
+<!-- ===================== 4 · BALANCE SHEET & CAPITAL RETURNS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Balance sheet &amp; capital returns</h2></div>
+  <p class="lede">This is the strongest part of the story. D-Wave used 2025's surging share price to raise huge sums through at-the-market (ATM) equity offerings, building cash and investments to $588.4M at 31 Mar 2026 against just ~$47M of debt — net cash of ~$542M ($1.46/share). That war chest buys years of runway at the current ~$100M burn and funds the $250M cash portion of the Quantum Circuits deal. The cost: relentless dilution. Shares outstanding rose from ~125M (2021) to ~321M (2025) to ~370M now — roughly <strong>3×</strong> in four years. There is no dividend and no buyback; capital is raised, not returned.</p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">Liquidity</div>
+      <h3>Fortress cash</h3>
+      <div class="row"><span class="lbl">Cash &amp; investments</span><span class="val">$588.4M</span></div>
+      <div class="row"><span class="lbl">Total debt</span><span class="val">~$46.8M</span></div>
+      <div class="row"><span class="lbl">Net cash</span><span class="val">~$541.6M</span></div>
+      <div class="row"><span class="lbl">Net cash / share</span><span class="val">~$1.46</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Cash use</div>
+      <h3>Burn &amp; runway</h3>
+      <div class="row"><span class="lbl">FCF (FY2025)</span><span class="val neg">−$75.8M</span></div>
+      <div class="row"><span class="lbl">FCF (TTM)</span><span class="val neg">~−$102M</span></div>
+      <div class="row"><span class="lbl">QCI cash outlay</span><span class="val">$250M</span></div>
+      <div class="row"><span class="lbl">Runway</span><span class="val">Multi-year</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Watch</div>
+      <h3>Dilution</h3>
+      <div class="row"><span class="lbl">Shares 2021</span><span class="val">~125M</span></div>
+      <div class="row"><span class="lbl">Shares 2025</span><span class="val">~321M</span></div>
+      <div class="row"><span class="lbl">Shares now</span><span class="val neg">~370M</span></div>
+      <div class="row"><span class="lbl">Dividend / buyback</span><span class="val">None</span></div>
+    </div>
+  </div>
+  <div class="callout amber">
+    <div class="q">THE DILUTION TRADE-OFF</div>
+    <p>D-Wave's funding strategy is rational but punishing for per-share value: it sells stock when the price is high to bank cash, then uses that cash to survive and to buy capability (Quantum Circuits). The result is genuine financial strength at the <em>company</em> level and persistent erosion at the <em>per-share</em> level — a ~3× rise in share count means the business must grow ~3× just to keep per-share value flat. Financial Strength Score: <strong style="color:var(--cyan)">6 / 10</strong> — abundant cash and almost no debt, offset by heavy burn and chronic dilution. <span class="conf">Confidence: High on the balance sheet; Med on burn trajectory</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 5 · VALUATION ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Valuation</h2></div>
+  <p class="lede">There is no sensible earnings- or cash-flow-based valuation for D-Wave — it has neither. The entire quantum-pure-play cohort trades on theme, narrative and headline flow at sales multiples that would be absurd in any other sector. D-Wave's ~670× trailing sales is the <em>highest</em> in the group on TTM revenue (because its revenue just shrank), though on annualised record bookings it screens closer to peers. Peer figures below are mid-2026 estimates, marked [EST]; treat every multiple as approximate.</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Company</th><th class="num">Mkt cap</th><th class="num">Latest-qtr rev</th><th class="num">Rev growth</th><th class="num">EV/Rev (TTM)</th><th class="num">Profitable?</th></tr></thead>
+      <tbody>
+        <tr class="self"><td>D-Wave (QBTS)</td><td class="num">~$8.9B</td><td class="num">$2.9M</td><td class="num neg">−81%</td><td class="num neg">~670×</td><td class="num neg">No</td></tr>
+        <tr><td>IonQ (IONQ) <span class="tag-est">EST</span></td><td class="num">~$21.5B</td><td class="num">$64.7M</td><td class="num pos">+755%</td><td class="num">~150–200×</td><td class="num neg">No</td></tr>
+        <tr><td>Rigetti (RGTI) <span class="tag-est">EST</span></td><td class="num">~$7.7B</td><td class="num">$4.4M</td><td class="num pos">~+190%</td><td class="num neg">~400–500×</td><td class="num neg">No</td></tr>
+        <tr><td>Quantum Computing (QUBT) <span class="tag-est">EST</span></td><td class="num">~$4–6B</td><td class="num">$3.7M</td><td class="num pos">high</td><td class="num neg">~400×+</td><td class="num neg">No</td></tr>
+        <tr><td>Quantinuum (pvt→IPO) <span class="tag-est">EST</span></td><td class="num">~$10B+</td><td class="num">largest</td><td class="num">n/d</td><td class="num">n/d</td><td class="num neg">No</td></tr>
+        <tr><td>IBM Quantum (ref) <span class="tag-est">EST</span></td><td class="num">part of IBM</td><td class="num">embedded</td><td class="num">n/d</td><td class="num">n/a</td><td class="num pos">Parent yes</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Peer multiples are rough mid-2026 estimates for framing only [EST]; verify before relying on them. Directional read: IonQ is the cohort's revenue leader (FY26 guide $260–270M) and trades on a "lower" sales multiple simply because it has more sales; D-Wave and Rigetti screen most expensive on TTM revenue. Versus its <em>own</em> history, QBTS has gone from a ~$1 stub in 2024 to a 52-week high of $46.75 — a >40× round-trip range that tells you this is sentiment-priced, not fundamentals-priced.</p>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card">
+      <div class="corner">What must be true</div>
+      <h3>Priced for a frontier win</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">For ~$24 to make sense, D-Wave must convert its bookings momentum into durable, growing recurring revenue, win a genuine commercial "quantum advantage" use case at scale, deliver enough of the 2030–2032 gate-model roadmap to stay relevant, and do it all without diluting holders into oblivion. Much of that is years out and binary. <span class="conf">Confidence: Med</span></p>
+    </div>
+    <div class="card">
+      <div class="corner">Independent marks</div>
+      <h3>Analyst consensus</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Sell-side is bullish: ~15 analysts average a "Strong Buy" with a 12-month target near <strong>~$37</strong> (Mizuho lifted to $35 post-Investor Day), <em>above</em> the ~$24 quote. These are other people's estimates on a pre-revenue-scale story, not a recommendation here — and on names like this, targets tend to chase the price both up and down. <span class="conf">Confidence: High (that this is consensus)</span></p>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">OUR FAIR-VALUE RANGE — ILLUSTRATIVE [EST]</div>
+    <p><strong>~$8–$34</strong>, midpoint ~$18 — below the current ~$24. The low end values D-Wave near a few times its net cash plus a modest option value on the technology if quantum optimisation stays niche and dilution continues. The high end assumes bookings compound into a real recurring-revenue ramp, a defensible niche emerges, and the gate-model bet keeps the platform credible. The midpoint sits under spot because the price already discounts a successful frontier outcome that is far from proven. <strong>What has to be true for ~$24:</strong> bookings becoming sustained revenue, a commercial quantum-advantage proof point, and capital markets staying open. <span class="conf">Confidence: Low (speculative estimate, not a forecast)</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 6 · GOVERNANCE ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Governance &amp; management</h2></div>
+  <p class="lede">A credible technologist-CEO who has steered the company through a near-death balance sheet to a fortress one — but with thin insider ownership, steady insider selling, and a capital-allocation history defined by heavy dilution.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Strengths</div>
+      <h3 style="color:var(--green)">What's good</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">President & CEO Dr. Alan Baratz (in the seat since 2020, ex-IBM/JavaSoft) has executed a textbook survival-to-strength funding playbook: tapping equity markets aggressively at high prices to amass ~$588M of cash and acquire gate-model capability when the company could easily have run out of money. The Investor Day showed a coherent dual-platform strategy and a public technology roadmap. The company has a single class of common stock — no dual-class vote — so public holders' shares carry full voting rights.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Watch items</div>
+      <h3 style="color:var(--amberw)">What to watch</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Insider ownership is low — Baratz holds ~0.53% — and insiders have been net sellers (Baratz sold ~$18M in June 2026, citing tax/financial planning). The defining capital-allocation choice has been issuing stock: a ~3× rise in share count in four years. The $550M Quantum Circuits deal is a large bet on unproven gate-model tech whose payoff is years out and hard to verify. Governance Score: <strong style="color:var(--cyan)">5 / 10</strong> — clean share structure and capable leadership, weighed against thin alignment and dilution. <span class="conf">Confidence: Med</span></p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 7 · RISK REGISTER ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">07</span><h2>Risk register</h2></div>
+  <p class="lede">Material risks, highest-severity first. Scores (1–10) are analytical opinion, not fact.</p>
+  <div id="risks" style="margin-top:30px">
+    <div class="risk-row"><div class="risk-name">Valuation</div><div class="meter"><div class="track"><div class="fill" data-w="98" style="background:var(--red)"></div></div><span class="sc">10</span></div><div class="risk-why">~670× trailing sales on revenue that just fell 81%; any sentiment shift in the quantum theme can re-rate the stock violently downward.</div></div>
+    <div class="risk-row"><div class="risk-name">Technology / commercialisation</div><div class="meter"><div class="track"><div class="fill" data-w="92" style="background:var(--red)"></div></div><span class="sc">9</span></div><div class="risk-why">A broad, repeatable commercial "quantum advantage" use case is still unproven; annealing's addressable problem set may stay niche.</div></div>
+    <div class="risk-row"><div class="risk-name">Revenue lumpiness / quality</div><div class="meter"><div class="track"><div class="fill" data-w="85" style="background:var(--red)"></div></div><span class="sc">9</span></div><div class="risk-why">One system sale can swing a quarter ±80%; bookings are encouraging but conversion to durable recurring revenue is unproven.</div></div>
+    <div class="risk-row"><div class="risk-name">Dilution / share supply</div><div class="meter"><div class="track"><div class="fill" data-w="82" style="background:var(--red)"></div></div><span class="sc">8</span></div><div class="risk-why">Share count tripled in four years and ATM issuance is the core funding model; per-share value erodes even as the business survives.</div></div>
+    <div class="risk-row"><div class="risk-name">Cash burn / path to profit</div><div class="meter"><div class="track"><div class="fill" data-w="75" style="background:var(--amberw)"></div></div><span class="sc">8</span></div><div class="risk-why">~$100M annual FCF burn against ~$12–25M revenue; profitability is years away and depends on a demand inflection that hasn't arrived.</div></div>
+    <div class="risk-row"><div class="risk-name">Competition</div><div class="meter"><div class="track"><div class="fill" data-w="72" style="background:var(--amberw)"></div></div><span class="sc">7</span></div><div class="risk-why">IonQ, Rigetti, Quantinuum, plus IBM, Google and Microsoft's deep-pocketed quantum efforts contest the same talent, customers and roadmap.</div></div>
+    <div class="risk-row"><div class="risk-name">Gate-model execution (QCI)</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amberw)"></div></div><span class="sc">7</span></div><div class="risk-why">A $550M pivot into unfamiliar superconducting gate-model territory with a 2030–2032 fault-tolerance timeline — integration and delivery risk is high.</div></div>
+    <div class="risk-row"><div class="risk-name">Earnings-quality optics</div><div class="meter"><div class="track"><div class="fill" data-w="55" style="background:var(--indigo)"></div></div><span class="sc">6</span></div><div class="risk-why">GAAP losses are distorted by non-cash warrant remeasurement; headline numbers can mislead in both directions.</div></div>
+    <div class="risk-row"><div class="risk-name">Customer concentration</div><div class="meter"><div class="track"><div class="fill" data-w="52" style="background:var(--indigo)"></div></div><span class="sc">6</span></div><div class="risk-why">Government and academic buyers dominate large deals; a single delayed or cancelled system sale dents the reported quarter.</div></div>
+    <div class="risk-row"><div class="risk-name">Macro / risk-appetite cyclicality</div><div class="meter"><div class="track"><div class="fill" data-w="50" style="background:var(--indigo)"></div></div><span class="sc">5</span></div><div class="risk-why">As a profitless theme stock, QBTS is highly sensitive to rates, liquidity and speculative appetite — it falls hard in risk-off markets.</div></div>
+    <div class="risk-row"><div class="risk-name">Key-person (Baratz)</div><div class="meter"><div class="track"><div class="fill" data-w="38" style="background:var(--indigo)"></div></div><span class="sc">4</span></div><div class="risk-why">Strategy and investor confidence are tied to the CEO; insider selling and thin ownership are watch items for alignment.</div></div>
+  </div>
+</div></section>
+
+<!-- ===================== 8 · CATALYSTS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">08</span><h2>Catalysts &amp; what to watch</h2></div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Confirms the thesis</div>
+      <h3 style="color:var(--green)">Bull confirmations</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Sustained bookings growth that converts into <em>recurring</em> QCaaS revenue (not just one-off systems); a marquee commercial quantum-advantage win with a named enterprise; on-track gate-model milestones (the 2026/2027 physical-qubit systems) validating the QCI acquisition; new government/defence contracts; and any quarter where revenue and bookings both rise together.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Breaks the thesis</div>
+      <h3 style="color:var(--red)">Bear triggers</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Bookings stalling or failing to convert to revenue; another dilutive equity raise at a lower price; gate-model roadmap slippage; a rival demonstrating clear commercial superiority; a broad de-rating of the quantum theme; or a risk-off market that punishes profitless, high-multiple names. Watch the next quarterly print and the cash-burn rate closely.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 9 · SCENARIOS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Scenarios</h2></div>
+  <p class="lede">Illustrative one-year scenarios — probabilities and targets are estimates for framing, not forecasts, and are deliberately wide given the speculative, theme-driven profile. <span class="tag-est">EST</span></p>
+  <div class="scn">
+    <div class="scn-card bear">
+      <div class="name">Bear</div><div class="prob">40%</div>
+      <div class="tgt">~$9 target</div>
+      <p class="asm">Quantum theme cools or risk appetite turns; bookings don't convert to revenue; another dilutive raise; the stock compresses toward a few times net cash plus a modest tech option value.</p>
+    </div>
+    <div class="scn-card base">
+      <div class="name">Base</div><div class="prob">38%</div>
+      <div class="tgt">~$22 target</div>
+      <p class="asm">Bookings keep climbing and revenue recovers off the Q1 trough, the gate-model roadmap stays on schedule, and the stock chops sideways with high volatility as sentiment ebbs and flows.</p>
+    </div>
+    <div class="scn-card bull">
+      <div class="name">Bull</div><div class="prob">22%</div>
+      <div class="tgt">~$45 target</div>
+      <p class="asm">A genuine commercial quantum-advantage win plus accelerating recurring revenue re-rates D-Wave as the credible dual-platform leader; the theme stays hot and the stock revisits its highs.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 10 · BULL VS BEAR ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">10</span><h2>Bull vs bear</h2></div>
+  <div class="bb">
+    <div class="bb-col bull">
+      <div class="bb-head"><span>Bull case</span><span>6 points</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">Bookings +1,994% to $33.4M in Q1'26.</div><div class="bb-why">A record quarter of forward demand suggests a genuine commercial inflection ahead of revenue.</div></div>
+        <div class="bb-item"><div class="bb-fact">Only commercial annealing player with paying users.</div><div class="bb-why">D-Wave ships real systems and cloud access today, ahead of gate-model peers still pre-commercial.</div></div>
+        <div class="bb-item"><div class="bb-fact">~$588M cash, ~$47M debt.</div><div class="bb-why">A fortress balance sheet buys years of runway to outlast rivals and fund the roadmap.</div></div>
+        <div class="bb-item"><div class="bb-fact">$550M Quantum Circuits acquisition.</div><div class="bb-why">Adds a credible error-corrected gate-model path, making D-Wave a dual-platform story.</div></div>
+        <div class="bb-item"><div class="bb-fact">~83% FY2025 gross margin.</div><div class="bb-why">If revenue scales, the cloud/software economics could become highly profitable.</div></div>
+        <div class="bb-item"><div class="bb-fact">"Strong Buy" consensus, ~$37 target.</div><div class="bb-why">Sell-side sees upside; the quantum theme commands scarcity premiums.</div></div>
+      </div>
+    </div>
+    <div class="bb-col bear">
+      <div class="bb-head"><span>Bear case</span><span>6 points</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">~670× trailing sales.</div><div class="bb-why">A valuation untethered from fundamentals; priced for a frontier outcome years away.</div></div>
+        <div class="bb-item"><div class="bb-fact">Revenue fell 81% YoY in Q1'26.</div><div class="bb-why">Tiny and lumpy: one contract dominates a quarter, so "growth" is unreliable.</div></div>
+        <div class="bb-item"><div class="bb-fact">Share count tripled in four years.</div><div class="bb-why">Chronic dilution means the business must triple just to hold per-share value flat.</div></div>
+        <div class="bb-item"><div class="bb-fact">~$100M annual cash burn.</div><div class="bb-why">Profitability is years away and contingent on a demand inflection that hasn't arrived.</div></div>
+        <div class="bb-item"><div class="bb-fact">Commercial quantum advantage unproven.</div><div class="bb-why">No broad, repeatable killer app yet; annealing may stay a niche.</div></div>
+        <div class="bb-item"><div class="bb-fact">Low insider ownership; insiders selling.</div><div class="bb-why">Thin alignment and net insider sales temper the "believe in the mission" narrative.</div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 11 · SCORECARD + VERDICT ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">11</span><h2>Final scorecard &amp; verdict</h2></div>
+  <p class="lede">Ten categories scored 1–10 (analytical opinion). Overall is the equal-weighted average × 10. Bands: &lt;30 Strong Sell · 30–45 Sell · 45–55 Neutral · 55–70 Buy · &gt;70 Strong Buy.</p>
+  <div class="score-grid" id="scores">
+    <div class="score-line"><span class="nm">Business Quality</span><span class="track"><span class="fill" data-w="40"></span></span><span class="n">4</span></div>
+    <div class="score-line"><span class="nm">Competitive Moat</span><span class="track"><span class="fill" data-w="50"></span></span><span class="n">5</span></div>
+    <div class="score-line"><span class="nm">Management</span><span class="track"><span class="fill" data-w="60"></span></span><span class="n">6</span></div>
+    <div class="score-line"><span class="nm">Governance</span><span class="track"><span class="fill" data-w="50"></span></span><span class="n">5</span></div>
+    <div class="score-line"><span class="nm">Financial Strength</span><span class="track"><span class="fill" data-w="60"></span></span><span class="n">6</span></div>
+    <div class="score-line"><span class="nm">Growth</span><span class="track"><span class="fill" data-w="50"></span></span><span class="n">5</span></div>
+    <div class="score-line"><span class="nm">Profitability</span><span class="track"><span class="fill" data-w="10"></span></span><span class="n">1</span></div>
+    <div class="score-line"><span class="nm">Valuation</span><span class="track"><span class="fill" data-w="10"></span></span><span class="n">1</span></div>
+    <div class="score-line"><span class="nm">Capital Returns</span><span class="track"><span class="fill" data-w="20"></span></span><span class="n">2</span></div>
+    <div class="score-line"><span class="nm">Risk Profile</span><span class="track"><span class="fill" data-w="20"></span></span><span class="n">2</span></div>
+  </div>
+
+  <div class="verdict-box">
+    <div class="verdict-label">Educational verdict · scale: Strong Sell → Strong Buy</div>
+    <div class="verdict-word">Sell</div>
+    <div class="verdict-score">Overall score · 37 / 100 · equal-weighted average of ten categories</div>
+    <p class="verdict-reason">A "remarkable technology, indefensible price" call — for the valuation, not the science. D-Wave is a genuine quantum-computing pioneer with the cohort's clearest commercial footing, a record bookings quarter, a fortress balance sheet, and a coherent new dual-platform strategy. Those strengths are why this isn't a Strong Sell. But the stock changes hands at roughly 670× trailing sales for a business whose revenue just fell 81%, which burns ~$100M a year, triples its share count over four years, and rests on a commercial quantum-advantage case that remains unproven and a fault-tolerance roadmap stretching to 2032. The price discounts a flawless, far-off frontier win. This is explicitly <em>not</em> personalised advice and we are not licensed advisors; a believer in the quantum theme and the bookings inflection could rate this "Buy," while a valuation- or dilution-focused investor could rate it "Strong Sell."</p>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><div class="corner" style="color:var(--green)">Biggest reason bulls may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">If quantum computing crosses from science project to commercial tool this decade, D-Wave — already shipping systems, with record bookings, a war chest to outlast rivals, and now both annealing and gate-model platforms — is among the best-positioned independents, and a tiny revenue base could compound fast enough to make today's multiple look prescient.</p></div>
+    <div class="card"><div class="corner" style="color:var(--red)">Biggest reason bears may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">The market is paying ~$8–9B for ~$12M of shrinking revenue and ~$100M of annual losses, funded by tripling the share count, on a bet that pays off — if at all — years from now. If the theme cools or the demand inflection stalls, a profitless stock priced for perfection has a very long way to fall.</p></div>
+  </div>
+</div></section>
+
+<!-- ===================== DISCLAIMER ===================== -->
+<div class="disc"><div class="wrap">
+  <p class="big">Educational only — not financial advice. Prices shown are as of the generation date and will have changed. Do your own research.</p>
+  <p>Figures drawn from D-Wave Quantum's SEC filings (10-K / 10-Q / 8-K), the Q1 2026 and FY2025 earnings releases and call transcripts, the 1 Jun 2026 Investor Day materials, company newsroom press releases, and reporting/aggregation by BusinessWire, The Quantum Insider, StockAnalysis, MacroTrends, MarketBeat, StockTitan, Yahoo Finance, Investing.com and Fortune. FY2025 GAAP net loss is materially distorted by non-cash warrant remeasurement; D-Wave's adjusted figures are used where cleaner. Market cap, enterprise value, peer multiples and any forward figure are reconstructed estimates and marked [EST]. Scores, the fair-value range, scenarios, probabilities and the verdict are analytical opinion, not fact, and not a recommendation. The author is not a licensed financial advisor.</p>
+  <p class="src-note">Generated 2026-06-20 (UTC) · prompt version 2c9bac7 · live market data changes constantly — look up QBTS for the current price. The next quarterly print and gate-model milestone updates are the key near-term catalysts.</p>
+</div></div>
+</main>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target;
+      if(el.id==='revbars'){ el.querySelectorAll('.bar').forEach(b=>{ b.style.height=b.dataset.h+'%'; }); }
+      if(el.id==='arrbars'){ el.querySelectorAll('.arr-bar').forEach(b=>{ b.style.height=b.dataset.h+'%'; }); }
+      if(el.id==='risks' || el.id==='scores'){ el.querySelectorAll('.fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; }); }
+      io.unobserve(el);
+    });
+  },{threshold:.3});
+  ['revbars','arrbars','risks','scores'].forEach(id=>{ const el=document.getElementById(id); if(el) io.observe(el); });
+  document.querySelectorAll('#revbars .bar').forEach(b=>b.style.height='0%');
+  document.querySelectorAll('#arrbars .arr-bar').forEach(b=>b.style.height='0%');
+  document.querySelectorAll('#risks .fill,#scores .fill').forEach(f=>f.style.width='0%');
+</script>
+</body>
+</html>
