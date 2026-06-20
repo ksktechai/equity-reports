@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- report-meta: type=stock; slug=nebius-group-nv; name=Nebius Group NV; generated=2026-06-20; prompt=72cf774 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius Group Stock Analysis · NBIS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap');
+
+  :root{
+    --void:#060810;
+    --deep:#0c0f1e;
+    --panel:#131730;
+    --panel-2:#161b3899;
+    --line:#28305c;
+    --ink:#eef1fb;
+    --mute:#a8b0d8;
+    --faint:#6c76a8;
+    --cyan:#46d6ff;       /* Nebius electric blue */
+    --indigo:#8b7cff;
+    --violet:#b388ff;
+    --magenta:#ff6ec7;    /* nebula */
+    --green:#54e0a6;
+    --amberw:#ffc24d;
+    --red:#ff5e7a;
+    --grid:rgba(70,214,255,.045);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1100px 560px at 80% -10%, rgba(139,124,255,.18), transparent 60%),
+      radial-gradient(820px 460px at 4% 4%, rgba(70,214,255,.10), transparent 55%),
+      radial-gradient(900px 520px at 50% 112%, rgba(255,110,199,.08), transparent 60%),
+      var(--void);
+    color:var(--ink);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* starfield / nebula backdrop */
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6;
+    background-image:
+      radial-gradient(closest-side at 18% 22%, rgba(139,124,255,.12), transparent),
+      radial-gradient(closest-side at 76% 34%, rgba(70,214,255,.08), transparent),
+      radial-gradient(closest-side at 44% 82%, rgba(255,110,199,.06), transparent),
+      radial-gradient(1px 1px at 12% 30%, rgba(255,255,255,.6), transparent),
+      radial-gradient(1px 1px at 62% 18%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 84% 62%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1px 1px at 32% 70%, rgba(255,255,255,.4), transparent),
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:auto,auto,auto,auto,auto,auto,auto,48px 48px,48px 48px;
+    mask-image:radial-gradient(circle at 50% 0%,#000,transparent 80%);
+    -webkit-mask-image:radial-gradient(circle at 50% 0%,#000,transparent 80%)}
+
+  main{position:relative;z-index:1}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--cyan)}
+
+  .nebmark{display:inline-block;width:44px;height:44px;vertical-align:middle;margin-right:10px}
+
+  /* HERO */
+  header.hero{position:relative;padding:84px 0 56px;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero-inner{position:relative;z-index:2}
+  .hero-tag{display:flex;gap:14px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .pill{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+    padding:5px 11px;border:1px solid var(--line);border-radius:100px;color:var(--mute);background:var(--panel-2)}
+  .pill.live{color:var(--green);border-color:rgba(84,224,166,.4)}
+  .pill.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--green);margin-right:7px;vertical-align:middle;box-shadow:0 0 8px var(--green);
+    animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .pill.up{color:var(--green);border-color:rgba(84,224,166,.4)}
+  .pill.hot{color:var(--cyan);border-color:rgba(70,214,255,.45)}
+
+  h1.title{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(38px,6.6vw,72px);
+    line-height:1.02;letter-spacing:-.02em;margin:8px 0 6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  h1.title .ticker{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.30em;
+    letter-spacing:.05em;color:var(--cyan);vertical-align:middle;border:1px solid rgba(70,214,255,.45);
+    border-radius:8px;padding:6px 12px;margin-left:6px;background:rgba(70,214,255,.08)}
+  .sub{color:var(--mute);max-width:66ch;font-size:17px;margin-top:14px}
+
+  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:44px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+  .strip .cell{background:var(--deep);padding:20px 18px}
+  .strip .v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(19px,2.5vw,26px);letter-spacing:-.01em}
+  .strip .v.cy{color:var(--cyan)} .strip .v.down{color:var(--red)} .strip .v.up{color:var(--green)}
+  .strip .k{font-size:11px;color:var(--faint);margin-top:6px;font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.04em;text-transform:uppercase}
+  .asof{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);margin-top:18px}
+  .note{font-size:13px;color:var(--faint);margin-top:14px;font-style:italic}
+
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--cyan);
+    border:1px solid rgba(70,214,255,.3);border-radius:6px;padding:2px 8px}
+  h2{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em;line-height:1.1}
+  .lede{color:var(--mute);max-width:70ch;margin-top:14px;font-size:16px}
+
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:linear-gradient(180deg,var(--panel),var(--deep));border:1px solid var(--line);
+    border-radius:16px;padding:24px;position:relative;overflow:hidden}
+  .card .corner{position:absolute;top:0;right:0;font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:.1em;color:var(--faint);padding:9px 12px;text-transform:uppercase}
+  .card h3{font-size:20px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .seg-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute);margin-bottom:14px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;
+    border-top:1px solid var(--line);font-size:14px}
+  .row:first-of-type{border-top:none}
+  .row .lbl{color:var(--faint)} .row .val{font-family:'IBM Plex Mono',monospace;font-weight:500}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot.cy{background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+  .dot.ind{background:var(--indigo);box-shadow:0 0 10px var(--indigo)}
+  .dot.mag{background:var(--magenta);box-shadow:0 0 10px var(--magenta)}
+
+  .callout{margin-top:28px;border-left:2px solid var(--cyan);
+    background:linear-gradient(90deg,rgba(70,214,255,.09),transparent);padding:18px 22px;border-radius:0 12px 12px 0}
+  .callout .q{font-weight:600;color:var(--cyan);font-size:14px;margin-bottom:6px;
+    font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+  .callout p{color:var(--mute);font-size:15px}
+  .callout.amber{border-color:var(--amberw);background:linear-gradient(90deg,rgba(255,194,77,.08),transparent)}
+  .callout.amber .q{color:var(--amberw)}
+  .callout.red{border-color:var(--red);background:linear-gradient(90deg,rgba(255,94,122,.08),transparent)}
+  .callout.red .q{color:var(--red)}
+
+  .chartbox{margin-top:34px;background:var(--deep);border:1px solid var(--line);border-radius:16px;padding:26px 24px 18px}
+  .chartbox .ct{font-size:13px;color:var(--mute);margin-bottom:2px}
+  .chartbox .cs{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-bottom:22px}
+  .bars{display:flex;align-items:flex-end;gap:clamp(8px,3vw,30px);height:230px;padding-left:8px}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:100%;max-width:62px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--cyan),rgba(70,214,255,.20));
+    transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+  .bar.est{background:linear-gradient(180deg,var(--indigo),rgba(139,124,255,.2))}
+  .bar.qtr{background:linear-gradient(180deg,var(--magenta),rgba(255,110,199,.2))}
+  .bar .top{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+  .bar-x{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-top:10px;text-align:center}
+  .legend{display:flex;gap:18px;margin-top:18px;font-size:11px;color:var(--faint);
+    font-family:'IBM Plex Mono',monospace;flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .swatch{width:11px;height:11px;border-radius:3px}
+
+  /* ARR ramp line */
+  .arr{display:flex;align-items:flex-end;gap:clamp(10px,4vw,40px);height:180px;margin-top:8px;padding:0 6px}
+  .arr-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .arr-bar{width:100%;max-width:80px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--indigo),rgba(139,124,255,.18));transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+  .arr-bar.tgt{background:linear-gradient(180deg,var(--green),rgba(84,224,166,.18))}
+  .arr-bar .top{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+
+  .tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--deep);overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
+  th{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--faint);background:var(--panel)}
+  td{color:var(--ink)}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right}
+  tr.self td{background:rgba(70,214,255,.10)}
+  .tag-est{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--amberw);
+    border:1px solid rgba(255,194,77,.35);border-radius:4px;padding:1px 5px;margin-left:6px}
+  .conf{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--faint);
+    border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:6px;text-transform:uppercase;letter-spacing:.06em}
+  .pos{color:var(--green)}.neg{color:var(--red)}
+
+  .risk-row{display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center;
+    padding:14px 0;border-top:1px solid var(--line)}
+  .risk-row:first-child{border-top:none}
+  .risk-name{font-weight:500;font-size:15px}
+  .risk-why{color:var(--faint);font-size:13px;margin-top:3px;grid-column:1/-1}
+  .meter{display:flex;align-items:center;gap:11px}
+  .meter .track{width:130px;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .meter .fill{height:100%;border-radius:4px;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .meter .sc{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;width:30px;text-align:right}
+
+  .bb{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+  .bb-col{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .bb-head{padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .bb.bull .bb-head{background:rgba(84,224,166,.1);color:var(--green);border-bottom:1px solid rgba(84,224,166,.25)}
+  .bb.bear .bb-head{background:rgba(255,94,122,.1);color:var(--red);border-bottom:1px solid rgba(255,94,122,.25)}
+  .bb-body{padding:8px 22px 18px}
+  .bb-item{padding:15px 0;border-top:1px solid var(--line)}
+  .bb-item:first-child{border-top:none}
+  .bb-fact{font-size:14px;font-weight:500;margin-bottom:4px}
+  .bb-why{font-size:13px;color:var(--faint)}
+
+  .scn{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .scn-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--deep);position:relative}
+  .scn-card .prob{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:-.02em}
+  .scn-card .name{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+  .scn-card.bear .prob{color:var(--red)} .scn-card.bear .name{color:var(--red)}
+  .scn-card.base .prob{color:var(--cyan)} .scn-card.base .name{color:var(--cyan)}
+  .scn-card.bull .prob{color:var(--green)} .scn-card.bull .name{color:var(--green)}
+  .scn-card .tgt{font-size:15px;margin:12px 0 4px;font-weight:600}
+  .scn-card .asm{font-size:13px;color:var(--faint)}
+
+  .verdict-box{margin-top:30px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(160deg,var(--panel),var(--void));padding:36px;text-align:center;position:relative;overflow:hidden}
+  .verdict-box::before{content:"";position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+    width:420px;height:420px;background:radial-gradient(circle,rgba(70,214,255,.16),transparent 70%)}
+  .verdict-label{position:relative;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;
+    text-transform:uppercase;font-size:12px;color:var(--faint);margin-bottom:14px}
+  .verdict-word{position:relative;font-family:'Newsreader',serif;font-size:clamp(44px,8vw,72px);
+    color:var(--cyan);font-weight:500;letter-spacing:-.01em}
+  .verdict-score{position:relative;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--mute);margin-top:8px}
+  .verdict-reason{position:relative;max-width:66ch;margin:22px auto 0;color:var(--mute);font-size:15px}
+
+  .score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 28px;margin-top:30px}
+  .score-line{display:flex;align-items:center;gap:14px}
+  .score-line .nm{flex:none;width:140px;font-size:13px;color:var(--mute)}
+  .score-line .track{flex:1;height:6px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .score-line .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cyan),var(--indigo));
+    width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .score-line .n{font-family:'IBM Plex Mono',monospace;font-size:13px;width:34px;text-align:right;font-weight:600}
+
+  .disc{padding:48px 0 70px;text-align:center}
+  .disc p{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);
+    letter-spacing:.04em;max-width:66ch;margin:0 auto}
+  .disc .big{color:var(--mute);font-size:13px;margin-bottom:10px}
+  .src-note{font-size:12px;color:var(--faint);margin-top:24px;line-height:1.7}
+
+  @media(max-width:860px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    .g3,.g2,.scn,.score-grid{grid-template-columns:1fr}
+    .bb{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<main>
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-tag">
+      <span class="pill live">Trading live · Nasdaq</span>
+      <span class="pill hot">Relisted 21 Oct 2024</span>
+      <span class="pill up">≈ all-time high</span>
+      <span class="pill">Educational · not advice</span>
+    </div>
+    <div class="eyebrow">Institutional Stock Teardown</div>
+    <h1 class="title">
+      <svg class="nebmark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <radialGradient id="neb" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#46d6ff"/>
+            <stop offset="55%" stop-color="#8b7cff"/>
+            <stop offset="100%" stop-color="#ff6ec7" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="32" cy="32" r="22" fill="url(#neb)" opacity=".55"/>
+        <circle cx="32" cy="32" r="6" fill="#cdecff"/>
+        <ellipse cx="32" cy="32" rx="29" ry="11" fill="none" stroke="#46d6ff" stroke-width="1.6" opacity=".8" transform="rotate(28 32 32)"/>
+        <ellipse cx="32" cy="32" rx="29" ry="11" fill="none" stroke="#8b7cff" stroke-width="1.2" opacity=".6" transform="rotate(-34 32 32)"/>
+        <circle cx="11" cy="20" r="1.4" fill="#fff"/><circle cx="54" cy="44" r="1.4" fill="#fff"/>
+        <circle cx="48" cy="13" r="1.1" fill="#fff"/><circle cx="16" cy="50" r="1.1" fill="#fff"/>
+      </svg>
+      Nebius Group<span class="ticker">NBIS</span></h1>
+    <p class="sub">The AI "neocloud" that rose from the ashes of Yandex now rents Nvidia GPUs at hyperscale — and just stapled on a Microsoft contract worth up to ~$19.4B, a ~$3B Meta deal and a $2B Nvidia equity cheque, driving Q1 revenue up <strong>684%</strong> to $399M and an annualised run-rate toward $7–9B by year-end.</p>
+
+    <div class="strip">
+      <div class="cell"><div class="v cy">~$285.50</div><div class="k">Price · 20 Jun 2026</div></div>
+      <div class="cell"><div class="v">~$72.2B</div><div class="k">Market cap</div></div>
+      <div class="cell"><div class="v up">+684%</div><div class="k">Q1'26 rev growth YoY</div></div>
+      <div class="cell"><div class="v cy">~$1.9B</div><div class="k">Core AI cloud ARR</div></div>
+      <div class="cell"><div class="v">$43.89–$298.85</div><div class="k">52-week range</div></div>
+    </div>
+    <p class="asof">Price ~$285.50 intraday 20 Jun 2026 (range $275.58–$298.85; ~253.9M shares out) [Google Finance/CNBC/Robinhood]. The stock has roughly 6×'d off its 52-week low and trades near record highs. Live price moves constantly — look up NBIS for where it trades now.</p>
+    <p class="note">Analysis complexity: <strong style="color:var(--cyan)">9 / 10</strong> — a ~20-month-old listing with a Russian-asset legacy, a holding-company structure stacked with venture stakes (ClickHouse, Toloka, Avride, TripleTen), GAAP profit flattered by fair-value gains, mega-contracts that both de-risk and concentrate revenue, and a $20–25B capex plan that dwarfs current sales.</p>
+  </div>
+</header>
+
+<!-- ===================== 1 · EXEC SUMMARY ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>The one-paragraph version</h2></div>
+  <p class="lede">Nebius is a vertically-integrated AI cloud: it builds and operates data centres, fills them with Nvidia GPUs, and rents that compute to AI labs and enterprises — the "neocloud" model, alongside CoreWeave. It is the surviving international rump of Yandex N.V., which sold its Russian businesses in July 2024 and relisted on Nasdaq as Nebius on 21 Oct 2024. Revenue is inflecting violently: FY2024 ~$117.5M → FY2025 $529.8M (+351%) → Q1 2026 $399M (+684% YoY), with core AI-cloud annualised run-rate (ARR) hitting ~$1.92B at quarter-end. Management guides 2026 group revenue of $3.0–3.4B and exit ARR of $7–9B, ~40% adjusted-EBITDA margin — and has raised 2026 capex to a staggering $20–25B. The stock has ~6×'d in a year to a ~$72B market cap.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Bull thesis · one line</div>
+      <h3 style="color:var(--green)">The bull pull</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">A scarce, Nvidia-backed pure-play on AI compute with explosive, now-profitable-at-EBITDA growth, multi-billion contracts from Microsoft and Meta already booked, and a portfolio of venture stakes (ClickHouse, Toloka) worth billions to self-fund the build. <span class="conf">Confidence: Med</span></p>
+    </div>
+    <div class="card">
+      <div class="corner">Bear thesis · one line</div>
+      <h3 style="color:var(--red)">The bear weight</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">A capital-devouring landlord for rented Nvidia chips, trading at ~75× trailing sales, funding a $20–25B build via debt and dilution into a possible AI-capex digestion, with growing dependence on two hyperscaler customers and a complex, dual-class governance legacy. <span class="conf">Confidence: Med</span></p>
+    </div>
+  </div>
+  <div class="callout amber">
+    <div class="q">WHAT CHANGED MOST RECENTLY</div>
+    <p>A cluster of events re-rated the stock in 2026: Nvidia disclosed a <strong>$2B equity investment</strong> at $94.94/share (~8.3% stake) in March; Nebius then signed a Microsoft GPU-capacity contract valued at <strong>~$17.4–19.4B</strong> (anchored by a new Vineland, NJ site) and a ~<strong>$3B Meta deal</strong>; Q1 2026 results (reported 13 May) showed revenue +684% and the first positive adjusted EBITDA; and the company secured <strong>over 3.5 GW</strong> of power, including a new 1.2 GW owned site in Pennsylvania. It also closed the Eigen AI acquisition on 10 Jun 2026. Shares trade near all-time highs.</p>
+  </div>
+</div></section>
+
+<!-- ===================== 2 · BUSINESS MODEL ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2>What Nebius actually sells</h2></div>
+  <p class="lede">~98% of revenue is the <strong>core AI cloud</strong> — GPU compute, managed AI platforms and storage sold by consumption and by long-term capacity contracts. Around it sits a holding company: wholly-owned businesses (Avride, TripleTen) and large minority/economic stakes in companies spun out of the group (ClickHouse, Toloka). The non-core pieces matter less as revenue than as a <em>balance-sheet</em> — sellable assets that help fund the cloud build. Splits below are directional. <span class="tag-est">EST</span></p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">~98% of revenue</div>
+      <h3><span class="dot cy"></span>Nebius AI cloud</h3>
+      <div class="seg-tag">GPU compute · AI platform · neocloud</div>
+      <div class="row"><span class="lbl">Q1'26 revenue</span><span class="val">~$390M</span></div>
+      <div class="row"><span class="lbl">Core ARR (exit Q1)</span><span class="val">~$1.92B</span></div>
+      <div class="row"><span class="lbl">Power secured</span><span class="val">3.5 GW+</span></div>
+      <div class="row"><span class="lbl">Owned capacity</span><span class="val">&gt;75%</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Wholly owned</div>
+      <h3><span class="dot ind"></span>Avride &amp; TripleTen</h3>
+      <div class="seg-tag">Autonomous vehicles · edtech</div>
+      <div class="row"><span class="lbl">Avride stake</span><span class="val">~83%</span></div>
+      <div class="row"><span class="lbl">Avride value</span><span class="val">~$2.2–2.3B <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">TripleTen</span><span class="val">100%</span></div>
+      <div class="row"><span class="lbl">TripleTen value</span><span class="val">~$0.2–0.3B <span class="tag-est">EST</span></span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Equity stakes</div>
+      <h3><span class="dot mag"></span>ClickHouse &amp; Toloka</h3>
+      <div class="seg-tag">Hidden balance-sheet value</div>
+      <div class="row"><span class="lbl">ClickHouse stake</span><span class="val">~28%</span></div>
+      <div class="row"><span class="lbl">Stake value</span><span class="val">~$6B <span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">Toloka</span><span class="val">Majority econ.</span></div>
+      <div class="row"><span class="lbl">Role</span><span class="val">Self-funding</span></div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">DO ECONOMICS IMPROVE WITH SCALE?</div>
+    <p>Yes, in the near term — and that is the difference from a year ago. Adjusted EBITDA swung to <strong>+$129.5M</strong> in Q1 2026 from a ~$53.7M loss a year earlier, and management guides ~40% group adjusted-EBITDA margin for 2026. The catch is the denominator below EBITDA: this is a real-estate-and-silicon business where each GPU generation depreciates fast and capex is enormous, so EBITDA flatters the economics. The true test is whether contracted ARR converts to durable <em>free</em> cash flow after the $20–25B capex cycle — not yet demonstrated. <span class="conf">Confidence: Med</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 3 · FINANCIAL TRAJECTORY ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>The financial trajectory</h2></div>
+  <p class="lede">Revenue is the headline and it is real: ~$117.5M (2024) → $529.8M (2025) → $399M in Q1 2026 alone. But two things distort the "profit" picture. First, FY2025 net income of ~$29M and Q1 2026 net income of ~$621M are heavily flattered by non-operating items — chiefly fair-value gains on the ClickHouse/Toloka stakes — not by cloud operating profit. Second, the cash flow statement shows a $2.3B Q1 operating inflow driven by <em>upfront customer prepayments</em>, which is great for liquidity but is deferred revenue, not earnings.</p>
+
+  <div class="chartbox">
+    <div class="ct">Revenue ($M) — annual actuals + Q1'26 + 2026 company guidance</div>
+    <div class="cs">FY24/FY25 reported; Q1'26 is a single quarter; 2026E is management group-revenue guidance ($3.0–3.4B), shown at midpoint</div>
+    <div class="bars" id="revbars">
+      <div class="bar-col"><div class="bar" data-h="4"><span class="top">$117.5M</span></div><div class="bar-x">FY2024</div></div>
+      <div class="bar-col"><div class="bar" data-h="16"><span class="top">$529.8M</span></div><div class="bar-x">FY2025</div></div>
+      <div class="bar-col"><div class="bar qtr" data-h="12"><span class="top">$399M</span></div><div class="bar-x">Q1'26<br>(1 qtr)</div></div>
+      <div class="bar-col"><div class="bar est" data-h="94"><span class="top">~$3.2B</span></div><div class="bar-x">2026E<br>(guide)</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--cyan)"></span>Reported (annual)</span>
+      <span><span class="swatch" style="background:var(--magenta)"></span>Q1'26 single quarter</span>
+      <span><span class="swatch" style="background:var(--indigo)"></span>2026 management guidance</span>
+    </div>
+  </div>
+
+  <div class="chartbox">
+    <div class="ct">Core AI-cloud ARR ($B) — the metric the bulls watch</div>
+    <div class="cs">Annualised run-rate revenue · Q4'25 → Q1'26 actuals; 2026 exit is company guidance ($7–9B), shown at midpoint <span class="tag-est">EST band</span></div>
+    <div class="arr" id="arrbars">
+      <div class="arr-col"><div class="arr-bar" data-h="16"><span class="top">$1.25B</span></div><div class="bar-x">Q4'25</div></div>
+      <div class="arr-col"><div class="arr-bar" data-h="24"><span class="top">$1.92B</span></div><div class="bar-x">Q1'26</div></div>
+      <div class="arr-col"><div class="arr-bar tgt" data-h="100"><span class="top">$7–9B</span></div><div class="bar-x">2026 exit<br>(guide)</div></div>
+    </div>
+  </div>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Metric</th><th class="num">FY2024</th><th class="num">FY2025</th><th class="num">Q1'26</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td class="num">~$117.5M</td><td class="num">$529.8M</td><td class="num">$399.0M</td></tr>
+        <tr><td>Revenue growth (YoY)</td><td class="num">—</td><td class="num pos">+351%</td><td class="num pos">+684%</td></tr>
+        <tr><td>Adjusted EBITDA</td><td class="num neg">loss</td><td class="num neg">loss</td><td class="num pos">+$129.5M</td></tr>
+        <tr><td>Net income (GAAP)</td><td class="num neg">~−$393M</td><td class="num pos">~$29.0M*</td><td class="num pos">~$621M*</td></tr>
+        <tr><td>Core AI-cloud ARR (exit)</td><td class="num">n/d</td><td class="num">~$1.25B</td><td class="num">~$1.92B</td></tr>
+        <tr><td>Operating cash flow</td><td class="num">neg</td><td class="num">n/d</td><td class="num pos">~$2.3B†</td></tr>
+        <tr><td>Cash &amp; equivalents</td><td class="num">~$2.4B</td><td class="num">~$3.68B</td><td class="num">~$9.30B</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">*GAAP net income is materially distorted by non-operating fair-value gains on equity stakes (e.g. ClickHouse) and other items — it is <em>not</em> a clean read on cloud profitability; any P/E (~84×) on this stock should be treated with caution. †Q1 operating cash inflow is driven by large customer prepayments (deferred revenue), not recurring earnings. FY2024 revenue is derived from the FY2025 "+351%" disclosure. Confidence: High on reported revenue/ARR; Medium on derived and one-time items.</p>
+
+  <div class="callout red">
+    <div class="q">THE NUMBER THAT MATTERS MOST — CAPEX vs REVENUE</div>
+    <p>Nebius lifted its 2026 capex guidance to <strong>$20–25B</strong> against guided 2026 revenue of just $3.0–3.4B — i.e. it plans to spend roughly <strong>6–8× its annual revenue</strong> building capacity this year alone. Even with ~$9.3B of cash and ~$6B of monetisable ClickHouse stake, that gap must be bridged with substantial new debt, equity, or customer prepayments. The bull reads this as demand-driven scaling; the bear reads it as a balance sheet betting the company on the AI-capex cycle not turning.</p>
+  </div>
+</div></section>
+
+<!-- ===================== 4 · BALANCE SHEET & CAPITAL RETURNS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Balance sheet &amp; capital returns</h2></div>
+  <p class="lede">Liquidity is strong today: ~$9.3B cash at 31 Mar 2026 after a ~$4.3B convertible-notes raise (1.25% due 2031, 2.625% due 2033), $2.0B of pre-funded warrants and Nvidia's $2B cheque. There is no dividend and no buyback — every dollar funds capacity. The watch item is the funding gap and the dilution it implies: convertibles, warrants and equity issuance are baked into the model, and the dual-class share count is rising.</p>
+  <div class="grid g3">
+    <div class="card">
+      <div class="corner">Liquidity</div>
+      <h3>Cash &amp; funding</h3>
+      <div class="row"><span class="lbl">Cash (31 Mar'26)</span><span class="val">~$9.30B</span></div>
+      <div class="row"><span class="lbl">Convertible notes</span><span class="val">~$4.34B</span></div>
+      <div class="row"><span class="lbl">Pre-funded warrants</span><span class="val">~$2.0B</span></div>
+      <div class="row"><span class="lbl">Nvidia investment</span><span class="val">~$2.0B</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">No income</div>
+      <h3>Capital returns</h3>
+      <div class="row"><span class="lbl">Dividend</span><span class="val">None</span></div>
+      <div class="row"><span class="lbl">Buyback</span><span class="val">None</span></div>
+      <div class="row"><span class="lbl">Cash use</span><span class="val">Capacity build</span></div>
+      <div class="row"><span class="lbl">2026 capex</span><span class="val neg">$20–25B</span></div>
+    </div>
+    <div class="card">
+      <div class="corner">Watch</div>
+      <h3>Share structure</h3>
+      <div class="row"><span class="lbl">Shares out</span><span class="val">~253.9M</span></div>
+      <div class="row"><span class="lbl">Class A / B</span><span class="val">220.4M / 33.5M</span></div>
+      <div class="row"><span class="lbl">Treasury</span><span class="val">~68.1M (A)</span></div>
+      <div class="row"><span class="lbl">Hidden stakes</span><span class="val">ClickHouse ~$6B</span></div>
+    </div>
+  </div>
+  <div class="callout amber">
+    <div class="q">THE FUNDING TIGHTROPE</div>
+    <p>This is the crux of the financial profile. A $20–25B build cannot be funded from ~$9.3B of cash and operating inflows alone — it requires a steady cadence of capital raises (debt, converts, warrants, equity) and customer prepayments. The offsetting cushion is genuine: the ClickHouse stake (~$6B), Avride (~$2.2B) and Toloka can be sold to "crystallise value," exactly as management has signalled. Financial Strength Score: <strong style="color:var(--cyan)">6 / 10</strong> — well-funded for now, but structurally dependent on open capital markets and AI demand staying robust. <span class="conf">Confidence: Med</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 5 · VALUATION ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Valuation</h2></div>
+  <p class="lede">On <em>trailing</em> numbers Nebius looks extreme — ~$72B market cap on ~$0.88B TTM revenue is <strong>~75–80× sales</strong>. But unlike a static story, the forward ramp is contracted: on guided 2026 revenue of ~$3.2B the multiple drops to <strong>~21×</strong>, and on exit ARR of $7–9B it is ~8–9× run-rate. The whole debate is whether that ramp is as bankable as the Microsoft/Meta backlog implies. Peer figures below are mid-2026 estimates, marked [EST].</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Company</th><th class="num">Mkt cap</th><th class="num">Rev growth</th><th class="num">EV/Rev (TTM)</th><th class="num">EV/Rev (FY26E)</th><th class="num">Profitable?</th></tr></thead>
+      <tbody>
+        <tr class="self"><td>Nebius (NBIS)</td><td class="num">~$72B</td><td class="num pos">~+684%</td><td class="num neg">~75–80×</td><td class="num">~21×</td><td class="num">Adj. EBITDA +</td></tr>
+        <tr><td>CoreWeave (CRWV) <span class="tag-est">EST</span></td><td class="num">~$60–70B</td><td class="num">~+150%</td><td class="num">~12–16×</td><td class="num">~6–8×</td><td class="num neg">Net loss</td></tr>
+        <tr><td>Nvidia (NVDA) <span class="tag-est">EST</span></td><td class="num">~$4T+</td><td class="num">~+50%</td><td class="num">~18–22×</td><td class="num">~14–17×</td><td class="num pos">Yes</td></tr>
+        <tr><td>Oracle (ORCL) <span class="tag-est">EST</span></td><td class="num">~$650B</td><td class="num">~+15%</td><td class="num">~9–11×</td><td class="num">~8–9×</td><td class="num pos">Yes</td></tr>
+        <tr><td>IREN (IREN) <span class="tag-est">EST</span></td><td class="num">~$15–20B</td><td class="num">~+100%</td><td class="num">~10–14×</td><td class="num">~6–8×</td><td class="num">Mixed</td></tr>
+        <tr><td>Applied Digital (APLD) <span class="tag-est">EST</span></td><td class="num">~$8–12B</td><td class="num">~+60%</td><td class="num">~12–18×</td><td class="num">~7–9×</td><td class="num neg">Net loss</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Peer multiples are rough mid-2026 estimates for framing only [EST]; verify before relying on them. The directional read: Nebius is the <em>most expensive</em> neocloud on trailing sales but converges toward the peer pack on FY26 estimates — its premium is a bet on the steepest ramp. Its trading history is ~20 months old (52-week range $43.89–$298.85), so "vs own history" means: it has gone from ~5× to ~75× trailing sales as the AI-cloud thesis took hold.</p>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card">
+      <div class="corner">What must be true</div>
+      <h3>Priced for the ramp delivering</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">For ~$285 to make sense, exit ARR must reach the $7–9B guide, the Microsoft/Meta capacity must come online on schedule, ~40% EBITDA margins must hold through the depreciation wave, and the $20–25B capex must be financed without crippling dilution. Much of that is contracted — but execution and financing risk are both high. <span class="conf">Confidence: Med</span></p>
+    </div>
+    <div class="card">
+      <div class="corner">Independent marks</div>
+      <h3>Analyst consensus</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Sell-side is broadly bullish but the price has <em>outrun</em> it: ~14–16 analysts average a 12-month target near <strong>~$242–244</strong> (range ~$120 low to ~$380 high), <em>below</em> the ~$285 quote. These are other people's estimates, not a recommendation here — and the gap signals the stock has priced in good news faster than analysts have lifted models. <span class="conf">Confidence: High (that this is consensus)</span></p>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="q">OUR FAIR-VALUE RANGE — ILLUSTRATIVE [EST]</div>
+    <p><strong>~$180–$360</strong>, midpoint ~$270 — modestly <em>below</em> the current ~$285. The low end assumes AI-capex digestion, a financing squeeze and multiple compression toward CoreWeave-like forward levels; the high end assumes ARR beats the $7–9B guide, stakes are monetised at full value, and Nebius is crowned the independent neocloud winner. The midpoint sits a touch under spot because the price already trades above analyst consensus and discounts a flawless ramp. <strong>What has to be true for ~$285:</strong> bankable conversion of the Microsoft/Meta backlog, durable ~40% margins, and capital markets that keep funding the build. <span class="conf">Confidence: Low (speculative estimate, not a forecast)</span></p>
+  </div>
+</div></section>
+
+<!-- ===================== 6 · GOVERNANCE ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Governance &amp; management</h2></div>
+  <p class="lede">A proven builder-CEO with deep skin in the game, wrapped in a Dutch holding-company structure, a dual-class vote, and a complicated post-Yandex history that demands more diligence than a typical US-listed name.</p>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Strengths</div>
+      <h3 style="color:var(--green)">What's good</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Founder-CEO Arkady Volozh built Yandex into one of the world's few non-US/China search-and-tech champions, and personally owns ~11.53% of Nebius (~$6.25B) — alignment is very high. The team is ~1,000+ ex-Yandex engineers with real infrastructure pedigree, and Nvidia's $2B investment is a strategic endorsement few neoclouds can claim. Management has been disciplined about "crystallising" stake value to self-fund rather than purely diluting.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Watch items</div>
+      <h3 style="color:var(--amberw)">What to watch</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Dual-class Class A/B structure concentrates voting power with insiders; the Dutch (N.V.) domicile and holding-company web (Avride, TripleTen, ClickHouse, Toloka) reduce transparency vs a clean pure-play. The Yandex legacy — sanctions-era trading suspension (2022), the Russian-asset divestiture (2024) and Volozh's own prior EU-sanctions history (since delisted) — is a reputational and headline risk even though the Russian operations are gone. Governance Score: <strong style="color:var(--cyan)">4 / 10</strong>. <span class="conf">Confidence: Med</span></p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 7 · RISK REGISTER ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">07</span><h2>Risk register</h2></div>
+  <p class="lede">Material risks, highest-severity first. Scores (1–10) are analytical opinion, not fact.</p>
+  <div id="risks" style="margin-top:30px">
+    <div class="risk-row"><div class="risk-name">Capital intensity / financing</div><div class="meter"><div class="track"><div class="fill" data-w="95" style="background:var(--red)"></div></div><span class="sc">10</span></div><div class="risk-why">$20–25B of 2026 capex on ~$3.2B of revenue requires continuous access to debt/equity markets; any funding squeeze stalls the build and the thesis.</div></div>
+    <div class="risk-row"><div class="risk-name">Valuation</div><div class="meter"><div class="track"><div class="fill" data-w="85" style="background:var(--red)"></div></div><span class="sc">9</span></div><div class="risk-why">~75–80× trailing sales and trading above consensus targets leaves little margin for error; any ramp wobble can re-rate the stock hard.</div></div>
+    <div class="risk-row"><div class="risk-name">AI-capex cyclicality / demand</div><div class="meter"><div class="track"><div class="fill" data-w="85" style="background:var(--red)"></div></div><span class="sc">9</span></div><div class="risk-why">The entire model rests on AI compute demand outrunning supply; a digestion phase among hyperscalers would hit pricing, utilisation and the whole neocloud group.</div></div>
+    <div class="risk-row"><div class="risk-name">Customer concentration</div><div class="meter"><div class="track"><div class="fill" data-w="80" style="background:var(--red)"></div></div><span class="sc">8</span></div><div class="risk-why">Microsoft (~$17–19B) and Meta (~$3B) will dominate forward revenue; the de-risking of mega-contracts comes with single-customer dependence.</div></div>
+    <div class="risk-row"><div class="risk-name">Depreciation / GPU obsolescence</div><div class="meter"><div class="track"><div class="fill" data-w="75" style="background:var(--amberw)"></div></div><span class="sc">8</span></div><div class="risk-why">GPUs depreciate fast; healthy EBITDA can still mean poor free cash flow once asset replacement is funded — the neocloud model's central question.</div></div>
+    <div class="risk-row"><div class="risk-name">Competition (CoreWeave, hyperscalers)</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amberw)"></div></div><span class="sc">7</span></div><div class="risk-why">CoreWeave, Crusoe, Lambda and the hyperscalers' own clouds contest the same GPUs and customers; compute can commoditise toward the cost of capital.</div></div>
+    <div class="risk-row"><div class="risk-name">Dilution / share supply</div><div class="meter"><div class="track"><div class="fill" data-w="65" style="background:var(--amberw)"></div></div><span class="sc">7</span></div><div class="risk-why">Convertibles, warrants and likely further equity raises to fund capex steadily expand the share count and cap per-share upside.</div></div>
+    <div class="risk-row"><div class="risk-name">Earnings quality</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amberw)"></div></div><span class="sc">6</span></div><div class="risk-why">GAAP profit is flattered by fair-value gains on stakes and prepayment-driven cash flow; headline numbers overstate underlying cloud profitability.</div></div>
+    <div class="risk-row"><div class="risk-name">Governance / dual-class &amp; structure</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amberw)"></div></div><span class="sc">6</span></div><div class="risk-why">Insider-controlled voting, a Dutch holdco and a venture-stake web give public holders limited control and reduced transparency.</div></div>
+    <div class="risk-row"><div class="risk-name">Geopolitical / Yandex legacy</div><div class="meter"><div class="track"><div class="fill" data-w="50" style="background:var(--indigo)"></div></div><span class="sc">5</span></div><div class="risk-why">Sanctions-era history and the Russian-asset divestiture remain headline and reputational risks despite the clean operational break.</div></div>
+    <div class="risk-row"><div class="risk-name">Nvidia dependence</div><div class="meter"><div class="track"><div class="fill" data-w="50" style="background:var(--indigo)"></div></div><span class="sc">5</span></div><div class="risk-why">Both supplier and ~8% shareholder; allocation, pricing and the "circular financing" optics tie Nebius's fortunes tightly to one chipmaker.</div></div>
+    <div class="risk-row"><div class="risk-name">Key-person (Volozh)</div><div class="meter"><div class="track"><div class="fill" data-w="40" style="background:var(--indigo)"></div></div><span class="sc">4</span></div><div class="risk-why">Vision, capital-allocation and culture are tightly bound to the founder-CEO; succession is unproven.</div></div>
+  </div>
+</div></section>
+
+<!-- ===================== 8 · CATALYSTS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">08</span><h2>Catalysts &amp; what to watch</h2></div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="corner">Confirms the thesis</div>
+      <h3 style="color:var(--green)">Bull confirmations</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Q2 2026 earnings showing ARR tracking toward the $7–9B exit; Microsoft/Meta capacity coming online on schedule; new large customers that broaden the base; ~40% EBITDA margins holding; a value-crystallising sale of the ClickHouse or Avride stake; financing the capex on favourable terms without heavy equity dilution.</p>
+    </div>
+    <div class="card">
+      <div class="corner">Breaks the thesis</div>
+      <h3 style="color:var(--red)">Bear triggers</h3>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">Signs of AI-capex digestion or GPU oversupply; any slippage in the Microsoft/Meta build; capex outrunning financing; a dilutive emergency raise; margin compression as depreciation bites; deteriorating free cash flow once capex is netted; or renewed geopolitical/sanctions headlines tied to the Yandex legacy.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 9 · SCENARIOS ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Scenarios</h2></div>
+  <p class="lede">Illustrative one-year scenarios — probabilities and targets are estimates for framing, not forecasts, and are wide given the early, capex-driven profile. <span class="tag-est">EST</span></p>
+  <div class="scn">
+    <div class="scn-card bear">
+      <div class="name">Bear</div><div class="prob">30%</div>
+      <div class="tgt">~$160 target</div>
+      <p class="asm">AI-capex digestion or a financing squeeze forces a dilutive raise; utilisation and pricing soften; the market re-rates neoclouds toward single-digit forward sales and the premium evaporates.</p>
+    </div>
+    <div class="scn-card base">
+      <div class="name">Base</div><div class="prob">45%</div>
+      <div class="tgt">~$290 target</div>
+      <p class="asm">ARR ramps into the $7–9B guide, Microsoft/Meta deliver, ~40% EBITDA holds, the capex is financed manageably, and the stock holds roughly current levels as growth offsets multiple compression.</p>
+    </div>
+    <div class="scn-card bull">
+      <div class="name">Bull</div><div class="prob">25%</div>
+      <div class="tgt">~$430 target</div>
+      <p class="asm">ARR beats the guide, stakes are monetised at full value, free cash flow turns the corner, and Nebius is crowned the scarce independent neocloud winner — re-rating well above today's price.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 10 · BULL VS BEAR ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">10</span><h2>Bull vs bear</h2></div>
+  <div class="bb">
+    <div class="bb-col bull">
+      <div class="bb-head"><span>Bull case</span><span>6 points</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">Revenue +684% to $399M in Q1'26.</div><div class="bb-why">One of the fastest growth rates in public tech, off a real, in-demand product.</div></div>
+        <div class="bb-item"><div class="bb-fact">~$1.92B ARR, guided to $7–9B by year-end.</div><div class="bb-why">Much of the ramp is contracted, not hoped-for — a rare visibility for a hyper-grower.</div></div>
+        <div class="bb-item"><div class="bb-fact">Microsoft (~$17–19B) + Meta (~$3B) deals.</div><div class="bb-why">Blue-chip anchors validate the platform and underwrite years of revenue.</div></div>
+        <div class="bb-item"><div class="bb-fact">Nvidia's $2B stake at $94.94.</div><div class="bb-why">Strategic endorsement plus likely preferential GPU allocation versus rivals.</div></div>
+        <div class="bb-item"><div class="bb-fact">~$9.3B cash + ~$6B ClickHouse stake.</div><div class="bb-why">A self-funding cushion few neoclouds have to bridge the capex gap.</div></div>
+        <div class="bb-item"><div class="bb-fact">Positive adjusted EBITDA (+$129.5M).</div><div class="bb-why">The model is showing operating leverage a year ahead of many peers.</div></div>
+      </div>
+    </div>
+    <div class="bb-col bear">
+      <div class="bb-head"><span>Bear case</span><span>6 points</span></div>
+      <div class="bb-body">
+        <div class="bb-item"><div class="bb-fact">$20–25B capex vs ~$3.2B revenue.</div><div class="bb-why">A balance-sheet bet on the AI cycle; demands constant external financing.</div></div>
+        <div class="bb-item"><div class="bb-fact">~75–80× trailing sales, above targets.</div><div class="bb-why">Priced for perfection and already trading above analyst consensus.</div></div>
+        <div class="bb-item"><div class="bb-fact">GAAP profit from fair-value gains.</div><div class="bb-why">Headline net income overstates true cloud profitability; FCF unproven.</div></div>
+        <div class="bb-item"><div class="bb-fact">Fast-depreciating rented Nvidia GPUs.</div><div class="bb-why">EBITDA can look great while free cash flow stays negative after replacement capex.</div></div>
+        <div class="bb-item"><div class="bb-fact">Forward revenue leans on two customers.</div><div class="bb-why">Mega-contract concentration: a single relationship shift would sting hard.</div></div>
+        <div class="bb-item"><div class="bb-fact">Dual-class vote + Yandex legacy.</div><div class="bb-why">Limited shareholder control, a complex holdco, and lingering headline risk.</div></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== 11 · SCORECARD + VERDICT ===================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">11</span><h2>Final scorecard &amp; verdict</h2></div>
+  <p class="lede">Ten categories scored 1–10 (analytical opinion). Overall is the equal-weighted average × 10.</p>
+  <div class="score-grid" id="scores">
+    <div class="score-line"><span class="nm">Business Quality</span><span class="track"><span class="fill" data-w="70"></span></span><span class="n">7</span></div>
+    <div class="score-line"><span class="nm">Competitive Moat</span><span class="track"><span class="fill" data-w="50"></span></span><span class="n">5</span></div>
+    <div class="score-line"><span class="nm">Management</span><span class="track"><span class="fill" data-w="70"></span></span><span class="n">7</span></div>
+    <div class="score-line"><span class="nm">Governance</span><span class="track"><span class="fill" data-w="40"></span></span><span class="n">4</span></div>
+    <div class="score-line"><span class="nm">Financial Strength</span><span class="track"><span class="fill" data-w="60"></span></span><span class="n">6</span></div>
+    <div class="score-line"><span class="nm">Growth</span><span class="track"><span class="fill" data-w="100"></span></span><span class="n">10</span></div>
+    <div class="score-line"><span class="nm">Profitability</span><span class="track"><span class="fill" data-w="50"></span></span><span class="n">5</span></div>
+    <div class="score-line"><span class="nm">Valuation</span><span class="track"><span class="fill" data-w="40"></span></span><span class="n">4</span></div>
+    <div class="score-line"><span class="nm">Capital Returns</span><span class="track"><span class="fill" data-w="30"></span></span><span class="n">3</span></div>
+    <div class="score-line"><span class="nm">Risk Profile</span><span class="track"><span class="fill" data-w="40"></span></span><span class="n">4</span></div>
+  </div>
+
+  <div class="verdict-box">
+    <div class="verdict-label">Educational verdict · scale: Strong Sell → Strong Buy</div>
+    <div class="verdict-word">Neutral</div>
+    <div class="verdict-score">Overall score · 55 / 100 · equal-weighted average of ten categories</div>
+    <p class="verdict-reason">A "great business, demanding price, brutal capital math" call. Nebius is arguably the best-positioned independent neocloud — Nvidia-backed, hyper-growing, EBITDA-positive, with marquee Microsoft and Meta contracts and a stash of monetisable stakes. Those are the reasons the score isn't lower. But it trades at ~75–80× trailing sales <em>above</em> analyst consensus, must finance a $20–25B build that dwarfs its revenue, and its reported profit leans on fair-value gains rather than cloud free cash flow. The whole thesis hinges on the AI-capex cycle staying hot while it converts contracted ARR into durable cash. This is explicitly <em>not</em> personalised advice and we are not licensed advisors; a believer in the ramp and Nvidia alignment could rate this "Buy," while a skeptic on capex, dilution and the cycle could rate it "Sell."</p>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><div class="corner" style="color:var(--green)">Biggest reason bulls may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">If AI compute demand keeps outstripping supply, Nebius becomes the scarce, investable independent neocloud — Nvidia-blessed, contracted to Microsoft and Meta, and sitting on billions in sellable stakes — and a $1.9B ARR base compounds toward $7–9B and beyond, making today's multiple look cheap in hindsight.</p></div>
+    <div class="card"><div class="corner" style="color:var(--red)">Biggest reason bears may be right</div><p style="color:var(--mute);font-size:15px;margin-top:10px">The market is paying ~75–80× sales for a capital-devouring landlord of depreciating rented GPUs that must raise tens of billions to grow into its valuation. If the AI-capex cycle cools or financing tightens, EBITDA optics won't save free cash flow, and a stock trading above consensus has a long way to fall.</p></div>
+  </div>
+</div></section>
+
+<!-- ===================== DISCLAIMER ===================== -->
+<div class="disc"><div class="wrap">
+  <p class="big">Educational only — not financial advice. Prices shown are as of the generation date and will have changed. Do your own research.</p>
+  <p>Figures drawn from Nebius Group's SEC filings (Form 6-K / earnings releases), the Q1 2026 results and earnings-call transcript, company newsroom materials, and reporting/aggregation by CNBC, TechCrunch, Reuters, The Motley Fool, Seeking Alpha, Futurum, StockAnalysis, Simply Wall St, Wikipedia and sell-side/aggregator data. FY2024 revenue, segment/stake valuations, enterprise value, peer multiples and any forward figure are reconstructed estimates and marked [EST]. GAAP net income is materially distorted by fair-value gains on equity stakes; any P/E is unreliable. Scores, the fair-value range, scenarios, probabilities and the verdict are analytical opinion, not fact, and not a recommendation. The author is not a licensed financial advisor.</p>
+  <p class="src-note">Generated 2026-06-20 (UTC) · prompt version 72cf774 · live market data changes constantly — look up NBIS for the current price. Next earnings (Q2 2026) is the key near-term catalyst.</p>
+</div></div>
+</main>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target;
+      if(el.id==='revbars'){ el.querySelectorAll('.bar').forEach(b=>{ b.style.height=b.dataset.h+'%'; }); }
+      if(el.id==='arrbars'){ el.querySelectorAll('.arr-bar').forEach(b=>{ b.style.height=b.dataset.h+'%'; }); }
+      if(el.id==='risks' || el.id==='scores'){ el.querySelectorAll('.fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; }); }
+      io.unobserve(el);
+    });
+  },{threshold:.3});
+  ['revbars','arrbars','risks','scores'].forEach(id=>{ const el=document.getElementById(id); if(el) io.observe(el); });
+  document.querySelectorAll('#revbars .bar').forEach(b=>b.style.height='0%');
+  document.querySelectorAll('#arrbars .arr-bar').forEach(b=>b.style.height='0%');
+  document.querySelectorAll('#risks .fill,#scores .fill').forEach(f=>f.style.width='0%');
+</script>
+</body>
+</html>
