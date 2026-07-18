@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- report-meta: type=stock; slug=hrow; name=HROW; generated=2026-07-18; prompt=17c4714 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harrow, Inc. Stock Analysis · HROW</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap');
+
+  :root{
+    --void:#04090c;
+    --deep:#081217;
+    --panel:#0d1a20;
+    --panel-2:#10222a99;
+    --line:#1d3540;
+    --ink:#e9f4f2;
+    --mute:#8fa8a8;
+    --faint:#5f7a7a;
+    --plasma:#f2a63d;     /* iris amber */
+    --plasma-soft:#ffc46b;
+    --ion:#34d0c4;        /* vision teal */
+    --ion-soft:#7ff0e6;
+    --green:#46d39a;
+    --amber:#f2b441;
+    --red:#ff5470;
+    --grid: rgba(52,208,196,.06);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 600px at 82% -8%, rgba(52,208,196,.10), transparent 60%),
+      radial-gradient(900px 500px at 8% 4%, rgba(242,166,61,.07), transparent 55%),
+      var(--void);
+    color:var(--ink);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---- iris backdrop ---- */
+  .iris{position:fixed;top:-260px;right:-220px;z-index:0;pointer-events:none;
+    width:720px;height:720px;border-radius:50%;opacity:.5;
+    background:
+      radial-gradient(circle at center,
+        rgba(4,9,12,1) 12%,
+        rgba(242,166,61,.20) 13%,
+        rgba(4,9,12,0) 22%,
+        rgba(52,208,196,.14) 30%,
+        rgba(4,9,12,0) 40%,
+        rgba(242,166,61,.10) 52%,
+        rgba(4,9,12,0) 62%,
+        rgba(52,208,196,.10) 74%,
+        rgba(4,9,12,0) 84%);
+    animation:dilate 14s ease-in-out infinite;
+  }
+  @keyframes dilate{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+  main{position:relative;z-index:1}
+
+  /* ---- eyebrow / labels ---- */
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--ion-soft)}
+  .eyebrow.plasma{color:var(--plasma-soft)}
+
+  /* ---- HERO ---- */
+  header.hero{position:relative;padding:84px 0 56px;border-bottom:1px solid var(--line);overflow:hidden}
+  .hero-inner{position:relative;z-index:2}
+  .hero-tag{display:flex;gap:14px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .pill{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+    padding:5px 11px;border:1px solid var(--line);border-radius:100px;color:var(--mute);background:var(--panel-2)}
+  .pill.live{color:var(--green);border-color:rgba(70,211,154,.4)}
+  .pill.live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--green);margin-right:7px;vertical-align:middle;box-shadow:0 0 8px var(--green);
+    animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  h1.title{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(40px,7vw,76px);
+    line-height:1.02;letter-spacing:-.02em;margin:8px 0 6px}
+  h1.title .ticker{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.34em;
+    letter-spacing:.05em;color:var(--plasma);vertical-align:middle;border:1px solid rgba(242,166,61,.4);
+    border-radius:8px;padding:6px 12px;margin-left:14px;position:relative;top:-.18em;background:rgba(242,166,61,.07)}
+  .sub{color:var(--mute);max-width:62ch;font-size:17px;margin-top:14px}
+
+  .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:44px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+  .strip .cell{background:var(--deep);padding:20px 18px}
+  .strip .v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(19px,2.5vw,26px);letter-spacing:-.01em}
+  .strip .v.plasma{color:var(--plasma-soft)}
+  .strip .v.ion{color:var(--ion-soft)}
+  .strip .k{font-size:11px;color:var(--faint);margin-top:6px;font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.04em;text-transform:uppercase}
+
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--plasma);
+    border:1px solid rgba(242,166,61,.3);border-radius:6px;padding:2px 8px}
+  h2{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(26px,4vw,38px);letter-spacing:-.01em;line-height:1.1}
+  .lede{color:var(--mute);max-width:70ch;margin-top:14px;font-size:16px}
+
+  .grid{display:grid;gap:18px;margin-top:34px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:linear-gradient(180deg,var(--panel),var(--deep));border:1px solid var(--line);
+    border-radius:16px;padding:24px;position:relative;overflow:hidden}
+  .card .corner{position:absolute;top:0;right:0;font-family:'IBM Plex Mono',monospace;font-size:10px;
+    letter-spacing:.1em;color:var(--faint);padding:9px 12px;text-transform:uppercase}
+  .card h3{font-size:20px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .seg-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute);margin-bottom:18px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;
+    border-top:1px solid var(--line);font-size:14px}
+  .row:first-of-type{border-top:none}
+  .row .lbl{color:var(--faint)}
+  .row .val{font-family:'IBM Plex Mono',monospace;font-weight:500}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot.ion{background:var(--ion);box-shadow:0 0 10px var(--ion)}
+  .dot.plasma{background:var(--plasma);box-shadow:0 0 10px var(--plasma)}
+  .dot.purple{background:#b07bff;box-shadow:0 0 10px #b07bff}
+
+  .callout{margin-top:28px;border-left:2px solid var(--plasma);
+    background:linear-gradient(90deg,rgba(242,166,61,.07),transparent);padding:18px 22px;border-radius:0 12px 12px 0}
+  .callout .q{font-weight:600;color:var(--plasma-soft);font-size:14px;margin-bottom:6px;
+    font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+  .callout p{color:var(--mute);font-size:15px}
+  .callout.ion{border-color:var(--ion);background:linear-gradient(90deg,rgba(52,208,196,.07),transparent)}
+  .callout.ion .q{color:var(--ion-soft)}
+
+  .chartbox{margin-top:34px;background:var(--deep);border:1px solid var(--line);border-radius:16px;padding:26px 24px 18px}
+  .chartbox .ct{font-size:13px;color:var(--mute);margin-bottom:2px}
+  .chartbox .cs{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-bottom:22px}
+  .bars{display:flex;align-items:flex-end;gap:clamp(8px,3vw,30px);height:230px;padding-left:8px}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:100%;max-width:60px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--ion),rgba(52,208,196,.22));transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+  .bar.est{background:linear-gradient(180deg,var(--plasma-soft),rgba(255,196,107,.2))}
+  .bar .top{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+  .bar-x{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);margin-top:10px}
+  .legend{display:flex;gap:18px;margin-top:18px;font-size:11px;color:var(--faint);
+    font-family:'IBM Plex Mono',monospace;flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .swatch{width:11px;height:11px;border-radius:3px}
+
+  .tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--deep)}
+  .tbl.scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
+  th{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--faint);background:var(--panel)}
+  td{color:var(--ink)}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{font-family:'IBM Plex Mono',monospace;text-align:right}
+  tr.me td{background:rgba(52,208,196,.07)}
+  .tag-est{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--amber);
+    border:1px solid rgba(242,180,65,.35);border-radius:4px;padding:1px 5px;margin-left:6px}
+  .pos{color:var(--green)}.neg{color:var(--red)}
+
+  .risk-row{display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center;
+    padding:14px 0;border-top:1px solid var(--line)}
+  .risk-row:first-child{border-top:none}
+  .risk-name{font-weight:500;font-size:15px}
+  .risk-why{color:var(--faint);font-size:13px;margin-top:3px;grid-column:1/-1}
+  .meter{display:flex;align-items:center;gap:11px}
+  .meter .track{width:130px;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .meter .fill{height:100%;border-radius:4px;width:0}
+  .meter .sc{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;width:30px;text-align:right}
+
+  .bb{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+  .bb-col{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .bb-head{padding:16px 22px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .bb.bull .bb-head{background:rgba(70,211,154,.1);color:var(--green);border-bottom:1px solid rgba(70,211,154,.25)}
+  .bb.bear .bb-head{background:rgba(255,84,112,.1);color:var(--red);border-bottom:1px solid rgba(255,84,112,.25)}
+  .bb-body{padding:8px 22px 18px}
+  .bb-item{padding:15px 0;border-top:1px solid var(--line)}
+  .bb-item:first-child{border-top:none}
+  .bb-fact{font-size:14px;font-weight:500;margin-bottom:4px}
+  .bb-why{font-size:13px;color:var(--faint)}
+
+  .scn{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+  .scn-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--deep);position:relative}
+  .scn-card .prob{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:-.02em}
+  .scn-card .name{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;margin-bottom:14px}
+  .scn-card.bear .prob,.scn-card.bear .name{color:var(--red)}
+  .scn-card.base .prob,.scn-card.base .name{color:var(--ion-soft)}
+  .scn-card.bull .prob,.scn-card.bull .name{color:var(--green)}
+  .scn-card .tgt{font-size:15px;margin:12px 0 4px;font-weight:600}
+  .scn-card .asm{font-size:13px;color:var(--faint)}
+
+  .verdict-box{margin-top:30px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(160deg,var(--panel),var(--void));padding:36px;text-align:center;position:relative;overflow:hidden}
+  .verdict-box::before{content:"";position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+    width:400px;height:400px;background:radial-gradient(circle,rgba(52,208,196,.12),transparent 70%)}
+  .verdict-label{position:relative;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;
+    text-transform:uppercase;font-size:12px;color:var(--faint);margin-bottom:14px}
+  .verdict-word{position:relative;font-family:'Newsreader',serif;font-size:clamp(44px,8vw,72px);
+    color:var(--ion-soft);font-weight:500;letter-spacing:-.01em}
+  .verdict-score{position:relative;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--mute);margin-top:8px}
+  .verdict-reason{position:relative;max-width:66ch;margin:22px auto 0;color:var(--mute);font-size:15px}
+
+  .score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 28px;margin-top:30px}
+  .score-line{display:flex;align-items:center;gap:14px}
+  .score-line .nm{flex:none;width:140px;font-size:13px;color:var(--mute)}
+  .score-line .track{flex:1;height:6px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .score-line .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--ion),var(--ion-soft));width:0}
+  .score-line .n{font-family:'IBM Plex Mono',monospace;font-size:13px;width:34px;text-align:right;font-weight:600}
+
+  .timeline{margin-top:30px;position:relative;padding-left:6px}
+  .tl-item{display:grid;grid-template-columns:130px 1fr;gap:20px;padding:14px 0;
+    border-left:1px solid var(--line);padding-left:26px;position:relative}
+  .tl-item::before{content:"";position:absolute;left:-5px;top:20px;width:9px;height:9px;border-radius:50%;
+    background:var(--ion);box-shadow:0 0 10px var(--ion)}
+  .tl-item.future::before{background:var(--plasma);box-shadow:0 0 10px var(--plasma)}
+  .tl-date{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ion-soft)}
+  .tl-ev{font-size:15px}
+  .tl-note{font-size:13px;color:var(--faint);margin-top:2px}
+
+  .disc{padding:48px 0 70px;text-align:center}
+  .disc p{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);letter-spacing:.04em;max-width:62ch;margin:0 auto}
+  .disc .big{color:var(--mute);font-size:13px;margin-bottom:10px}
+  .src-note{font-size:12px;color:var(--faint);margin-top:24px;line-height:1.7}
+  .note{font-size:13px;color:var(--faint);margin-top:18px;font-style:italic}
+
+  @media(max-width:860px){
+    .strip{grid-template-columns:repeat(2,1fr)}
+    .g3,.g2,.scn,.score-grid{grid-template-columns:1fr}
+    .bb{grid-template-columns:1fr}
+    .tl-item{grid-template-columns:104px 1fr;gap:12px}
+    .iris{width:440px;height:440px;top:-160px;right:-160px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="iris" aria-hidden="true"></div>
+
+<main>
+<!-- ====================== HERO ====================== -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-tag">
+      <span class="pill live">Live price — verify before use</span>
+      <span class="pill">NASDAQ · HROW</span>
+      <span class="pill">Ophthalmic pharma</span>
+      <span class="pill">Generated 2026-07-18</span>
+    </div>
+    <h1 class="title">Harrow, Inc.<span class="ticker">HROW</span></h1>
+    <p class="sub">A US eyecare-pharmaceutical roll-up: a growing branded ophthalmic portfolio
+      (VEVYE, IHEEZO, TRIESENCE) bolted onto the ImprimisRx compounding pharmacy. Revenue has
+      compounded ~39%/yr since 2021 — but the company still runs GAAP losses and carries ~$292M of debt.
+      An education-only teardown of the business, the numbers, and the risks.</p>
+
+    <div class="strip">
+      <div class="cell"><div class="v ion">$44.80</div><div class="k">Price · Jul 16 '26 close</div></div>
+      <div class="cell"><div class="v">~$1.66B</div><div class="k">Market cap</div></div>
+      <div class="cell"><div class="v">~$1.86B</div><div class="k">Enterprise value [EST]</div></div>
+      <div class="cell"><div class="v">$28.54–54.85</div><div class="k">52-week range</div></div>
+      <div class="cell"><div class="v plasma">$350–365M</div><div class="k">2026E revenue (co. guide)</div></div>
+    </div>
+    <p class="note">Price is a snapshot; a small-cap like HROW can move several percent in a day.
+      Look up HROW for the live quote. Market cap/EV assume ~37M diluted shares outstanding
+      (implied by the Q1'26 loss of $27.6M ÷ EPS of −$0.74).</p>
+  </div>
+</header>
+
+<!-- ====================== 1 · EXEC SUMMARY ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>Executive summary</h2></div>
+  <p class="lede">Harrow discovers, licenses, buys and commercialises ophthalmic pharmaceuticals in the
+    US. It makes money two ways: (1) <b>branded prescription drugs</b> sold through pharmacies, buy-and-bill
+    and specialty channels, and (2) <b>ImprimisRx</b>, an ophthalmology-focused compounding pharmacy.
+    The 2023–24 licensing of legacy Novartis/Santen eye brands plus the ramp of VEVYE for dry-eye disease
+    turned Harrow from a niche compounder into a ~$270M-revenue specialty pharma.</p>
+
+  <div class="grid g2">
+    <div class="card"><div class="corner" style="color:var(--green)">Bull thesis · one line</div>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">A high-growth, high-gross-margin eyecare
+        portfolio led by VEVYE (tracking to &gt;$100M in 2026) with operating leverage that should flip
+        the P&amp;L to real profitability as the branded mix scales.</p></div>
+    <div class="card"><div class="corner" style="color:var(--red)">Bear thesis · one line</div>
+      <p style="color:var(--mute);font-size:15px;margin-top:8px">A serially loss-making, ~$292M-levered
+        roll-up whose gross-to-net revenue "adjustments" and guidance history make the path to durable
+        free cash flow — and to servicing 8.625% notes — far from proven.</p></div>
+  </div>
+
+  <div class="callout ion">
+    <div class="q">What changed most recently — Q1 2026 (reported May 2026)</div>
+    <p>Revenue of <b>$44.2M fell 7.6% YoY</b> and missed the ~$52.6M consensus by ~16%, dragged by an
+      ~$8M non-recurring VEVYE gross-to-net adjustment. Gross margin slipped to 61% (from 68%), net loss
+      widened to −$27.6M and Adjusted EBITDA swung to −$12.7M. Yet management reaffirmed full-year guidance
+      of $350–365M revenue and $80–100M Adjusted EBITDA, and guided Q2 to $71–81M — implying a very
+      back-half-loaded year. Unit demand stayed strong (IHEEZO +18%, TRIESENCE +136% YoY).</p>
+  </div>
+
+  <div class="callout">
+    <div class="q">Analysis Complexity Score — 8 / 10</div>
+    <p>High. GAAP vs Adjusted EBITDA diverge sharply; revenue is muddied by gross-to-net accruals and a
+      compounding-vs-branded mix shift; the balance sheet has been repeatedly refinanced; and the full-year
+      story depends on a steep, unproven H2 acceleration. [EST · confidence High]</p>
+  </div>
+</div></section>
+
+<!-- ====================== 2 · BUSINESS MODEL ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2>Business model</h2></div>
+  <p class="lede">Two engines. Branded Rx is the growth story and the margin story; ImprimisRx compounding
+    is the older, steadier base that seeded Harrow's ophthalmology franchise and prescriber relationships.
+    Harrow does not run its own large-scale manufacturing for most brands — it licenses/acquires approved
+    products and commercialises them, which keeps the model asset-light but reliant on deal-making.</p>
+
+  <div class="grid g3">
+    <div class="card"><div class="corner">Product · dry eye</div>
+      <h3><span class="dot ion"></span>VEVYE</h3>
+      <div class="seg-tag">Cyclosporine 0.1% · non-aqueous vehicle</div>
+      <div class="row"><span class="lbl">Indication</span><span class="val">Dry eye disease</span></div>
+      <div class="row"><span class="lbl">2026 revenue</span><span class="val">&gt;$100M target<span class="tag-est">EST</span></span></div>
+      <div class="row"><span class="lbl">Dry-eye share</span><span class="val">~14%</span></div>
+      <div class="row"><span class="lbl">Note</span><span class="val">Surpassed XIIDRA on Rx</span></div>
+    </div>
+    <div class="card"><div class="corner">Product · surgical</div>
+      <h3><span class="dot plasma"></span>IHEEZO</h3>
+      <div class="seg-tag">Chloroprocaine ocular anesthetic</div>
+      <div class="row"><span class="lbl">Use</span><span class="val">Topical anesthesia</span></div>
+      <div class="row"><span class="lbl">Reimbursement</span><span class="val">Permanent J-code J2403</span></div>
+      <div class="row"><span class="lbl">Unit demand</span><span class="val pos">+18% YoY (Q1'26)</span></div>
+      <div class="row"><span class="lbl">Acquired</span><span class="val">2021 · approved 2022</span></div>
+    </div>
+    <div class="card"><div class="corner">Product · retina</div>
+      <h3><span class="dot purple"></span>TRIESENCE</h3>
+      <div class="seg-tag">Preservative-free triamcinolone</div>
+      <div class="row"><span class="lbl">Use</span><span class="val">Intraocular steroid</span></div>
+      <div class="row"><span class="lbl">Backstory</span><span class="val">Off shortage list</span></div>
+      <div class="row"><span class="lbl">Unit demand</span><span class="val pos">+136% YoY (Q1'26)</span></div>
+      <div class="row"><span class="lbl">Relaunched</span><span class="val">Late 2024</span></div>
+    </div>
+  </div>
+
+  <div class="tbl scroll">
+    <table>
+      <thead><tr><th>Revenue engine</th><th>What it is</th><th class="num">Q1'26 revenue</th><th>Economics</th></tr></thead>
+      <tbody>
+        <tr><td>Branded Rx</td><td>VEVYE, IHEEZO, TRIESENCE + legacy eye brands (FLAREX, NATACYN, ZERVIATE, ILEVRO, NEVANAC, VIGAMOX, MAXIDEX, TOBRADEX ST)</td><td class="num">$30.7M</td><td>Higher gross margin; scales with prescribers &amp; access</td></tr>
+        <tr><td>Compounding (ImprimisRx)</td><td>Ophthalmology compounding pharmacy, 30+ customizable formulations</td><td class="num">$13.5M</td><td>Steadier, lower-growth base; thinner incremental margin</td></tr>
+        <tr class="me"><td><b>Total</b></td><td>Blended eyecare pharma</td><td class="num"><b>$44.2M</b></td><td>61% gross margin in Q1'26 (vs 68% PY)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Segment split is an approximation from company commentary ("branded ~$30.7M, compounding
+    ~$13.5M"); Harrow reports as a single operating segment. Unit economics (ARPU, retention, net price by
+    brand) are not disclosed at the product level — treat brand-level margins as [EST].</p>
+
+  <div class="callout">
+    <div class="q">Does it improve with scale?</div>
+    <p>Structurally yes — branded pharma carries high gross margins and Harrow's SG&amp;A/field force is
+      largely fixed, so incremental branded revenue should drop through. The catch is <b>gross-to-net</b>:
+      rebates, chargebacks and access concessions (visible in the ~$8M VEVYE adjustment) can claw back the
+      operating leverage if net pricing erodes faster than volume grows. [Confidence: Medium]</p>
+  </div>
+</div></section>
+
+<!-- ====================== 3 · FINANCIAL TRAJECTORY ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>Financial trajectory</h2></div>
+  <p class="lede">The core difference from an IPO: Harrow has a multi-year record. Revenue is the standout —
+    up roughly 6× in five years — but profitability has lagged, and 2025 still closed in a small GAAP net
+    loss even as revenue grew 36%.</p>
+
+  <div class="chartbox">
+    <div class="ct">Total revenue — FY2021 → FY2026E ($M)</div>
+    <div class="cs">Source: company 8-K/earnings releases. 2026 = midpoint of $350–365M guidance [EST]</div>
+    <div class="bars" id="revbars">
+      <div class="bar-col"><div class="bar" data-h="20"><span class="top">$72.5</span></div><div class="bar-x">2021</div></div>
+      <div class="bar-col"><div class="bar" data-h="25"><span class="top">$88.6</span></div><div class="bar-x">2022</div></div>
+      <div class="bar-col"><div class="bar" data-h="37"><span class="top">$130.2</span></div><div class="bar-x">2023</div></div>
+      <div class="bar-col"><div class="bar" data-h="56"><span class="top">$199.6</span></div><div class="bar-x">2024</div></div>
+      <div class="bar-col"><div class="bar" data-h="76"><span class="top">$272.3</span></div><div class="bar-x">2025</div></div>
+      <div class="bar-col"><div class="bar est" data-h="100"><span class="top">$357.5</span></div><div class="bar-x">2026E</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--ion)"></span>Reported</span>
+      <span><span class="swatch" style="background:var(--plasma-soft)"></span>Guidance midpoint [EST]</span>
+    </div>
+  </div>
+
+  <div class="tbl scroll">
+    <table>
+      <thead><tr><th>Fiscal year</th><th class="num">Revenue</th><th class="num">YoY growth</th><th class="num">GAAP net income</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>2021</td><td class="num">$72.5M</td><td class="num pos">+48%</td><td class="num">n/a</td><td>Compounding-led</td></tr>
+        <tr><td>2022</td><td class="num">$88.6M</td><td class="num pos">+22%</td><td class="num">n/a</td><td>IHEEZO approved</td></tr>
+        <tr><td>2023</td><td class="num">$130.2M</td><td class="num pos">+47%</td><td class="num">n/a</td><td>Brand licensing deals</td></tr>
+        <tr><td>2024</td><td class="num">$199.6M</td><td class="num pos">+53%</td><td class="num">n/a</td><td>VEVYE + TRIESENCE relaunch</td></tr>
+        <tr><td>2025</td><td class="num">$272.3M</td><td class="num pos">+36%</td><td class="num neg">−$5.1M</td><td>Growth, still net loss</td></tr>
+        <tr class="me"><td><b>2026E</b></td><td class="num"><b>$350–365M</b></td><td class="num pos">~+30%<span class="tag-est">EST</span></td><td class="num">guide: +$80–100M adj. EBITDA</td><td>H2-loaded</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Revenue CAGR 2021→2025 ≈ <b>39%</b>. Full net-income/EPS/FCF history for 2021–24 is not
+    reproduced line-by-line here — verify against the 10-K. Where a year's GAAP net income is shown "n/a"
+    it is not stated in the sources gathered, not zero. Adjusted EBITDA guidance is management's, not audited.</p>
+
+  <div class="tbl scroll">
+    <table>
+      <thead><tr><th>Latest quarter — Q1 2026</th><th class="num">Q1'26</th><th class="num">Q1'25</th><th class="num">Δ</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td class="num">$44.2M</td><td class="num">$47.8M</td><td class="num neg">−7.6%</td></tr>
+        <tr><td>Gross profit</td><td class="num">$27.0M</td><td class="num">$32.3M</td><td class="num neg">−16.3%</td></tr>
+        <tr><td>Gross margin</td><td class="num">61%</td><td class="num">68%</td><td class="num neg">−7 pts</td></tr>
+        <tr><td>Operating loss</td><td class="num neg">−$22.1M</td><td class="num neg">large</td><td class="num pos">improved</td></tr>
+        <tr><td>Adjusted EBITDA</td><td class="num neg">−$12.7M</td><td class="num neg">−$2.0M</td><td class="num neg">worse</td></tr>
+        <tr><td>Net loss (to common)</td><td class="num neg">−$27.6M</td><td class="num neg">−$17.8M</td><td class="num neg">wider</td></tr>
+        <tr><td>Diluted EPS</td><td class="num neg">−$0.74</td><td class="num neg">−$0.50</td><td class="num neg">wider</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">What beat / missed: revenue <b>missed</b> consensus by ~16%, chiefly the ~$8M non-recurring
+    VEVYE gross-to-net adjustment (management calls it addressed). Volumes <b>beat</b> — IHEEZO and TRIESENCE
+    unit demand grew sharply. Guidance was <b>reaffirmed</b>, which is the crux: the year now needs a large
+    H2 step-up to land.</p>
+</div></section>
+
+<!-- ====================== 4 · BALANCE SHEET ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Balance sheet &amp; capital returns</h2></div>
+  <p class="lede">Harrow funds its growth with debt, not dividends. It refinanced repeatedly through 2025–26,
+    consolidating into 8.625% senior unsecured notes due 2030 plus a Fifth Third revolver — retiring the old
+    Oaktree loan and the 2026/2027 notes.</p>
+
+  <div class="grid g3">
+    <div class="card"><div class="corner">Liquidity</div><h3>$94.6M</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">Cash &amp; equivalents at Mar 31, 2026. Ample
+        near-term runway, but Q1 burned Adjusted EBITDA of −$12.7M.</p></div>
+    <div class="card"><div class="corner" style="color:var(--red)">Leverage</div><h3 style="color:var(--red)">~$292M</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">Loans payable. Net debt ≈ <b>$197M</b>.
+        Coupons of 8.625% on the 2030 notes make cash generation non-optional.</p></div>
+    <div class="card"><div class="corner">Equity</div><h3>$28.4M</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">Thin stockholders' equity on $419.5M assets —
+        a highly leveraged capital structure typical of a specialty-pharma roll-up.</p></div>
+  </div>
+
+  <div class="grid g3" style="margin-top:18px">
+    <div class="card"><div class="corner">Dividend</div><h3>None</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">No dividend; 0% yield. Cash is reinvested and
+        used to service debt.</p></div>
+    <div class="card"><div class="corner" style="color:var(--amber)">Share count</div><h3 style="color:var(--amber)">Rising</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">~37M diluted shares; count has drifted up over
+        time via equity comp and financing — a per-share headwind. [EST]</p></div>
+    <div class="card"><div class="corner">Financial strength</div><h3 style="color:var(--red)">4 / 10</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">High leverage, negative TTM Adjusted EBITDA,
+        no dividend, dilution — offset by a real $95M cash cushion and a refinanced maturity wall.</p></div>
+  </div>
+  <p class="note">Interest coverage is presently weak (negative EBIT ÷ interest). The bull case requires the
+    guided $80–100M of 2026 Adjusted EBITDA to materialise so that coverage turns comfortably positive.
+    [Confidence: Medium]</p>
+</div></section>
+
+<!-- ====================== 5 · VALUATION ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Valuation</h2></div>
+  <p class="lede">On TTM revenue of ~$269M, HROW trades at roughly <b>6.9× EV/Revenue</b>; on 2026 guided
+    revenue, ~<b>5.2×</b>. There is no meaningful P/E (GAAP losses). On the company's guided 2026 Adjusted
+    EBITDA midpoint (~$90M), EV/EBITDA is ~<b>21×</b> — full for a levered small-cap, and dependent on hitting
+    a number the year has so far undershot.</p>
+
+  <div class="tbl scroll">
+    <table>
+      <thead><tr><th>Peer (illustrative)</th><th class="num">Rev growth</th><th class="num">Gross margin</th><th class="num">EV/Rev</th><th class="num">P/E</th></tr></thead>
+      <tbody>
+        <tr class="me"><td><b>Harrow (HROW)</b></td><td class="num">~30% <span class="tag-est">'26E</span></td><td class="num">~61–65%</td><td class="num">~5.2× <span class="tag-est">'26E</span></td><td class="num neg">n/m (loss)</td></tr>
+        <tr><td>Tarsus (TARS)</td><td class="num">high</td><td class="num">~90%</td><td class="num">~7×</td><td class="num neg">n/m</td></tr>
+        <tr><td>Ocular Therapeutix (OCUL)</td><td class="num">high</td><td class="num">~85%</td><td class="num">~9×</td><td class="num neg">n/m</td></tr>
+        <tr><td>ANI Pharmaceuticals (ANIP)</td><td class="num">~20%</td><td class="num">~60%</td><td class="num">~2.5×</td><td class="num">~15×</td></tr>
+        <tr><td>Collegium (COLL)</td><td class="num">~10%</td><td class="num">~85%</td><td class="num">~3×</td><td class="num">~8×</td></tr>
+        <tr><td>Alcon (ALC) — large-cap eyecare</td><td class="num">~6%</td><td class="num">~55%</td><td class="num">~5×</td><td class="num">~30×</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note"><b>Peer multiples above are approximate/illustrative [EST · confidence Low] and were not
+    live-verified for this report — do not trade on them.</b> They position HROW, not price it: HROW screens
+    at a premium EV/Revenue to profitable, slower-growing specialty-pharma peers (ANIP, COLL) and roughly in
+    line with or below high-growth, higher-gross-margin eyecare names (TARS, OCUL). The premium is "paying for
+    growth that isn't yet profitable."</p>
+
+  <div class="callout">
+    <div class="q">Own historical range</div>
+    <p>HROW has generally traded in a wide EV/Revenue band (~4–9×) as growth and sentiment swung; today's
+      ~5–7× sits in the <b>middle-to-lower</b> half of its own history despite a 52-week price range of
+      $28.54–$54.85. Cheaper than its hype peaks, not cheap in absolute terms. [EST · Low–Medium]</p>
+  </div>
+
+  <div class="callout ion">
+    <div class="q">Fair-value range (analytical opinion — not a target)</div>
+    <p>Anchoring on 2026E revenue of ~$357.5M and applying a 3.5×–7.0× EV/Revenue band, netting ~$197M debt
+      across ~37M shares: a <b>~$28 (bear) to ~$62 (bull)</b> range, with a base around <b>$46–48</b>.
+      At $44.80, the stock sits near the low-to-middle of that base — roughly fairly valued <i>if</i> guidance
+      is met. <b>What has to be true for today's price:</b> H2 2026 revenue accelerates sharply, gross margin
+      recovers toward the high-60s, and Adjusted EBITDA lands in the guided $80–100M — i.e. the P&amp;L finally
+      converts growth to cash. [EST · confidence Medium]</p>
+  </div>
+</div></section>
+
+<!-- ====================== 6 · GOVERNANCE ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Governance &amp; management</h2></div>
+  <p class="lede">Harrow is a founder-led company. CEO Mark L. Baum has run it since the Imprimis days and is a
+    consistent open-market <b>buyer</b> of the stock — a genuine skin-in-the-game signal — though he sits atop
+    a highly acquisitive, debt-funded strategy that must keep compounding to justify itself.</p>
+
+  <div class="grid g3">
+    <div class="card"><div class="corner">Leadership</div><h3>Founder-CEO</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">Mark Baum has led the company for a decade-plus,
+        through the Imprimis→Harrow Health→Harrow evolution. Long tenure, deep eyecare-channel knowledge.</p></div>
+    <div class="card"><div class="corner" style="color:var(--green)">Insider alignment</div><h3 style="color:var(--green)">Buyer</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">Baum directly held ~3.0M shares after buying
+        10,000 more in May 2026 (~$302k); a repeated open-market buyer with no recorded sales — meaningful
+        alignment. [Confidence: Medium]</p></div>
+    <div class="card"><div class="corner" style="color:var(--amber)">Capital allocation</div><h3 style="color:var(--amber)">Deal-driven</h3>
+      <p style="color:var(--mute);font-size:14px;margin-top:6px">Value creation has come from licensing/acquiring
+        approved brands and relaunching them (IHEEZO, TRIESENCE). Effective so far — but leverage means little
+        margin for a bad deal.</p></div>
+  </div>
+  <div class="callout">
+    <div class="q">Governance Score — 6 / 10</div>
+    <p>Strong founder alignment and a coherent, so-far-successful M&amp;A playbook are offset by an aggressive,
+      debt-funded model, ongoing dilution, and the concentration risk of a single dominant CEO. Voting
+      structure and full board-independence detail should be confirmed in the latest proxy (DEF 14A).
+      [EST · confidence Medium]</p>
+  </div>
+</div></section>
+
+<!-- ====================== 7 · RISK REGISTER ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">07</span><h2>Risk register</h2></div>
+  <p class="lede">Sorted highest-severity first. Scores are analytical opinion (1 = low, 10 = severe).</p>
+  <div id="risks" style="margin-top:26px">
+    <div class="risk-row"><div class="risk-name">Balance-sheet / leverage</div><div class="meter"><div class="track"><div class="fill" data-w="90" style="background:var(--red)"></div></div><div class="sc">9</div></div><div class="risk-why">~$292M debt at 8.625% against negative TTM Adjusted EBITDA — cash generation is not optional.</div></div>
+    <div class="risk-row"><div class="risk-name">Execution / guidance credibility</div><div class="meter"><div class="track"><div class="fill" data-w="90" style="background:var(--red)"></div></div><div class="sc">9</div></div><div class="risk-why">Q1 missed by ~16%; full-year guide now requires a steep, unproven H2 acceleration.</div></div>
+    <div class="risk-row"><div class="risk-name">Margin / gross-to-net</div><div class="meter"><div class="track"><div class="fill" data-w="80" style="background:var(--plasma)"></div></div><div class="sc">8</div></div><div class="risk-why">The ~$8M VEVYE adjustment shows net price can lag gross volume; margin fell 7 pts YoY.</div></div>
+    <div class="risk-row"><div class="risk-name">Profitability / cash burn</div><div class="meter"><div class="track"><div class="fill" data-w="80" style="background:var(--plasma)"></div></div><div class="sc">8</div></div><div class="risk-why">Still GAAP loss-making; 2025 closed −$5.1M and Q1'26 burned −$12.7M Adjusted EBITDA.</div></div>
+    <div class="risk-row"><div class="risk-name">Valuation</div><div class="meter"><div class="track"><div class="fill" data-w="70" style="background:var(--amber)"></div></div><div class="sc">7</div></div><div class="risk-why">~21× guided EV/EBITDA and ~5× EV/sales price in successful execution; misses re-rate down.</div></div>
+    <div class="risk-row"><div class="risk-name">Competition</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amber)"></div></div><div class="sc">6</div></div><div class="risk-why">Dry-eye (VEVYE) faces XIIDRA, RESTASIS generics, MIEBO and others; anesthetics face generics.</div></div>
+    <div class="risk-row"><div class="risk-name">Key-person</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amber)"></div></div><div class="sc">6</div></div><div class="risk-why">Strategy and capital allocation center on founder-CEO Mark Baum.</div></div>
+    <div class="risk-row"><div class="risk-name">Regulatory / reimbursement</div><div class="meter"><div class="track"><div class="fill" data-w="60" style="background:var(--amber)"></div></div><div class="sc">6</div></div><div class="risk-why">J-code status, compounding (503A/503B) rules and payer coverage decisions move revenue.</div></div>
+    <div class="risk-row"><div class="risk-name">Customer / revenue concentration</div><div class="meter"><div class="track"><div class="fill" data-w="50" style="background:var(--amber)"></div></div><div class="sc">5</div></div><div class="risk-why">Growth increasingly leans on VEVYE; buy-and-bill exposes IHEEZO/TRIESENCE to distributor dynamics.</div></div>
+    <div class="risk-row"><div class="risk-name">Macro / cyclicality</div><div class="meter"><div class="track"><div class="fill" data-w="40" style="background:var(--green)"></div></div><div class="sc">4</div></div><div class="risk-why">Eyecare demand is fairly resilient, but rates raise the cost of a debt-funded model.</div></div>
+  </div>
+</div></section>
+
+<!-- ====================== 8 · CATALYSTS ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">08</span><h2>Catalysts &amp; what to watch</h2></div>
+  <p class="lede">The thesis lives or dies on whether the guided H2 acceleration is real. Watch net revenue
+    (not just units), gross margin recovery, and the first clean Adjusted-EBITDA-positive quarter.</p>
+  <div class="timeline">
+    <div class="tl-item future"><div class="tl-date">Q2 2026 print</div><div><div class="tl-ev">Guidance test — $71–81M revenue</div><div class="tl-note">A sequential jump from $44.2M. A miss here would put full-year guidance in serious doubt.</div></div></div>
+    <div class="tl-item future"><div class="tl-date">VEVYE trajectory</div><div><div class="tl-ev">Path to &gt;$100M in 2026</div><div class="tl-note">Watch net (post-GTN) revenue and dry-eye share vs XIIDRA/MIEBO — the single biggest swing factor.</div></div></div>
+    <div class="tl-item future"><div class="tl-date">Margin recovery</div><div><div class="tl-ev">Gross margin back toward high-60s</div><div class="tl-note">Confirms the ~$8M GTN hit was one-off, not a structural net-price reset.</div></div></div>
+    <div class="tl-item future"><div class="tl-date">H2 2026</div><div><div class="tl-ev">First clean positive Adjusted EBITDA quarter</div><div class="tl-note">Needed to validate the $80–100M full-year guide and improve interest coverage.</div></div></div>
+    <div class="tl-item future"><div class="tl-date">Ongoing</div><div><div class="tl-ev">Deleveraging / refi signals</div><div class="tl-note">Any move to pay down or refinance the 2030 notes on better terms de-risks the equity.</div></div></div>
+  </div>
+</div></section>
+
+<!-- ====================== 9 · SCENARIOS ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Scenarios</h2></div>
+  <p class="lede">Illustrative, probability-weighted — not forecasts. All targets are analytical estimates.</p>
+  <div class="scn">
+    <div class="scn-card bear"><div class="prob">30%</div><div class="name">Bear</div>
+      <div class="tgt">~$25–32 / share</div>
+      <p class="asm">Gross-to-net pressure persists, H2 undershoots, guidance is cut. Losses continue,
+        leverage forces a dilutive raise. Multiple compresses to ~3.5× EV/sales.</p></div>
+    <div class="scn-card base"><div class="prob">45%</div><div class="name">Base</div>
+      <div class="tgt">~$45–52 / share</div>
+      <p class="asm">2026 lands within guidance (~$357M rev, ~$90M adj. EBITDA); margins recover; first
+        profitable quarters arrive. ~5.5× EV/sales holds.</p></div>
+    <div class="scn-card bull"><div class="prob">25%</div><div class="name">Bull</div>
+      <div class="tgt">~$62–80 / share</div>
+      <p class="asm">VEVYE clears $120M+, margins snap back to high-60s, EBITDA beats and deleveraging begins.
+        The market re-rates growth to ~7×+ EV/sales.</p></div>
+  </div>
+  <p class="note">Probabilities are subjective and sum to 100%. Small-cap outcomes are path-dependent on
+    execution and financing — treat the ranges as scenario sketches, not price targets.</p>
+</div></section>
+
+<!-- ====================== 10 · BULL VS BEAR ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">10</span><h2>Bull vs bear</h2></div>
+  <div class="bb">
+    <div class="bb-col bull"><div class="bb-head">Bull case <span>▲</span></div><div class="bb-body">
+      <div class="bb-item"><div class="bb-fact">~39% revenue CAGR 2021→2025 ($72.5M → $272.3M)</div><div class="bb-why">Rare, durable top-line compounding in a defensive therapeutic area.</div></div>
+      <div class="bb-item"><div class="bb-fact">VEVYE ~14% dry-eye share, surpassed XIIDRA on Rx</div><div class="bb-why">A genuine share-gaining franchise tracking to Harrow's first &gt;$100M product.</div></div>
+      <div class="bb-item"><div class="bb-fact">IHEEZO +18% and TRIESENCE +136% unit demand YoY</div><div class="bb-why">Underlying volume is accelerating even in a weak headline quarter.</div></div>
+      <div class="bb-item"><div class="bb-fact">High branded gross margins + largely fixed cost base</div><div class="bb-why">Operating leverage should convert growth into profit as branded mix scales.</div></div>
+      <div class="bb-item"><div class="bb-fact">Founder-CEO buying stock in the open market</div><div class="bb-why">Insider alignment; Baum adds shares rather than selling into strength.</div></div>
+      <div class="bb-item"><div class="bb-fact">$94.6M cash + refinanced maturities to 2030</div><div class="bb-why">Near-term liquidity and a pushed-out maturity wall buy time to execute.</div></div>
+    </div></div>
+    <div class="bb-col bear"><div class="bb-head">Bear case <span>▼</span></div><div class="bb-body">
+      <div class="bb-item"><div class="bb-fact">Q1'26 revenue fell 7.6% YoY and missed by ~16%</div><div class="bb-why">Growth stall + a big miss dents the "reliable compounder" narrative.</div></div>
+      <div class="bb-item"><div class="bb-fact">~$8M VEVYE gross-to-net adjustment</div><div class="bb-why">Net pricing can lag reported volume — reported revenue is noisier than it looks.</div></div>
+      <div class="bb-item"><div class="bb-fact">Still GAAP loss-making (2025: −$5.1M; Q1'26: −$27.6M)</div><div class="bb-why">Six years of scale and no durable GAAP profit yet.</div></div>
+      <div class="bb-item"><div class="bb-fact">~$292M debt at 8.625%, thin $28.4M equity</div><div class="bb-why">A levered balance sheet with little cushion if execution slips.</div></div>
+      <div class="bb-item"><div class="bb-fact">Full-year guide needs a steep H2 acceleration</div><div class="bb-why">After a Q1 miss, reaffirmed guidance is a high bar, not a floor.</div></div>
+      <div class="bb-item"><div class="bb-fact">~21× guided EV/EBITDA on a number not yet hit</div><div class="bb-why">Priced for success; a miss compounds a valuation de-rating with an earnings cut.</div></div>
+    </div></div>
+  </div>
+</div></section>
+
+<!-- ====================== 11 · SCORECARD + VERDICT ====================== -->
+<section><div class="wrap">
+  <div class="sec-head"><span class="sec-num">11</span><h2>Scorecard &amp; verdict</h2></div>
+  <p class="lede">Each category rated /10 (analytical opinion). Overall = equal-weighted average ×10.</p>
+  <div class="score-grid" id="scores">
+    <div class="score-line"><span class="nm">Business quality</span><span class="track"><span class="fill" data-w="70"></span></span><span class="n">7</span></div>
+    <div class="score-line"><span class="nm">Competitive moat</span><span class="track"><span class="fill" data-w="50"></span></span><span class="n">5</span></div>
+    <div class="score-line"><span class="nm">Management</span><span class="track"><span class="fill" data-w="70"></span></span><span class="n">7</span></div>
+    <div class="score-line"><span class="nm">Governance</span><span class="track"><span class="fill" data-w="60"></span></span><span class="n">6</span></div>
+    <div class="score-line"><span class="nm">Financial strength</span><span class="track"><span class="fill" data-w="40"></span></span><span class="n">4</span></div>
+    <div class="score-line"><span class="nm">Growth</span><span class="track"><span class="fill" data-w="80"></span></span><span class="n">8</span></div>
+    <div class="score-line"><span class="nm">Profitability</span><span class="track"><span class="fill" data-w="30"></span></span><span class="n">3</span></div>
+    <div class="score-line"><span class="nm">Valuation</span><span class="track"><span class="fill" data-w="50"></span></span><span class="n">5</span></div>
+    <div class="score-line"><span class="nm">Capital returns</span><span class="track"><span class="fill" data-w="30"></span></span><span class="n">3</span></div>
+    <div class="score-line"><span class="nm">Risk profile</span><span class="track"><span class="fill" data-w="40"></span></span><span class="n">4</span></div>
+  </div>
+
+  <div class="verdict-box">
+    <div class="verdict-label">Educational verdict · scale: Strong Sell → Strong Buy</div>
+    <div class="verdict-word">Neutral</div>
+    <div class="verdict-score">Overall score · 52 / 100 · equal-weighted average of ten categories</div>
+    <p class="verdict-reason">A genuinely fast-growing eyecare franchise wrapped in a levered, still-unprofitable
+      capital structure. The growth (39% CAGR, VEVYE taking dry-eye share) is real and the founder is buying —
+      but a 16% Q1 revenue miss, an ~$8M gross-to-net hit, ~$292M of 8.625% debt and six years without durable
+      GAAP profit mean the price already assumes the guided H2 turnaround happens. At ~$45 the stock looks
+      roughly fairly valued <i>if</i> guidance is met — which is precisely the open question. Neutral: attractive
+      business, unproven finish, asymmetric downside if H2 disappoints.</p>
+  </div>
+
+  <div class="grid g2" style="margin-top:20px">
+    <div class="card"><div class="corner" style="color:var(--green)">Biggest reason bulls may be right</div>
+      <p style="color:var(--mute);font-size:15px;margin-top:10px">VEVYE is a share-gaining, ~$100M-scale dry-eye
+        drug attached to a fixed cost base — if net pricing normalises, the operating leverage flips a 39%-growth
+        top line into real profit and the current price looks cheap in hindsight.</p></div>
+    <div class="card"><div class="corner" style="color:var(--red)">Biggest reason bears may be right</div>
+      <p style="color:var(--mute);font-size:15px;margin-top:10px">The very quarter that was supposed to show
+        leverage instead showed a 16% miss and a widening loss — with ~$292M of 8.625% debt, there is little room
+        for the guided H2 acceleration to disappoint.</p></div>
+  </div>
+</div></section>
+
+<!-- ====================== DISCLAIMER ====================== -->
+<div class="disc"><div class="wrap">
+  <p class="big">Educational only — not financial advice. Prices shown are as of the generation date and will
+    have changed. Do your own research.</p>
+  <p>Figures from Harrow's Q1 2026 earnings release / 10-Q and FY2021–2025 8-K/earnings releases, plus reporting
+    by StockTitan, GuruFocus, Investing.com, WallStreetZen and Yahoo Finance. Peer multiples, enterprise value,
+    share count, FCF and any item marked [EST] are estimates and were not all independently re-verified — treat
+    them accordingly. Scores, fair-value ranges, scenarios and probabilities are analytical opinion, not fact.
+    The author is not a licensed financial advisor.</p>
+  <p class="src-note">Generated 2026-07-18 · prompt version 17c4714 · Live market price changes constantly —
+    look up HROW for where shares trade now.</p>
+</div></div>
+</main>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target;
+      if(el.id==='revbars'){
+        el.querySelectorAll('.bar').forEach(b=>{ b.style.height=b.dataset.h+'%'; });
+      }
+      if(el.id==='risks' || el.id==='scores'){
+        el.querySelectorAll('.fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; });
+      }
+      io.unobserve(el);
+    });
+  },{threshold:.25});
+  ['revbars','risks','scores'].forEach(id=>{ const el=document.getElementById(id); if(el) io.observe(el); });
+  document.querySelectorAll('#revbars .bar').forEach(b=>b.style.height='0%');
+</script>
+</body>
+</html>
